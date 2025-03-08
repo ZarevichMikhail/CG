@@ -62,6 +62,7 @@
             Lab2Button.TabIndex = 16;
             Lab2Button.Text = "Лабораторная работа №2";
             Lab2Button.UseVisualStyleBackColor = true;
+            Lab2Button.Click += Lab2Button_Click;
             // 
             // Lab3Button
             // 

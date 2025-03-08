@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CG.View.Forms;
+using CG.View.Forms.Lab2;
 using static System.Windows.Forms.DataFormats;
 
 
@@ -27,8 +28,8 @@ namespace CG.View
             InitializeComponent();
         }
 
-               
-        
+
+
         private void Lab1Button_Click(object sender, EventArgs e)
         {
             var NewForm = new Lab1Form();
@@ -40,6 +41,18 @@ namespace CG.View
                 return;
 
             }
+        }
+
+        private void Lab2Button_Click(object sender, EventArgs e)
+        {
+            var NewForm = new Lab2Form();
+
+            if (NewForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+
         }
     }
 }

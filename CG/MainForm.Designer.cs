@@ -72,7 +72,7 @@
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(192, 67);
+            tabPage2.Size = new Size(792, 417);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "tabPage2";
             tabPage2.UseVisualStyleBackColor = true;
@@ -84,7 +84,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(tabControl1);
             Name = "MainForm";
-            Text = "Компьютерная графика";
+            Text = "Компьютерная графика. Заревич, Лим, Тютюнников, Черкашин. ";
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             ResumeLayout(false);

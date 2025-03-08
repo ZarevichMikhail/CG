@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -632,12 +633,14 @@ namespace CG.View.Forms
         /// <param name="Vector2"></param>
         /// <param name="dimention"></param>
         /// <returns></returns>
-        public double CalculateVectorMultiplication(double[,] Vector1, double[,] Vector2, int dimention)
+        public double CalculateVectorMultiplicationModule(double[,] Vector1, double[,] Vector2, int dimention)
         {
             double result = 0;
 
             double length1 = CalculateVectorLength(Vector1, dimention);
             double length2 = CalculateVectorLength(Vector2, dimention);
+
+            // Модуль векторного произведения 
 
             // Модуль векторного произведения считается как
             // [a,b] = |a|*|b|*Sin(alpha) = |a|*|b|*(1-Cos(alpha)^2)
@@ -648,18 +651,39 @@ namespace CG.View.Forms
             return result;
         }
 
+        public double[,] CalculateVectorMultiplicationVector(double[,] Vector1, double[,] Vector2, int dimention)
+        {
+
+            
+
+            double[,] result = new double[3, 1];
+
+            result[0, 0] = Vector1[1, 0] * Vector2[2, 0] - Vector1[2, 0] * Vector2[1, 0];
+            result[1, 0] = -(Vector1[0, 0] * Vector2[2, 0] - Vector1[2, 0] * Vector2[0, 0]);
+            result[2, 0] = Vector1[0, 0] * Vector2[1, 0] - Vector1[1, 0] * Vector2[0, 0];
+            
+
+            return result;
+
+        }
+
         private void VectorMultiplicationButton_Click(object sender, EventArgs e)
         {
+            
+
             int dimention = int.Parse(VectorDimentionTextBox.Text);
 
-            double result = CalculateVectorMultiplication(Vector1, Vector2, dimention);
+            if (dimention != 3)
+                return;
+
+            double[,] vector = CalculateVectorMultiplicationVector(Vector1,Vector2, dimention);
 
             Clear_MatrText();
-            MatrText[0, 0].Visible = true;
-
-            MatrText[0, 0].TabIndex = 0;
-            // 3.2. Перевести число в строку
-            MatrText[0, 0].Text = result.ToString();
+            for (int i = 0; i < 3; i++)
+            {
+                MatrText[i, 0].Visible = true;
+                MatrText[i, 0].Text = vector[i, 0].ToString();
+            }
 
 
             // 4. Вывод формы

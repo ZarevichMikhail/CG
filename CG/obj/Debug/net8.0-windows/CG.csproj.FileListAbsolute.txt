@@ -38,3 +38,4 @@ C:\Users\Mikhail\source\repos\КГ\CG\obj\Debug\net8.0-windows\refint\CG.dll
 C:\Users\Mikhail\source\repos\КГ\CG\obj\Debug\net8.0-windows\CG.pdb
 C:\Users\Mikhail\source\repos\КГ\CG\obj\Debug\net8.0-windows\CG.genruntimeconfig.cache
 C:\Users\Mikhail\source\repos\КГ\CG\obj\Debug\net8.0-windows\ref\CG.dll
+C:\Users\Mikhail\source\repos\КГ\CG\obj\Debug\net8.0-windows\CG.View.Forms.Lab2.Lab2Form.resources
