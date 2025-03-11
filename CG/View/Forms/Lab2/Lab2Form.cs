@@ -23,7 +23,8 @@ namespace CG.View.Forms.Lab2
 
             AlgListBox.Items.Add("Обычный ЦДА");
             AlgListBox.Items.Add("Алгоритм Брезенхема");
-            AlgListBox.Items.Add("Заливка");
+            AlgListBox.Items.Add("Рекурсивная заливка");
+            AlgListBox.Items.Add("Итеративная заливка");
 
             // Задаёт стиль линии по умолчанию. 
             Style = myBitmap.SetPixel;
@@ -85,7 +86,6 @@ namespace CG.View.Forms.Lab2
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
 
-            int index, numberNodes;
             double xOutput, yOutput, dx, dy;
 
             xk = e.X;
@@ -113,8 +113,12 @@ namespace CG.View.Forms.Lab2
 
                 case 2:
 
-                    FloodFill(xn, yn);
+                    RecursiveFloodFill(xn, yn);
 
+                    break;
+                case 3:
+
+                    IterativeFloodFill(xn, yn);
                     break;
             }
 
@@ -448,7 +452,7 @@ namespace CG.View.Forms.Lab2
         /// </summary>
         /// <param name="x1"></param>
         /// <param name="y1"></param>
-        private void FloodFill(int x1, int y1)
+        private void RecursiveFloodFill(int x1, int y1)
         {
 
 
@@ -467,16 +471,121 @@ namespace CG.View.Forms.Lab2
                 myBitmap.SetPixel(x1, y1, CurrentFillCllor);
 
                 //вызываем метод для 4-х соседних пикселей
-                FloodFill(x1 + 1, y1);
-                FloodFill(x1 - 1, y1);
-                FloodFill(x1, y1 + 1);
-                FloodFill(x1, y1 - 1);
+                RecursiveFloodFill(x1 + 1, y1);
+                RecursiveFloodFill(x1 - 1, y1);
+                RecursiveFloodFill(x1, y1 + 1);
+                RecursiveFloodFill(x1, y1 - 1);
             }
             else
             {
                 //выходим из метода
                 return;
             }
+        }
+
+
+        /// <summary>
+        /// Итеративная заливка.
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        private void IterativeFloodFill(int x1, int y1)
+        {
+            // теория про массивы в с#
+            // https://metanit.com/sharp/tutorial/2.4.php
+            // теория про стеки в c#
+            // https://metanit.com/sharp/tutorial/4.8.php
+
+
+            // стек из массивов. в каждом массиве по 2 элемента - координаты пикселя.
+            Stack<int[]> Pixels = new Stack<int[]>();
+
+            // координаты первого пикселя
+            int[] CurrentPixel = { x1, y1 };
+
+            // Добавляет первый пиксель в стек
+            Pixels.Push(CurrentPixel);
+
+            // Пока стек не пуст
+            while (Pixels.Count !=0) 
+            {
+                // Получает пиксель из стека
+                CurrentPixel = Pixels.Pop();
+
+                // координаты x и y текущего пикселя
+                // занёс их в отдельные переменные, чтобы они занимали меньше текста
+                int xc = CurrentPixel[0];
+                int yc = CurrentPixel[1];
+
+                Color oldPixelColor = myBitmap.GetPixel(xc, yc);
+
+                // проверяет его цвет
+                if ((oldPixelColor.ToArgb() != СurrentLineColor.ToArgb())
+                     && (oldPixelColor.ToArgb() != CurrentFillCllor.ToArgb()))
+                {
+
+                    myBitmap.SetPixel(xc, yc, CurrentFillCllor);
+
+
+                    // Для всех четырех соседних пикселов проверить, является ли он граничным или уже перекрашен
+
+                    if ((myBitmap.GetPixel(xc, yc + 1).ToArgb() != СurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                    {
+                        // это не работает, значения будут передаваться по ссылке,
+                        // поэтому у всех элементов стека координаты будут одни и те же
+                        //CurrentPixel = [xc, yc + 1];
+                        //CurrentPixel[0] = xc;
+                        //CurrentPixel[1] = yc+1;
+
+                        // надо выделить память под новый массив, и заносить его. 
+                        int[] a = { xc, yc + 1 };
+                        Pixels.Push(a);
+                    }
+
+                    if ((myBitmap.GetPixel(xc + 1, yc).ToArgb() != СurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc + 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    {
+                        int[] a = { xc+1, yc };
+                        Pixels.Push(a);
+                    }
+
+                    if ((myBitmap.GetPixel(xc, yc - 1).ToArgb() != СurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc, yc - 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                    {
+                        int[] a = { xc, yc - 1 };
+                        Pixels.Push(a);
+                    }
+
+                    if ((myBitmap.GetPixel(xc-1 , yc).ToArgb() != СurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc -1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    {
+                        int[] a = { xc-1, yc };
+                        Pixels.Push(a);
+                    }
+
+
+                    // решил сделать более красиво, через двумерный массив
+                    // но не разобрался как итерироваться по его подмассивам
+                    // foreach идёт не по ним, а по элементам
+                    //  соседние пиксели
+                    //int[,] NeighborPixels =  { {x1,yc+1},{xc+1,yc}, {xc,yc-1}, { xc, yc-1 } };
+
+                    //foreach (int pixel in NeighborPixels)
+                    //{
+                    //    if ((myBitmap.GetPixel(pixel[0], pixel[1]).ToArgb() != СurrentLineColor.ToArgb())
+                    //        && (myBitmap.GetPixel(xc, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                    //    {
+                    //        CurrentPixel = [xc, yc + 1];
+                    //        Pixels.Push(CurrentPixel);
+                    //    }
+
+                    //}
+
+                }
+
+            }
+
         }
 
 
@@ -536,7 +645,7 @@ namespace CG.View.Forms.Lab2
                         xn = 160;
                         yn = 40;
                         // вызываем рекурсивную процедуру заливки с затравкой
-                        FloodFill(xn, yn);
+                        RecursiveFloodFill(xn, yn);
                     }
                 }
 
