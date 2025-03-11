@@ -91,10 +91,11 @@ namespace CG.View.Forms.Lab2
             xk = e.X;
             yk = e.Y;
 
+            textBox1.Text = xk.ToString()+" " +  yk.ToString();
 
             // Выбор алгоритма рисования
-            // 0 цда
-            // 1 Брезенхем
+            // 0 Отрезок по ЦДА
+            // 1 отрезок по Брезенхему
             // 2 заливка
             switch (AlgListBox.SelectedIndex)
             {
@@ -105,7 +106,9 @@ namespace CG.View.Forms.Lab2
                     break;
 
                 case 1:
-                    // для Брезенхема код пока не написал
+
+                    BresLineAlg(xn, yn, xk, yk, Style);
+
                     break;
 
                 case 2:
@@ -215,6 +218,155 @@ namespace CG.View.Forms.Lab2
                 xOutput = xOutput + dx / numberNodes;
                 yOutput = yOutput + dy / numberNodes;
             }
+        }
+
+
+        /// <summary>
+        /// Алгоритм Брезенхема для генерации отрезка
+        /// </summary>
+        /// <param name="xn"></param>
+        /// <param name="yn"></param>
+        /// <param name="xk"></param>
+        /// <param name="yk"></param>
+        /// <param name="Style"></param>
+        private void BresLineAlg( int xn, int yn, int xk, int yk, DrawStyle Style)
+        {
+            int count = 0;
+            double xOutput, yOutput, dx, dy, E;
+
+            // Переменная для замены координат
+            int temp;
+
+            // Приращения x и y
+            dx = xk - xn;
+            dy = yk - yn;
+
+
+            // Условие для 3 четверти, dx и dy оба отрицательные
+            // Менят начальные и кончные координаты, и инвертирует их приращение
+            // т.о. отрезок будет рисоваться не из x1,y1 в x2,y2, а наоборот
+            if (dx <= 0 && dy <= 0)
+            {
+
+                temp = xn;
+                xn = xk;
+                xk = temp;
+
+                temp = yn;
+                yn = yk;
+                yk = temp;
+
+                dx = -dx;
+                dy = -dy;
+            }
+
+            // Условие для 2 четверти, dx<0, dy>0.
+            // т.к. уже есть функция для 4 четверти, где dx>0, dy<0, тут надо поменять координаты.
+            // Менят начальные и кончные координаты, и инвертирует их приращение
+            if (dx <= 0 && dy >= 0)
+            {
+                temp = xn;
+                xn = xk;
+                xk = temp;
+
+                temp = yn;
+                yn = yk;
+                yk = temp;
+
+                dx = -dx;
+                dy = -dy;
+            }
+            
+
+            xOutput = xn;
+            yOutput = yn;
+
+            // 2 варианта: 1 и 4 четверть. 3 и 4 получаются, соответственно, отражениями координат
+            // т.е. рисую не в x1,y1 в x2,y2, а наоборот. условия вверху нужны для этого. 
+            if(dx >= dy && dy>= 0)
+            {
+                E = 2 * dy - dx;
+                for (double i = dx; (i - 1) >= 0; i--)
+                {
+                    if (E >= 0)
+                    {
+                        xOutput = xOutput + 1;
+                        yOutput = yOutput + 1;
+                        E = E + 2 * (dy - dx);
+                    }
+                    else
+                    {
+                        xOutput = xOutput + 1;
+                        E = E + 2 * dy;
+                    }
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+
+                }
+            }
+            else if(dy >= dx && dx >= 0)
+            {
+                E = 2 * dy - dx;
+                for (double i = dy; (i - 1) >= 0; i--)
+                {
+                    if (E >= 0)
+                    {
+                        xOutput = xOutput + 1;
+                        yOutput = yOutput + 1;
+                        E = E + 2 * (dx - dy);
+                    }
+                    else
+                    {
+                        yOutput = yOutput + 1;
+                        E = E + 2 * dx;
+                    }
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+
+                }
+            }
+
+            // 4 четверть 
+            else if(Math.Abs(dx) >= Math.Abs(dy) && dy<=0)
+            {
+
+                E = 2 * Math.Abs(dy) - Math.Abs(dx);
+                for (double i = dx; (i - 1) >= 0; i--)
+                {
+                    if (E >= 0)
+                    {
+                        xOutput = xOutput + 1;
+                        yOutput = yOutput - 1;
+                        E = E + 2 * (Math.Abs(dy) - Math.Abs(dx));
+                    }
+                    else
+                    {
+                        xOutput = xOutput + 1;
+                        E = E + 2 * Math.Abs(dy);
+                    }
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                }
+            }
+            else if (Math.Abs(dy) >= Math.Abs(dx) && dy <= 0)
+            {
+
+                E = 2 * Math.Abs(dy) - Math.Abs(dx);
+                for (double i = Math.Abs(dy); (i - 1) >= 0; i--)
+                {
+                    if (E >= 0)
+                    {
+                        xOutput = xOutput + 1;
+                        yOutput = yOutput - 1;
+                        E = E + 2 * (Math.Abs(dx) - Math.Abs(dy));
+                    }
+                    else
+                    {
+                        yOutput = yOutput - 1;
+                        E = E + 2 * Math.Abs(dx);
+                    }
+                    count++;
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                }
+            }
+
         }
 
 
