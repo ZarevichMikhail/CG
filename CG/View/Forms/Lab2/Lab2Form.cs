@@ -21,10 +21,13 @@ namespace CG.View.Forms.Lab2
             // Создаёт битмап
             myBitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
-            AlgListBox.Items.Add("Обычный ЦДА");
-            AlgListBox.Items.Add("Алгоритм Брезенхема");
+            AlgListBox.Items.Add("Отрезок по обычному ЦДА");
+            AlgListBox.Items.Add("Отрезок по несимметричному ЦДА");
+            AlgListBox.Items.Add("Отрезок по алгоритму Брезенхема");
+            AlgListBox.Items.Add("Окружность по алгоритму Брезенхема");
             AlgListBox.Items.Add("Рекурсивная заливка");
             AlgListBox.Items.Add("Итеративная заливка");
+            AlgListBox.Items.Add("Построчная заливка");
 
             // Задаёт стиль линии по умолчанию. 
             Style = myBitmap.SetPixel;
@@ -94,9 +97,13 @@ namespace CG.View.Forms.Lab2
             textBox1.Text = xk.ToString()+" " +  yk.ToString();
 
             // Выбор алгоритма рисования
-            // 0 Отрезок по ЦДА
-            // 1 отрезок по Брезенхему
-            // 2 заливка
+            // 0 Отрезок по обычному ЦДА
+            // 1 Отрезок по несимметричному цда
+            // 2 отрезок по Брезенхему
+            // 3 окружность по Брезенхему
+            // 4 Рекурсивная заливка
+            // 5 Итеративная заливка
+            // 6 Построчная заливка
             switch (AlgListBox.SelectedIndex)
             {
                 case 0:
@@ -107,19 +114,35 @@ namespace CG.View.Forms.Lab2
 
                 case 1:
 
-                    BresLineAlg(xn, yn, xk, yk, Style);
+                    AsimDDA(xn, yn, xk, yk, Style);
 
                     break;
 
                 case 2:
 
-                    RecursiveFloodFill(xn, yn);
-
+                    BresLineAlg(xn, yn, xk, yk, Style);
                     break;
+
                 case 3:
+
+                    BresCircleAlg(xn, yn, Style);
+                    break;
+
+                case 4:
+
+                    RecursiveFloodFill(xn, yn);
+                    break;
+
+                case 5:
 
                     IterativeFloodFill(xn, yn);
                     break;
+
+                case 6:
+
+                    SpanFloodFill(xn, yn);
+                    break;
+
             }
 
             pictureBox1.Image = myBitmap;
@@ -224,6 +247,19 @@ namespace CG.View.Forms.Lab2
             }
         }
 
+
+        /// <summary>
+        /// Несимметричный цда
+        /// </summary>
+        /// <param name="xStart"></param>
+        /// <param name="yStart"></param>
+        /// <param name="xEnd"></param>
+        /// <param name="yEnd"></param>
+        /// <param name="Style"></param>
+        private void AsimDDA(int xStart, int yStart, int xEnd, int yEnd, DrawStyle Style)
+        {
+
+        }
 
         /// <summary>
         /// Алгоритм Брезенхема для генерации отрезка
@@ -372,7 +408,12 @@ namespace CG.View.Forms.Lab2
             }
 
         }
+        
 
+        private void BresCircleAlg(int xn, int yn, DrawStyle Style)
+        {
+
+        }
 
         /// <summary>
         /// Рисует квадрат. 
@@ -585,6 +626,16 @@ namespace CG.View.Forms.Lab2
                 }
 
             }
+
+        }
+
+        /// <summary>
+        /// Построчная заливка
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        private void SpanFloodFill(int x1, int y1)
+        {
 
         }
 

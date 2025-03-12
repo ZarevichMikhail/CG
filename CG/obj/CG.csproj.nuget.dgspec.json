@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\CG.csproj": {}
+    "C:\\Users\\Mikhail\\source\\repos\\КГ\\CG\\CG.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\CG.csproj": {
+    "C:\\Users\\Mikhail\\source\\repos\\КГ\\CG\\CG.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\CG.csproj",
+        "projectUniqueName": "C:\\Users\\Mikhail\\source\\repos\\КГ\\CG\\CG.csproj",
         "projectName": "CG",
-        "projectPath": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\CG.csproj",
+        "projectPath": "C:\\Users\\Mikhail\\source\\repos\\КГ\\CG\\CG.csproj",
         "packagesPath": "C:\\Users\\Mikhail\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\obj\\",
+        "outputPath": "C:\\Users\\Mikhail\\source\\repos\\КГ\\CG\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
