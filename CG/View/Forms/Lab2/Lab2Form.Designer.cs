@@ -30,6 +30,8 @@
         {
             splitContainer1 = new SplitContainer();
             pictureBox1 = new PictureBox();
+            label2 = new Label();
+            RadiusTextBox = new TextBox();
             AlgListBox = new CheckedListBox();
             BresAlgButton = new RadioButton();
             textBox1 = new TextBox();
@@ -61,6 +63,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(label2);
+            splitContainer1.Panel2.Controls.Add(RadiusTextBox);
             splitContainer1.Panel2.Controls.Add(AlgListBox);
             splitContainer1.Panel2.Controls.Add(BresAlgButton);
             splitContainer1.Panel2.Controls.Add(textBox1);
@@ -72,8 +76,8 @@
             splitContainer1.Panel2.Controls.Add(ClearButton);
             splitContainer1.Panel2.Controls.Add(DDAAlgButton);
             splitContainer1.Panel2.Controls.Add(label1);
-            splitContainer1.Size = new Size(835, 542);
-            splitContainer1.SplitterDistance = 585;
+            splitContainer1.Size = new Size(954, 542);
+            splitContainer1.SplitterDistance = 668;
             splitContainer1.TabIndex = 0;
             // 
             // pictureBox1
@@ -81,11 +85,28 @@
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(585, 542);
+            pictureBox1.Size = new Size(668, 542);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             pictureBox1.MouseDown += pictureBox1_MouseDown;
             pictureBox1.MouseUp += pictureBox1_MouseUp;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(59, 191);
+            label2.Name = "label2";
+            label2.Size = new Size(143, 20);
+            label2.TabIndex = 14;
+            label2.Text = "Радиус окружности";
+            // 
+            // RadiusTextBox
+            // 
+            RadiusTextBox.Location = new Point(14, 188);
+            RadiusTextBox.Name = "RadiusTextBox";
+            RadiusTextBox.Size = new Size(39, 27);
+            RadiusTextBox.TabIndex = 13;
+            RadiusTextBox.Text = "80";
             // 
             // AlgListBox
             // 
@@ -93,7 +114,7 @@
             AlgListBox.FormattingEnabled = true;
             AlgListBox.Location = new Point(14, 47);
             AlgListBox.Name = "AlgListBox";
-            AlgListBox.Size = new Size(195, 114);
+            AlgListBox.Size = new Size(244, 114);
             AlgListBox.TabIndex = 12;
             AlgListBox.SelectedIndexChanged += AlgListBox_SelectedIndexChanged;
             // 
@@ -110,7 +131,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(14, 197);
+            textBox1.Location = new Point(12, 221);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(166, 73);
@@ -202,7 +223,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(835, 542);
+            ClientSize = new Size(954, 542);
             Controls.Add(splitContainer1);
             Name = "Lab2Form";
             Text = "Растровые алгоритмы.";
@@ -231,5 +252,7 @@
         private TextBox textBox1;
         private RadioButton BresAlgButton;
         private CheckedListBox AlgListBox;
+        private Label label2;
+        private TextBox RadiusTextBox;
     }
 }

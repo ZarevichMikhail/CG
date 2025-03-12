@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
-
-namespace CG.View.Forms.Lab2
+﻿namespace CG.View.Forms.Lab2
 {
     public partial class Lab2Form : Form
     {
@@ -54,6 +42,12 @@ namespace CG.View.Forms.Lab2
 
 
         /// <summary>
+        /// Матрица оператора поворота.
+        /// </summary>
+        double[,] Operator = { { 0, -1 }, { 1, 0 } };
+
+
+        /// <summary>
         /// Делегат для функции стиля линии
         /// </summary>
         /// <param name="x"></param>
@@ -66,6 +60,28 @@ namespace CG.View.Forms.Lab2
         /// Стиль линии
         /// </summary>
         DrawStyle Style;
+
+
+
+
+        public double[,] MatrixMultiply(double[,] m1, double[,] m2)
+        {
+            double[,] result = new double[2, 1];
+
+            for (int i = 0; i < m1.GetLength(0); i++)
+            {
+                for (int j = 0; j < m2.GetLength(1); j++)
+                {
+                    for (int k = 0; k < m2.GetLength(0); k++)
+                    {
+                        result[i, j] += m1[i, k] * m2[k, j];
+                    }
+                }
+            }
+
+            return result;
+        }
+
 
 
         /// <summary>
@@ -94,7 +110,7 @@ namespace CG.View.Forms.Lab2
             xk = e.X;
             yk = e.Y;
 
-            textBox1.Text = xk.ToString()+" " +  yk.ToString();
+            textBox1.Text = xk.ToString() + " " + yk.ToString();
 
             // Выбор алгоритма рисования
             // 0 Отрезок по обычному ЦДА
@@ -235,7 +251,7 @@ namespace CG.View.Forms.Lab2
             yOutput = yn;
 
             for (index = 1; index <= numberNodes; index++)
-            {   
+            {
 
                 // Рисует линию выбранного стиля. 
                 Style((int)xOutput, (int)yOutput, СurrentLineColor);
@@ -269,7 +285,7 @@ namespace CG.View.Forms.Lab2
         /// <param name="xk"></param>
         /// <param name="yk"></param>
         /// <param name="Style"></param>
-        private void BresLineAlg( int xn, int yn, int xk, int yk, DrawStyle Style)
+        private void BresLineAlg(int xn, int yn, int xk, int yk, DrawStyle Style)
         {
             int count = 0;
             double xOutput, yOutput, dx, dy, E;
@@ -316,14 +332,14 @@ namespace CG.View.Forms.Lab2
                 dx = -dx;
                 dy = -dy;
             }
-            
+
 
             xOutput = xn;
             yOutput = yn;
 
             // 2 варианта: 1 и 4 четверть. 3 и 4 получаются, соответственно, отражениями координат
             // т.е. рисую не в x1,y1 в x2,y2, а наоборот. условия вверху нужны для этого. 
-            if(dx >= dy && dy>= 0)
+            if (dx >= dy && dy >= 0)
             {
                 E = 2 * dy - dx;
                 for (double i = dx; (i - 1) >= 0; i--)
@@ -343,7 +359,7 @@ namespace CG.View.Forms.Lab2
 
                 }
             }
-            else if(dy >= dx && dx >= 0)
+            else if (dy >= dx && dx >= 0)
             {
                 E = 2 * dy - dx;
                 for (double i = dy; (i - 1) >= 0; i--)
@@ -365,7 +381,7 @@ namespace CG.View.Forms.Lab2
             }
 
             // 4 четверть 
-            else if(Math.Abs(dx) >= Math.Abs(dy) && dy<=0)
+            else if (Math.Abs(dx) >= Math.Abs(dy) && dy <= 0)
             {
 
                 E = 2 * Math.Abs(dy) - Math.Abs(dx);
@@ -408,10 +424,339 @@ namespace CG.View.Forms.Lab2
             }
 
         }
-        
 
-        private void BresCircleAlg(int xn, int yn, DrawStyle Style)
+
+        /// <summary>
+        /// Алгортим Брезенхема для геренрации окружности. 
+        /// </summary>
+        /// <param name="xn">x центра окружности</param>
+        /// <param name="yn">y центра окружности</param>
+        /// <param name="Style"></param>
+        private void BresCircleAlg(double xc, double yc, DrawStyle Style)
         {
+            // Суть алгортима
+            // Первую четверть будем рисовать относительно старой системы координат
+            // Чтобы нарисовать остальные - нужно повернуть точку на 90 градусов с помощью оператора поворота
+            // Но он поворачивает, только относительно начала координат
+            // Ведём новую ск с центром в точке xc,yc, чтобы поворачивать относительно неё
+            // потом будем переводить координаты полученной точки в старую ск и рисовать 
+
+            // Теория по преобразованию координат, слайд 5
+            // https://moodle.math.tusur.ru/pluginfile.php/1187/mod_resource/content/1/Preobr_dsk.pdf
+
+            int radius = int.Parse(RadiusTextBox.Text);
+
+
+            // координаты точки, которую надо повернуть. 
+            double[,] Coord = new double[2, 1];
+
+
+            // координаты точки, которую надо нарисовать, в старой системе координат.
+            // output потому, что рисовать будем именно в ней
+            double xOutput = xc;
+            double yOutput = yc + radius;
+
+
+
+            // Координаты точки в новой ск 
+            double xn = xOutput - xc; // = 0
+            double yn = yOutput - yc; // = radius
+
+
+
+            Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+
+
+            // Считаем относительно новой системы координат 
+            double Dd = Math.Pow(xn + 1, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+            double Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+            double Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+
+
+
+            while (yn >= 0)
+            {
+                if (Dd < 0)
+                {
+                    double di = Math.Abs(Dg) - Math.Abs(Dd);
+
+                    if (di <= 0)
+                    {
+                        // Горизонтальный пиксель
+                        //xOutput = xOutput + 1;
+
+                        // Меняем точку в новой системе кординат
+                        xn++;
+
+                        // Переводим из новой в старую
+                        xOutput = xn + xc;
+                        //yOutput = yOutput;
+
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // Заношу координаты в новой ск в матрицу
+                        Coord[0, 0] = xn;
+                        Coord[1, 0] = yn;
+
+                        // поворот на 90 градусов
+                        Coord = MatrixMultiply(Operator, Coord);
+
+                        // Перевожу координаты из новой ск в старую
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        // Рисую координаты в старой ск
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // повторяю это ещё 2 раза
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+
+                        Dd = Dd + 2 * xn + 1;
+
+                        Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+                        Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+                    }
+                    else
+                    {
+                        // Диагональный пиксель 
+
+                        xn++;
+                        yn--;
+
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // Заношу координаты в новой ск в матрицу
+                        Coord[0, 0] = xn;
+                        Coord[1, 0] = yn;
+
+                        // поворот на 90 градусов
+                        Coord = MatrixMultiply(Operator, Coord);
+               
+
+                        // Перевожу координаты из новой ск в старую
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        // Рисую координаты в старой ск
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // повторяю это ещё 2 раза
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+
+                        Dd = Dd + 2 * xn - 2 * yn + 2;
+                        Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+                        Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+
+
+                    }
+
+                }
+                else if (Dd > 0)
+                {
+                    double Si = Math.Abs(Dg) - Math.Abs(Dv);
+
+                    if (Si <= 0)
+                    {
+                        // Диагональный пиксель 
+                        xn++;
+                        yn--;
+
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // Заношу координаты в новой ск в матрицу
+                        Coord[0, 0] = xn;
+                        Coord[1, 0] = yn;
+
+                        // поворот на 90 градусов
+                        Coord = MatrixMultiply(Operator, Coord);
+
+                        // Перевожу координаты из новой ск в старую
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        // Рисую координаты в старой ск
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // повторяю это ещё 2 раза
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+
+                        Dd = Dd + 2 * xn - 2 * yn + 2;
+                        Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+                        Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+
+
+                    }
+                    else
+                    {
+                        // Вертикальный пиксель
+
+                        yn--;
+
+                        yOutput = yn + yc;
+
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // Заношу координаты в новой ск в матрицу
+                        Coord[0, 0] = xn;
+                        Coord[1, 0] = yn;
+
+                        // поворот на 90 градусов
+                        Coord = MatrixMultiply(Operator, Coord);
+
+                        // Перевожу координаты из новой ск в старую
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+
+                        // Рисую координаты в старой ск
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        // повторяю это ещё 2 раза
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+                        xOutput = xn + xc;
+                        yOutput = yn + yc;
+                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                        Coord = MatrixMultiply(Operator, Coord);
+                        xn = Coord[0, 0];
+                        yn = Coord[1, 0];
+
+                        Dd = Dd - 2 * yn + 1;
+                        Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+                        Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+
+                    }
+                }
+                else
+                {
+                    // Диагональный пиксель 
+
+                    xn++;
+                    yn--;
+
+                    xOutput = xn + xc;
+                    yOutput = yn + yc;
+
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                    // Заношу координаты в новой ск в матрицу
+                    Coord[0, 0] = xn;
+                    Coord[1, 0] = yn;
+
+                    // поворот на 90 градусов
+                    Coord = MatrixMultiply(Operator, Coord);
+
+                    // Перевожу координаты из новой ск в старую
+                    xn = Coord[0, 0];
+                    yn = Coord[1, 0];
+                    xOutput = xn + xc;
+                    yOutput = yn + yc;
+
+                    // Рисую координаты в старой ск
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                    // повторяю это ещё 2 раза
+                    Coord = MatrixMultiply(Operator, Coord);
+                    xn = Coord[0, 0];
+                    yn = Coord[1, 0];
+                    xOutput = xn + xc;
+                    yOutput = yn + yc;
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+
+                    Coord = MatrixMultiply(Operator, Coord);
+                    xn = Coord[0, 0];
+                    yn = Coord[1, 0];
+                    xOutput = xn + xc;
+                    yOutput = yn + yc;
+                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+
+                    Coord = MatrixMultiply(Operator, Coord);
+                    xn = Coord[0, 0];
+                    yn = Coord[1, 0];
+
+                    Dd = Dd + 2 * xn - 2 * yn + 2;
+                    Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
+                    Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
+                }
+            }
+
+
 
         }
 
@@ -548,7 +893,7 @@ namespace CG.View.Forms.Lab2
             Pixels.Push(CurrentPixel);
 
             // Пока стек не пуст
-            while (Pixels.Count !=0) 
+            while (Pixels.Count != 0)
             {
                 // Получает пиксель из стека
                 CurrentPixel = Pixels.Pop();
@@ -587,7 +932,7 @@ namespace CG.View.Forms.Lab2
                     if ((myBitmap.GetPixel(xc + 1, yc).ToArgb() != СurrentLineColor.ToArgb())
                             && (myBitmap.GetPixel(xc + 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
                     {
-                        int[] a = { xc+1, yc };
+                        int[] a = { xc + 1, yc };
                         Pixels.Push(a);
                     }
 
@@ -598,10 +943,10 @@ namespace CG.View.Forms.Lab2
                         Pixels.Push(a);
                     }
 
-                    if ((myBitmap.GetPixel(xc-1 , yc).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xc -1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    if ((myBitmap.GetPixel(xc - 1, yc).ToArgb() != СurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc - 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
                     {
-                        int[] a = { xc-1, yc };
+                        int[] a = { xc - 1, yc };
                         Pixels.Push(a);
                     }
 
