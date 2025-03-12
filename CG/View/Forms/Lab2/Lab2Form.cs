@@ -495,43 +495,42 @@
                         Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
                         // Заношу координаты в новой ск в матрицу
-                        Coord[0, 0] = xn;
-                        Coord[1, 0] = yn;
+                        //Coord[0, 0] = xn;
+                        //Coord[1, 0] = yn;
 
-                        // поворот на 90 градусов
-                        Coord = MatrixMultiply(Operator, Coord);
+                        //// поворот на 90 градусов
+                        //Coord = MatrixMultiply(Operator, Coord);
 
-                        // Перевожу координаты из новой ск в старую
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
+                        //// Перевожу координаты из новой ск в старую
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
 
                         // Рисую координаты в старой ск
                         Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // повторяю это ещё 2 раза
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// повторяю это ещё 2 раза
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
 
                         Dd = Dd + 2 * xn + 1;
-
                         Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
                         Dv = Math.Pow(xn, 2) + Math.Pow(yn - 1, 2) - Math.Pow(radius, 2);
                     }
@@ -547,42 +546,42 @@
 
                         Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // Заношу координаты в новой ск в матрицу
-                        Coord[0, 0] = xn;
-                        Coord[1, 0] = yn;
+                        //// Заношу координаты в новой ск в матрицу
+                        //Coord[0, 0] = xn;
+                        //Coord[1, 0] = yn;
 
-                        // поворот на 90 градусов
-                        Coord = MatrixMultiply(Operator, Coord);
+                        //// поворот на 90 градусов
+                        //Coord = MatrixMultiply(Operator, Coord);
                
 
-                        // Перевожу координаты из новой ск в старую
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
+                        //// Перевожу координаты из новой ск в старую
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
 
-                        // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// Рисую координаты в старой ск
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // повторяю это ещё 2 раза
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// повторяю это ещё 2 раза
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
 
                         Dd = Dd + 2 * xn - 2 * yn + 2;
                         Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
@@ -607,41 +606,41 @@
 
                         Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // Заношу координаты в новой ск в матрицу
-                        Coord[0, 0] = xn;
-                        Coord[1, 0] = yn;
+                        //// Заношу координаты в новой ск в матрицу
+                        //Coord[0, 0] = xn;
+                        //Coord[1, 0] = yn;
 
-                        // поворот на 90 градусов
-                        Coord = MatrixMultiply(Operator, Coord);
+                        //// поворот на 90 градусов
+                        //Coord = MatrixMultiply(Operator, Coord);
 
-                        // Перевожу координаты из новой ск в старую
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
+                        //// Перевожу координаты из новой ск в старую
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
 
-                        // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// Рисую координаты в старой ск
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // повторяю это ещё 2 раза
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// повторяю это ещё 2 раза
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
 
                         Dd = Dd + 2 * xn - 2 * yn + 2;
                         Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
@@ -659,41 +658,41 @@
 
                         Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // Заношу координаты в новой ск в матрицу
-                        Coord[0, 0] = xn;
-                        Coord[1, 0] = yn;
+                        //// Заношу координаты в новой ск в матрицу
+                        //Coord[0, 0] = xn;
+                        //Coord[1, 0] = yn;
 
-                        // поворот на 90 градусов
-                        Coord = MatrixMultiply(Operator, Coord);
+                        //// поворот на 90 градусов
+                        //Coord = MatrixMultiply(Operator, Coord);
 
-                        // Перевожу координаты из новой ск в старую
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
+                        //// Перевожу координаты из новой ск в старую
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
 
-                        // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// Рисую координаты в старой ск
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        // повторяю это ещё 2 раза
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //// повторяю это ещё 2 раза
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
-                        xOutput = xn + xc;
-                        yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
+                        //xOutput = xn + xc;
+                        //yOutput = yn + yc;
+                        //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                        Coord = MatrixMultiply(Operator, Coord);
-                        xn = Coord[0, 0];
-                        yn = Coord[1, 0];
+                        //Coord = MatrixMultiply(Operator, Coord);
+                        //xn = Coord[0, 0];
+                        //yn = Coord[1, 0];
 
                         Dd = Dd - 2 * yn + 1;
                         Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
@@ -714,41 +713,41 @@
                     Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                    // Заношу координаты в новой ск в матрицу
-                    Coord[0, 0] = xn;
-                    Coord[1, 0] = yn;
+                    //// Заношу координаты в новой ск в матрицу
+                    //Coord[0, 0] = xn;
+                    //Coord[1, 0] = yn;
 
-                    // поворот на 90 градусов
-                    Coord = MatrixMultiply(Operator, Coord);
+                    //// поворот на 90 градусов
+                    //Coord = MatrixMultiply(Operator, Coord);
 
-                    // Перевожу координаты из новой ск в старую
-                    xn = Coord[0, 0];
-                    yn = Coord[1, 0];
-                    xOutput = xn + xc;
-                    yOutput = yn + yc;
+                    //// Перевожу координаты из новой ск в старую
+                    //xn = Coord[0, 0];
+                    //yn = Coord[1, 0];
+                    //xOutput = xn + xc;
+                    //yOutput = yn + yc;
 
-                    // Рисую координаты в старой ск
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    //// Рисую координаты в старой ск
+                    //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                    // повторяю это ещё 2 раза
-                    Coord = MatrixMultiply(Operator, Coord);
-                    xn = Coord[0, 0];
-                    yn = Coord[1, 0];
-                    xOutput = xn + xc;
-                    yOutput = yn + yc;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    //// повторяю это ещё 2 раза
+                    //Coord = MatrixMultiply(Operator, Coord);
+                    //xn = Coord[0, 0];
+                    //yn = Coord[1, 0];
+                    //xOutput = xn + xc;
+                    //yOutput = yn + yc;
+                    //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
 
-                    Coord = MatrixMultiply(Operator, Coord);
-                    xn = Coord[0, 0];
-                    yn = Coord[1, 0];
-                    xOutput = xn + xc;
-                    yOutput = yn + yc;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    //Coord = MatrixMultiply(Operator, Coord);
+                    //xn = Coord[0, 0];
+                    //yn = Coord[1, 0];
+                    //xOutput = xn + xc;
+                    //yOutput = yn + yc;
+                    //Style((int)xOutput, (int)yOutput, СurrentLineColor);
 
-                    Coord = MatrixMultiply(Operator, Coord);
-                    xn = Coord[0, 0];
-                    yn = Coord[1, 0];
+                    //Coord = MatrixMultiply(Operator, Coord);
+                    //xn = Coord[0, 0];
+                    //yn = Coord[1, 0];
 
                     Dd = Dd + 2 * xn - 2 * yn + 2;
                     Dg = Math.Pow(xn + 1, 2) + Math.Pow(yn, 2) - Math.Pow(radius, 2);
