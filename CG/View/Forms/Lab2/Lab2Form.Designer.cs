@@ -76,8 +76,8 @@
             splitContainer1.Panel2.Controls.Add(ClearButton);
             splitContainer1.Panel2.Controls.Add(DDAAlgButton);
             splitContainer1.Panel2.Controls.Add(label1);
-            splitContainer1.Size = new Size(954, 542);
-            splitContainer1.SplitterDistance = 668;
+            splitContainer1.Size = new Size(1018, 542);
+            splitContainer1.SplitterDistance = 598;
             splitContainer1.TabIndex = 0;
             // 
             // pictureBox1
@@ -85,7 +85,7 @@
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(668, 542);
+            pictureBox1.Size = new Size(598, 542);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             pictureBox1.MouseDown += pictureBox1_MouseDown;
@@ -94,7 +94,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(59, 191);
+            label2.Location = new Point(59, 241);
             label2.Name = "label2";
             label2.Size = new Size(143, 20);
             label2.TabIndex = 14;
@@ -102,26 +102,26 @@
             // 
             // RadiusTextBox
             // 
-            RadiusTextBox.Location = new Point(14, 188);
+            RadiusTextBox.Location = new Point(14, 238);
             RadiusTextBox.Name = "RadiusTextBox";
             RadiusTextBox.Size = new Size(39, 27);
             RadiusTextBox.TabIndex = 13;
-            RadiusTextBox.Text = "80";
+            RadiusTextBox.Text = "50";
             // 
             // AlgListBox
             // 
             AlgListBox.CheckOnClick = true;
             AlgListBox.FormattingEnabled = true;
-            AlgListBox.Location = new Point(14, 47);
+            AlgListBox.Location = new Point(17, 47);
             AlgListBox.Name = "AlgListBox";
-            AlgListBox.Size = new Size(244, 114);
+            AlgListBox.Size = new Size(358, 158);
             AlgListBox.TabIndex = 12;
             AlgListBox.SelectedIndexChanged += AlgListBox_SelectedIndexChanged;
             // 
             // BresAlgButton
             // 
             BresAlgButton.AutoSize = true;
-            BresAlgButton.Location = new Point(16, 419);
+            BresAlgButton.Location = new Point(16, 444);
             BresAlgButton.Name = "BresAlgButton";
             BresAlgButton.Size = new Size(186, 24);
             BresAlgButton.TabIndex = 11;
@@ -131,15 +131,15 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(12, 221);
+            textBox1.Location = new Point(12, 279);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(166, 73);
+            textBox1.Size = new Size(166, 40);
             textBox1.TabIndex = 10;
             // 
             // FillColorButton
             // 
-            FillColorButton.Location = new Point(124, 335);
+            FillColorButton.Location = new Point(124, 360);
             FillColorButton.Name = "FillColorButton";
             FillColorButton.Size = new Size(112, 29);
             FillColorButton.TabIndex = 8;
@@ -150,7 +150,7 @@
             // BoldlineDrawButton
             // 
             BoldlineDrawButton.AutoSize = true;
-            BoldlineDrawButton.Location = new Point(17, 167);
+            BoldlineDrawButton.Location = new Point(17, 208);
             BoldlineDrawButton.Name = "BoldlineDrawButton";
             BoldlineDrawButton.Size = new Size(132, 24);
             BoldlineDrawButton.TabIndex = 7;
@@ -160,7 +160,7 @@
             // 
             // ExecuteButton
             // 
-            ExecuteButton.Location = new Point(14, 300);
+            ExecuteButton.Location = new Point(14, 325);
             ExecuteButton.Name = "ExecuteButton";
             ExecuteButton.Size = new Size(104, 29);
             ExecuteButton.TabIndex = 5;
@@ -170,7 +170,7 @@
             // 
             // LineColorButton
             // 
-            LineColorButton.Location = new Point(123, 300);
+            LineColorButton.Location = new Point(123, 325);
             LineColorButton.Name = "LineColorButton";
             LineColorButton.Size = new Size(105, 29);
             LineColorButton.TabIndex = 4;
@@ -181,7 +181,7 @@
             // FillButton
             // 
             FillButton.AutoSize = true;
-            FillButton.Location = new Point(16, 449);
+            FillButton.Location = new Point(16, 474);
             FillButton.Name = "FillButton";
             FillButton.Size = new Size(86, 24);
             FillButton.TabIndex = 3;
@@ -191,7 +191,7 @@
             // 
             // ClearButton
             // 
-            ClearButton.Location = new Point(14, 335);
+            ClearButton.Location = new Point(14, 360);
             ClearButton.Name = "ClearButton";
             ClearButton.Size = new Size(94, 29);
             ClearButton.TabIndex = 2;
@@ -202,7 +202,7 @@
             // DDAAlgButton
             // 
             DDAAlgButton.AutoSize = true;
-            DDAAlgButton.Location = new Point(16, 389);
+            DDAAlgButton.Location = new Point(16, 414);
             DDAAlgButton.Name = "DDAAlgButton";
             DDAAlgButton.Size = new Size(133, 24);
             DDAAlgButton.TabIndex = 1;
@@ -223,7 +223,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(954, 542);
+            ClientSize = new Size(1018, 542);
             Controls.Add(splitContainer1);
             Name = "Lab2Form";
             Text = "Растровые алгоритмы.";
