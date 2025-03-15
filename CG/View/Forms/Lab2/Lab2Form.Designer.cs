@@ -44,6 +44,7 @@
             DDAAlgButton = new RadioButton();
             label1 = new Label();
             colorDialog1 = new ColorDialog();
+            PolygonCreationToggle = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -63,6 +64,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(PolygonCreationToggle);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Controls.Add(RadiusTextBox);
             splitContainer1.Panel2.Controls.Add(AlgListBox);
@@ -131,7 +133,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(12, 279);
+            textBox1.Location = new Point(12, 302);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(166, 40);
@@ -139,7 +141,7 @@
             // 
             // FillColorButton
             // 
-            FillColorButton.Location = new Point(124, 360);
+            FillColorButton.Location = new Point(124, 383);
             FillColorButton.Name = "FillColorButton";
             FillColorButton.Size = new Size(112, 29);
             FillColorButton.TabIndex = 8;
@@ -160,7 +162,7 @@
             // 
             // ExecuteButton
             // 
-            ExecuteButton.Location = new Point(14, 325);
+            ExecuteButton.Location = new Point(14, 348);
             ExecuteButton.Name = "ExecuteButton";
             ExecuteButton.Size = new Size(104, 29);
             ExecuteButton.TabIndex = 5;
@@ -170,7 +172,7 @@
             // 
             // LineColorButton
             // 
-            LineColorButton.Location = new Point(123, 325);
+            LineColorButton.Location = new Point(123, 348);
             LineColorButton.Name = "LineColorButton";
             LineColorButton.Size = new Size(105, 29);
             LineColorButton.TabIndex = 4;
@@ -191,7 +193,7 @@
             // 
             // ClearButton
             // 
-            ClearButton.Location = new Point(14, 360);
+            ClearButton.Location = new Point(14, 383);
             ClearButton.Name = "ClearButton";
             ClearButton.Size = new Size(94, 29);
             ClearButton.TabIndex = 2;
@@ -218,6 +220,17 @@
             label1.Size = new Size(134, 20);
             label1.TabIndex = 0;
             label1.Text = "Выбор алгоритма";
+            // 
+            // PolygonCreationToggle
+            // 
+            PolygonCreationToggle.AutoSize = true;
+            PolygonCreationToggle.Location = new Point(18, 271);
+            PolygonCreationToggle.Name = "PolygonCreationToggle";
+            PolygonCreationToggle.Size = new Size(265, 24);
+            PolygonCreationToggle.TabIndex = 15;
+            PolygonCreationToggle.TabStop = true;
+            PolygonCreationToggle.Text = "Режим создания многоугольника";
+            PolygonCreationToggle.UseVisualStyleBackColor = true;
             // 
             // Lab2Form
             // 
@@ -254,5 +267,6 @@
         private CheckedListBox AlgListBox;
         private Label label2;
         private TextBox RadiusTextBox;
+        private RadioButton PolygonCreationToggle;
     }
 }

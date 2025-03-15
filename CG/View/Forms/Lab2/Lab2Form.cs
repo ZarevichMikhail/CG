@@ -21,6 +21,7 @@ namespace CG.View.Forms.Lab2
             AlgListBox.Items.Add("Рекурсивная заливка");
             AlgListBox.Items.Add("Итеративная заливка");
             AlgListBox.Items.Add("Построчная заливка (работает неправильно)");
+            AlgListBox.Items.Add("Режим создания многоугольника");
 
             // Задаёт стиль линии по умолчанию. 
             Style = myBitmap.SetPixel;
@@ -38,18 +39,15 @@ namespace CG.View.Forms.Lab2
         Color СurrentLineColor = Color.Red; // текущий цвет отрезка
         Color CurrentFillCllor = Color.Green; // Текущий цвет заливки
 
-
-        /// <summary>
-        /// Индекс выбранного алгоритма
-        /// </summary>
-        int AlgIndex;
-
-
         /// <summary>
         /// Матрица оператора поворота на 90 градусов против часовой стрелки.
         /// </summary>
         double[,] Operator = { { 0, -1 }, { 1, 0 } };
 
+        /// <summary>
+        /// Пиксели многоугольника
+        /// </summary>
+        List<int[]> PolygonPixels;
 
         /// <summary>
         /// Делегат для функции стиля линии
@@ -57,7 +55,12 @@ namespace CG.View.Forms.Lab2
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="PixelColor"></param>
-        public delegate void DrawStyle(int x, int y, Color PixelColor);
+        public delegate void DrawStyle(int xc, int yc, Color PixelColor);
+
+
+        public delegate void DoFunction(int xn, int yn, int xk, int yk, DrawStyle Style);
+
+        DoFunction DrawFunction;
 
 
         /// <summary>
@@ -167,6 +170,20 @@ namespace CG.View.Forms.Lab2
                     SpanFloodFill(xn, yn);
                     break;
 
+                case 7:
+                    // Если кнопка нажата, добавляет пиксели. 
+                    // Если кнопку отжать, потом нажать снова, пиксели сбрасываются
+                    // Нужно будет добавлять их заного. 
+                    PolygonPixels.Clear();
+
+                    int[] a = { e.X, e.Y };
+                    PolygonPixels.Add(a);
+                    
+
+                    break;
+
+
+    
             }
 
             pictureBox1.Image = myBitmap;
@@ -1325,13 +1342,71 @@ namespace CG.View.Forms.Lab2
         private void AlgListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Текущий выбранный индекс
-            AlgIndex = AlgListBox.SelectedIndex;
+            int AlgIndex = AlgListBox.SelectedIndex;
 
             // Убирает выбор с других элементов
             for (int i = 0; i < AlgListBox.Items.Count; i++)
             {
                 if (i != AlgIndex)
                     AlgListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            switch (AlgListBox.SelectedIndex)
+            {
+                case 0:
+
+                    //CDA(xn, yn, xk, yk, Style);
+
+                    DrawFunction = CDA;
+
+                    break;
+
+                case 1:
+
+
+                    AsimDDA(xn, yn, xk, yk, Style);
+
+                    break;
+
+                case 2:
+
+                    BresLineAlg(xn, yn, xk, yk, Style);
+                    break;
+
+                case 3:
+
+                    BresCircleAlg(xn, yn, Style);
+                    break;
+
+                case 4:
+
+                    RecursiveFloodFill(xn, yn);
+                    break;
+
+                case 5:
+
+                    IterativeFloodFill(xn, yn);
+                    break;
+
+                case 6:
+
+                    SpanFloodFill(xn, yn);
+                    break;
+
+                case 7:
+                    // Если кнопка нажата, добавляет пиксели. 
+                    // Если кнопку отжать, потом нажать снова, пиксели сбрасываются
+                    // Нужно будет добавлять их заного. 
+                    PolygonPixels.Clear();
+
+                    int[] a = { xk, yk };
+                    PolygonPixels.Add(a);
+
+
+                    break;
+
+
+
             }
 
         }
