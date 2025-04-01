@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.DirectoryServices;
 using CG;
 using CG.View.Forms;
 
@@ -7,6 +8,7 @@ namespace CG.View.Forms.Lab2
 {
     public partial class Lab2Form : Form
     {
+        Bitmap myBitmap; // объект Bitmap для вывода отрезка
         public Lab2Form()
         {
             InitializeComponent();
@@ -20,9 +22,14 @@ namespace CG.View.Forms.Lab2
             AlgListBox.Items.Add("Окружность по алгоритму Брезенхема");
             AlgListBox.Items.Add("Рекурсивная заливка");
             AlgListBox.Items.Add("Итеративная заливка");
-            AlgListBox.Items.Add("Построчная заливка (работает неправильно)");
+            AlgListBox.Items.Add("Построчная заливка");
+            AlgListBox.Items.Add("Режим создания многоугольника");
+            AlgListBox.Items.Add("Режим создания прямоугольника");
+            AlgListBox.Items.Add("Создать отрезки");
+            AlgListBox.Items.Add("Алгоритм Коэна-Сазерленда для отсечения");
 
             // Задаёт стиль линии по умолчанию. 
+            // Тонкая линия 
             Style = myBitmap.SetPixel;
 
         }
@@ -32,17 +39,11 @@ namespace CG.View.Forms.Lab2
         /// </summary>
         public int xn, yn, xk, yk;
 
-        Bitmap myBitmap; // объект Bitmap для вывода отрезка
 
 
-        Color СurrentLineColor = Color.Red; // текущий цвет отрезка
-        Color CurrentFillCllor = Color.Green; // Текущий цвет заливки
 
-
-        /// <summary>
-        /// Индекс выбранного алгоритма
-        /// </summary>
-        int AlgIndex;
+        Color CurrentLineColor = Color.Red; // текущий цвет отрезка
+        Color CurrentFillColor = Color.Green; // Текущий цвет заливки
 
 
         /// <summary>
@@ -52,16 +53,30 @@ namespace CG.View.Forms.Lab2
 
 
         /// <summary>
-        /// Делегат для функции стиля линии
+        /// Пиксели многоугольника
+        /// </summary>
+        List<int[]> PolygonPixels = new List<int[]>();
+
+
+        // Не понял, как трёхмерную коллекцию задать более красиво
+        /// <summary>
+        /// Пиксели отрезков. 
+        /// Каждый элемент коллекции - коллекция из двух коллекций - координаты начала и координаты конца отрезка
+        /// </summary>
+        List<List<List<double>>> LinePixels = new List<List<List<double>>>();
+
+        /// <summary>
+        /// Делегат для функции стиля линии. (Толстая или тонкая)
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="PixelColor"></param>
-        public delegate void DrawStyle(int x, int y, Color PixelColor);
+        public delegate void DrawStyle(int xc, int yc, Color PixelColor);
+
 
 
         /// <summary>
-        /// Стиль линии
+        /// Стиль линии. (Толстая или тонкая)
         /// </summary>
         DrawStyle Style;
 
@@ -118,16 +133,20 @@ namespace CG.View.Forms.Lab2
             xk = e.X;
             yk = e.Y;
 
-            textBox1.Text = "x: "+ xk.ToString() + " y: " + yk.ToString();
+            //textBox1.Text = "x: " + xk.ToString() + " y: " + yk.ToString();
 
             // Выбор алгоритма рисования
             // 0 Отрезок по обычному ЦДА
             // 1 Отрезок по несимметричному цда
-            // 2 отрезок по Брезенхему
-            // 3 окружность по Брезенхему
+            // 2 Отрезок по Брезенхему
+            // 3 Окружность по Брезенхему
             // 4 Рекурсивная заливка
             // 5 Итеративная заливка
-            // 6 Построчная заливка ( работает неправильно)
+            // 6 Построчная заливка (работает неправильно)
+            // 7 Режим создания многоугольника
+            // 8 Создание прямоугльника
+            // 9 Создание списка с отрезками
+            // 10 Алгоритм Коэна-Сазерленда для отсечения 
             switch (AlgListBox.SelectedIndex)
             {
                 case 0:
@@ -167,7 +186,61 @@ namespace CG.View.Forms.Lab2
                     SpanFloodFill(xn, yn);
                     break;
 
+                case 7:
+
+                    // Если выбран режим рисования многоугольника, по каждому клику добавляет пиксели
+                    // Рисует по кнопке "Создать многоугольник".
+
+                    //int[] a = { xn, yn };
+                    //PolygonPixels.Add(a);
+
+                    PolygonPixels.Add([e.X, e.Y]);
+                    Style(e.X, e.Y, CurrentLineColor);
+
+                    break;
+
+                case 8:
+
+                    PolygonPixels.Add([e.X, e.Y]);
+                    Style(e.X, e.Y, CurrentLineColor);
+
+                    break;
+
+                case 9:
+
+                    //AsimDDA(xn, yn, xk, yn, Style);
+                    //AsimDDA(xk, yn, xk, yk, Style);
+                    //AsimDDA(xk, yk, xn, yk, Style);
+                    //AsimDDA(xn, yk, xn, yn, Style);
+
+                    //BresLineAlg(xn, yn, xk, yn, Style);
+                    //BresLineAlg(xk, yn, xk, yk, Style);
+                    //BresLineAlg(xk, yk, xn, yk, Style);
+                    //BresLineAlg(xn, yk, xn, yn, Style);
+
+                    BresLineAlg(xn, yn, xk, yk, Style);
+                    //List<List<int>> b = new List<List<int>>();
+                    //b = [[xn, yn], [xk, yk]];
+                    //LinePixels.Add(b);
+
+                    LinePixels.Add([[xn, yn], [xk, yk]]);
+
+
+                    break;
+
+                case 10:
+
+                    BresLineAlg(xn, yn, xk, yk, Style);
+                    //LinePixels.Add([[xn, yn],[xk, yk]]);
+
+                    break;
+
+
+
+
             }
+
+            textBox1.Text = upperpixelsaddedcount.ToString();
 
             pictureBox1.Image = myBitmap;
 
@@ -181,20 +254,22 @@ namespace CG.View.Forms.Lab2
             // Все пиксели компонента PictureBox перекрасятся в светлый цвет
 
             //Bitmap myBitmap = new Bitmap(pictureBox1.Height, pictureBox1.Width);
-            ////Задаем цвет пикселя по схеме RGB (от 0 до 255 для каждого цвета)
-            //Color newPixelColor = Color.FromArgb(247, 249, 239);
-            //for (int x = 0; x < myBitmap.Width; x++)
-            //{
-            //    for (int y = 0; y < myBitmap.Height; y++)
-            //    {
-            //        myBitmap.SetPixel(x, y, newPixelColor);
-            //    }
-            //}
-            //pictureBox1.Image = myBitmap;
+            //Задаем цвет пикселя по схеме RGB (от 0 до 255 для каждого цвета)
+            Color newPixelColor = Color.White;
+            for (int x = 0; x < myBitmap.Width; x++)
+            {
+                for (int y = 0; y < myBitmap.Height; y++)
+                {
+                    myBitmap.SetPixel(x, y, newPixelColor);
+                }
+            }
+            pictureBox1.Image = myBitmap;
+
 
             // Метод обновления компонента PictureBox
-            pictureBox1.Image = null;
-
+            //pictureBox1.Image = null;
+            //myBitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            //Style = myBitmap.SetPixel;
 
 
         }
@@ -210,7 +285,7 @@ namespace CG.View.Forms.Lab2
 
             if (dialogResult == DialogResult.OK)
             {
-                СurrentLineColor = colorDialog1.Color;
+                CurrentLineColor = colorDialog1.Color;
             }
 
         }
@@ -226,7 +301,7 @@ namespace CG.View.Forms.Lab2
 
             if (dialogResult == DialogResult.OK)
             {
-                CurrentFillCllor = colorDialog1.Color;
+                CurrentFillColor = colorDialog1.Color;
             }
 
         }
@@ -261,13 +336,14 @@ namespace CG.View.Forms.Lab2
             {
 
                 // Рисует линию выбранного стиля. 
-                Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
-                // myBitmap.SetPixel((int)xOutput, (int)yOutput, СurrentLineColor);
+                //myBitmap.SetPixel((int)xOutput, (int)yOutput, Color.Red);
 
                 xOutput = xOutput + dx / numberNodes;
                 yOutput = yOutput + dy / numberNodes;
             }
+
         }
 
 
@@ -329,17 +405,17 @@ namespace CG.View.Forms.Lab2
             xOutput = xn;
             yOutput = yn;
 
-            Style((int)xOutput, (int)yOutput, СurrentLineColor);
-            
+            Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
-           // 1 Четверть
-            if (dx >= dy && dy>0)
+
+            // 1 Четверть
+            if (dx >= dy && dy > 0)
             {
                 while (xOutput < xk)
                 {
                     xOutput++;
                     yOutput = yOutput + dy / dx;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                 }
             }
@@ -349,7 +425,7 @@ namespace CG.View.Forms.Lab2
                 {
                     yOutput++;
                     xOutput = xOutput + dx / dy;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
                 }
             }
 
@@ -360,7 +436,7 @@ namespace CG.View.Forms.Lab2
                 {
                     xOutput++;
                     yOutput = yOutput - Math.Abs(dy) / dx;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
                 }
             }
             else if (Math.Abs(dy) >= Math.Abs(dx) && dy < 0)
@@ -369,7 +445,7 @@ namespace CG.View.Forms.Lab2
                 {
                     yOutput--;
                     xOutput = xOutput + dx / Math.Abs(dy);
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
                 }
             }
 
@@ -434,6 +510,7 @@ namespace CG.View.Forms.Lab2
             xOutput = xn;
             yOutput = yn;
 
+            Style((int)xOutput, (int)yOutput, CurrentLineColor);
             // 2 варианта: 1 и 4 четверть. 3 и 4 получаются, соответственно, отражениями координат
 
 
@@ -454,27 +531,29 @@ namespace CG.View.Forms.Lab2
                         xOutput = xOutput + 1;
                         E = E + 2 * dy;
                     }
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor); /* Очередная точка вектора */
 
                 }
             }
             else if (dy >= dx && dx >= 0)
             {
-                E = 2 * dy - dx;
+                E = 2 * dx - dy;
                 for (double i = dy; (i - 1) >= 0; i--)
                 {
                     if (E >= 0)
                     {
                         xOutput = xOutput + 1;
                         yOutput = yOutput + 1;
+                        //E = E + 2 * dx;
                         E = E + 2 * (dx - dy);
                     }
                     else
                     {
                         yOutput = yOutput + 1;
+                        //E = E + 2 * (dx - dy);
                         E = E + 2 * dx;
                     }
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor); /* Очередная точка вектора */
 
                 }
             }
@@ -497,13 +576,13 @@ namespace CG.View.Forms.Lab2
                         xOutput = xOutput + 1;
                         E = E + 2 * Math.Abs(dy);
                     }
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor); /* Очередная точка вектора */
                 }
             }
             else if (Math.Abs(dy) >= Math.Abs(dx) && dy <= 0)
             {
 
-                E = 2 * Math.Abs(dy) - Math.Abs(dx);
+                E = 2 * Math.Abs(dx) - Math.Abs(dy);
                 for (double i = Math.Abs(dy); (i - 1) >= 0; i--)
                 {
                     if (E >= 0)
@@ -517,7 +596,7 @@ namespace CG.View.Forms.Lab2
                         yOutput = yOutput - 1;
                         E = E + 2 * Math.Abs(dx);
                     }
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor); /* Очередная точка вектора */
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor); /* Очередная точка вектора */
                 }
             }
 
@@ -532,19 +611,19 @@ namespace CG.View.Forms.Lab2
         /// <param name="Style"></param>
         private void BresCircleAlg(double xc, double yc, DrawStyle Style)
         {
-        // Суть алгортима
-        // Алгоритм Брезенхема для окружности рисует её только в 1 четверти
-        // Ведём новую систему координат с центром в точке xc,yc, чтобы определять точки относительно неё
-        // Будем находить точки, которые надо нарисовать, переводить их в старую ск, и рисовать в ней
-        // Чтобы нарисовать остальные - нужно повернуть точку на 90 градусов с помощью оператора поворота
-        // Но он поворачивает, только относительно начала координат
-        // поврорачиваем относительно новой - переводим в старую и рисуем
+            // Суть алгортима
+            // Алгоритм Брезенхема для окружности рисует её только в 1 четверти
+            // Ведём новую систему координат с центром в точке xc,yc, чтобы определять точки относительно неё
+            // Будем находить точки, которые надо нарисовать, переводить их в старую ск, и рисовать в ней
+            // Чтобы нарисовать остальные - нужно повернуть точку на 90 градусов с помощью оператора поворота
+            // Но он поворачивает только относительно начала координат
+            // поврорачиваем относительно новой - переводим в старую и рисуем
 
 
-        // Теория по преобразованию координат, слайд 5
-        // https://moodle.math.tusur.ru/pluginfile.php/1187/mod_resource/content/1/Preobr_dsk.pdf
-        // Теория по линейным операторам, слайд 11
-        // https://moodle.math.tusur.ru/pluginfile.php/4097/mod_resource/content/1/Linejnyj%20operator.pdf
+            // Теория по преобразованию координат, слайд 5
+            // https://moodle.math.tusur.ru/pluginfile.php/1187/mod_resource/content/1/Preobr_dsk.pdf
+            // Теория по линейным операторам, слайд 11
+            // https://moodle.math.tusur.ru/pluginfile.php/4097/mod_resource/content/1/Linejnyj%20operator.pdf
 
 
             int radius = int.Parse(RadiusTextBox.Text);
@@ -595,7 +674,7 @@ namespace CG.View.Forms.Lab2
                         //yOutput = yOutput;
 
                         // рисуем в старой
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                         // Заношу координаты в новой ск в матрицу
@@ -612,7 +691,7 @@ namespace CG.View.Forms.Lab2
                         yOutput = yn + yc;
 
                         ////Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         //// повторяю это ещё 2 раза
                         Coord = MatrixMultiply(Operator, Coord);
@@ -620,7 +699,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                         Coord = MatrixMultiply(Operator, Coord);
@@ -628,7 +707,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // поворачиваю ещё раз, чтобы восстановить координаты точек 
                         Coord = MatrixMultiply(Operator, Coord);
@@ -651,7 +730,7 @@ namespace CG.View.Forms.Lab2
                         xOutput = xn + xc;
                         yOutput = yn + yc;
 
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // Заношу координаты в новой ск в матрицу
                         Coord[0, 0] = xn;
@@ -668,7 +747,7 @@ namespace CG.View.Forms.Lab2
                         yOutput = yn + yc;
 
                         // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // повторяю это ещё 2 раза
                         Coord = MatrixMultiply(Operator, Coord);
@@ -676,7 +755,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                         Coord = MatrixMultiply(Operator, Coord);
@@ -684,7 +763,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         Coord = MatrixMultiply(Operator, Coord);
                         xn = Coord[0, 0];
@@ -713,7 +792,7 @@ namespace CG.View.Forms.Lab2
                         xOutput = xn + xc;
                         yOutput = yn + yc;
 
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // Заношу координаты в новой ск в матрицу
                         Coord[0, 0] = xn;
@@ -729,7 +808,7 @@ namespace CG.View.Forms.Lab2
                         yOutput = yn + yc;
 
                         // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // повторяю это ещё 2 раза
                         Coord = MatrixMultiply(Operator, Coord);
@@ -737,7 +816,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                         Coord = MatrixMultiply(Operator, Coord);
@@ -745,7 +824,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         Coord = MatrixMultiply(Operator, Coord);
                         xn = Coord[0, 0];
@@ -767,7 +846,7 @@ namespace CG.View.Forms.Lab2
 
                         yOutput = yn + yc;
 
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // Заношу координаты в новой ск в матрицу
                         Coord[0, 0] = xn;
@@ -783,7 +862,7 @@ namespace CG.View.Forms.Lab2
                         yOutput = yn + yc;
 
                         // Рисую координаты в старой ск
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         // повторяю это ещё 2 раза
                         Coord = MatrixMultiply(Operator, Coord);
@@ -791,7 +870,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                         Coord = MatrixMultiply(Operator, Coord);
@@ -799,7 +878,7 @@ namespace CG.View.Forms.Lab2
                         yn = Coord[1, 0];
                         xOutput = xn + xc;
                         yOutput = yn + yc;
-                        Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                        Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                         Coord = MatrixMultiply(Operator, Coord);
                         xn = Coord[0, 0];
@@ -823,7 +902,7 @@ namespace CG.View.Forms.Lab2
                     xOutput = xn + xc;
                     yOutput = yn + yc;
 
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                     // Заношу координаты в новой ск в матрицу
@@ -840,7 +919,7 @@ namespace CG.View.Forms.Lab2
                     yOutput = yn + yc;
 
                     // Рисую координаты в старой ск
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                     // повторяю это ещё 2 раза
                     Coord = MatrixMultiply(Operator, Coord);
@@ -848,7 +927,7 @@ namespace CG.View.Forms.Lab2
                     yn = Coord[1, 0];
                     xOutput = xn + xc;
                     yOutput = yn + yc;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
 
                     Coord = MatrixMultiply(Operator, Coord);
@@ -856,7 +935,7 @@ namespace CG.View.Forms.Lab2
                     yn = Coord[1, 0];
                     xOutput = xn + xc;
                     yOutput = yn + yc;
-                    Style((int)xOutput, (int)yOutput, СurrentLineColor);
+                    Style((int)xOutput, (int)yOutput, CurrentLineColor);
 
                     Coord = MatrixMultiply(Operator, Coord);
                     xn = Coord[0, 0];
@@ -875,7 +954,8 @@ namespace CG.View.Forms.Lab2
         }
 
         /// <summary>
-        /// Рисует квадрат. 
+        /// Рисует квадрат. Нужно для рисования толстой линии.
+        /// Вместо одной точки, рисует квадрат вокруг неё. 
         /// </summary>
         /// <param name="x">Текущий x</param>
         /// <param name="y">Текущий y</param>
@@ -891,7 +971,7 @@ namespace CG.View.Forms.Lab2
 
 
             // Рисую линии квадрата
-            for (int i = 1; i <= height*2; i++)
+            for (int i = 1; i <= height * 2; i++)
             {
                 // Верхняя линия
                 myBitmap.SetPixel((int)xmin + i, (int)ymax, PixelColor);
@@ -938,7 +1018,7 @@ namespace CG.View.Forms.Lab2
             for (index = 1; index <= numberNodes; index++)
             {
                 // Сделал через рисование квадратов, вместо рисования пикселей
-                DrawRectangle((int)xOutput, (int)yOutput, СurrentLineColor);
+                DrawRectangle((int)xOutput, (int)yOutput, CurrentLineColor);
 
                 xOutput = xOutput + dx / numberNodes;
                 yOutput = yOutput + dy / numberNodes;
@@ -954,7 +1034,7 @@ namespace CG.View.Forms.Lab2
         /// <param name="y1"></param>
         private void RecursiveFloodFill(int x1, int y1)
         {
-            
+
             Color oldPixelColor = myBitmap.GetPixel(x1, y1);
 
             // Тут он сравнивает цвет пикселя с текущим цветом линии
@@ -962,12 +1042,16 @@ namespace CG.View.Forms.Lab2
 
             // сравнение цветов происходит в формате RGB
             // для этого используем метод ToArgb объекта Color
-            if ((oldPixelColor.ToArgb() != СurrentLineColor.ToArgb())
-            && (oldPixelColor.ToArgb() != CurrentFillCllor.ToArgb()))
+            if ((oldPixelColor.ToArgb() != CurrentLineColor.ToArgb())
+            && (oldPixelColor.ToArgb() != CurrentFillColor.ToArgb()))
             {
-                //перекрашиваем пиксель
 
-                myBitmap.SetPixel(x1, y1, CurrentFillCllor);
+                //перекрашиваем пиксель
+                myBitmap.SetPixel(x1, y1, CurrentFillColor);
+
+                //pictureBox1.Image = myBitmap;
+
+                //pictureBox1.Refresh();
 
                 //вызываем метод для 4-х соседних пикселей
                 RecursiveFloodFill(x1 + 1, y1);
@@ -983,13 +1067,14 @@ namespace CG.View.Forms.Lab2
         }
 
 
+
         /// <summary>
         /// Итеративная заливка.
         /// </summary>
         /// <param name="x1"></param>
         /// <param name="y1"></param>
         private void IterativeFloodFill(int x1, int y1)
-        {   
+        {
 
             // теория про массивы в с#
             // https://metanit.com/sharp/tutorial/2.4.php
@@ -1029,17 +1114,19 @@ namespace CG.View.Forms.Lab2
                 Color oldPixelColor = myBitmap.GetPixel(xc, yc);
 
                 // проверяет его цвет
-                if ((oldPixelColor.ToArgb() != СurrentLineColor.ToArgb())
-                     && (oldPixelColor.ToArgb() != CurrentFillCllor.ToArgb()))
+                if ((oldPixelColor.ToArgb() != CurrentLineColor.ToArgb())
+                     && (oldPixelColor.ToArgb() != CurrentFillColor.ToArgb()))
                 {
 
-                    myBitmap.SetPixel(xc, yc, CurrentFillCllor);
+                    myBitmap.SetPixel(xc, yc, CurrentFillColor);
+                    //pictureBox1.Image = myBitmap;
 
+                    //pictureBox1.Refresh();
 
                     // Для всех четырех соседних пикселов проверить, является ли он граничным или уже перекрашен
 
-                    if ((myBitmap.GetPixel(xc, yc + 1).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xc, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                    if ((myBitmap.GetPixel(xc, yc + 1).ToArgb() != CurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc, yc + 1).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         // это не работает, значения будут передаваться по ссылке,
                         // поэтому у всех элементов стека координаты будут одни и те же
@@ -1052,22 +1139,22 @@ namespace CG.View.Forms.Lab2
                         Pixels.Push(a);
                     }
 
-                    if ((myBitmap.GetPixel(xc + 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xc + 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    if ((myBitmap.GetPixel(xc + 1, yc).ToArgb() != CurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc + 1, yc).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         int[] a = { xc + 1, yc };
                         Pixels.Push(a);
                     }
 
-                    if ((myBitmap.GetPixel(xc, yc - 1).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xc, yc - 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                    if ((myBitmap.GetPixel(xc, yc - 1).ToArgb() != CurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc, yc - 1).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         int[] a = { xc, yc - 1 };
                         Pixels.Push(a);
                     }
 
-                    if ((myBitmap.GetPixel(xc - 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xc - 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    if ((myBitmap.GetPixel(xc - 1, yc).ToArgb() != CurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xc - 1, yc).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         int[] a = { xc - 1, yc };
                         Pixels.Push(a);
@@ -1097,6 +1184,9 @@ namespace CG.View.Forms.Lab2
 
         }
 
+
+        int upperpixelsaddedcount;
+
         /// <summary>
         /// Построчная заливка
         /// </summary>
@@ -1104,7 +1194,38 @@ namespace CG.View.Forms.Lab2
         /// <param name="y1"></param>
         private void SpanFloodFill(int x1, int y1)
         {
-            int count = 0;
+
+
+            // Переменные, чтобы указывать, какой пиксель заносить в стек верхний или нижний
+            // Изначально нужно занести оба
+            // Нужны, чтобы решить проблему неправильной заливки
+            /*Проблема:
+            Причина проблемы, которую я долго не мог решить заключалась в следующем:
+            После каждой новой закрашенной строки в стек заносился и верхний и нижний пиксели
+            Т.е. после первой строки занеслись верхний и нижний. Достал нижний, строка закрасилась
+            затем занеслись верхний(предыдущий первый) и нижний пиксели.
+            Таким образом в стеке были пиксели, которые находились на закрашенных строках. 
+            После достижения нижней границы начали доставаться верхние пиксели, но, так как они находились уже на закрашенных строках,
+            Алгортим записывал, что верхняя граница уже достигнута. Доставал все верхние пиксели, дошёл до самого первого верхнего.
+            Закрасил его, но вверх больше не шёл. 
+
+            Это объясняет то, почему алгоритм работал, если я закрашивал либо только верх, либо только низ,
+            В этом случае в стеке не было лишних пикселей. И то почему, если я менял местами порядок добавления пикселей
+            (Нижний добавлялся первым, затем верхний. Т.о. из стека сначала доставались верхние пиксели), заливка шла вверх, а вниз - нет.
+            Почему заливка иногда протекала так и не понял, но, видимо, проблема тоже была где - то тут.
+            */
+            /* Решение проблемы:
+            Сначала нужно занести оба пикселя - верхний и нижний.
+            Первым достанется нижний. Нужно дойти до самого низа, но заносить при этом только нижние пиксели, а не верхние.
+            Когда дошёл до нижней границы, в стеке останется 1 пиксель - верхний. Нужно достать его и идти вверх,
+            занося только верхние пиксели.
+            Реализацию см ниже. строка 1359
+             */
+            bool CanGoUp = true;
+            bool CanGoDown = true;
+
+            upperpixelsaddedcount = 0;
+
             // стек из массивов. в каждом массиве по 2 элемента - координаты пикселя.
             Stack<int[]> Pixels = new Stack<int[]>();
 
@@ -1114,10 +1235,13 @@ namespace CG.View.Forms.Lab2
             // Добавляет первый пиксель в стек
             Pixels.Push(CurrentPixel);
 
+            // Достигнута или нет верхняя граница
+            bool UpperBoundReached = false;
+            bool LowerBoundReached = false;
+
             // Пока стек не пуст
             while (Pixels.Count != 0)
             {
-                count++;
                 // Получает пиксель из стека
                 CurrentPixel = Pixels.Pop();
 
@@ -1131,141 +1255,193 @@ namespace CG.View.Forms.Lab2
                 int xRight = xc;
 
 
-                // если текущий пиксель не закрашен, закрашивает все слева и справа от него. 
-                if((myBitmap.GetPixel(xc, yc).ToArgb() != СurrentLineColor.ToArgb())
-                       && (myBitmap.GetPixel(yc, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                // если текущий пиксель не граничный и не закрашен, закрашивает всё слева и справа от него. 
+                if ((myBitmap.GetPixel(xc, yc).ToArgb() != CurrentLineColor.ToArgb())
+                       && (myBitmap.GetPixel(xc, yc).ToArgb() != CurrentFillColor.ToArgb()))
                 {
 
-                    myBitmap.SetPixel(xc, yc, CurrentFillCllor);
+                    myBitmap.SetPixel(xc, yc, CurrentFillColor);
 
-                    while ((myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                      && (myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    while ((myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != CurrentLineColor.ToArgb())
+                        && (myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         xLeft--;
-                        myBitmap.SetPixel(xLeft, yc, CurrentFillCllor);
+                        myBitmap.SetPixel(xLeft, yc, CurrentFillColor);
+
                     }
 
 
-                    while ((myBitmap.GetPixel(xRight + 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                            && (myBitmap.GetPixel(xRight + 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
+                    while ((myBitmap.GetPixel(xRight + 1, yc).ToArgb() != CurrentLineColor.ToArgb())
+                            && (myBitmap.GetPixel(xRight + 1, yc).ToArgb() != CurrentFillColor.ToArgb()))
                     {
                         xRight++;
-                        myBitmap.SetPixel(xRight, yc, CurrentFillCllor);
+                        myBitmap.SetPixel(xRight, yc, CurrentFillColor);
+
+
                     }
                     pictureBox1.Image = myBitmap;
 
                     pictureBox1.Refresh();
                 }
 
-                //Color oldPixelColor = myBitmap.GetPixel(xc, yc);
-
-                //myBitmap.SetPixel(xc, yc, CurrentFillCllor);
-
-                //  проверяет пиксели справа и слева и закрашивает их 
-
-                //while ((myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                //       && (myBitmap.GetPixel(xLeft - 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
-                //{
-                //    xLeft--;
-                //    myBitmap.SetPixel(xLeft, yc, CurrentFillCllor);
-                //}
 
 
-                //while ((myBitmap.GetPixel(xRight + 1, yc).ToArgb() != СurrentLineColor.ToArgb())
-                //        && (myBitmap.GetPixel(xRight + 1, yc).ToArgb() != CurrentFillCllor.ToArgb()))
-                //{
-                //    xRight++;
-                //    myBitmap.SetPixel(xRight, yc, CurrentFillCllor);
-                //}
-                //pictureBox1.Image = myBitmap;
+                /*при поиске верхнего правого незакрашенного пикселя могут быть три ситуации. 
+                1) верхний пиксель граничный.
+                Нам не надо проверять, будет ли следующий пиксель граничным, так как неизвестно, насколько длинная граница
+                все граничные пиксели надо пропустить.
 
-                //pictureBox1.Refresh();
+                Поиск крайнего правого граничного пикселя сделал в другом цикле
+
+                2) верхний пиксель самый верхний в фигуре. 
+                надо дополнить условие из 1
+                надо дойти до самого крайнего граничного пикселя в верхней строке, запомнить координату x
+                и посмотреть, является ли пиксель на текущей строке с этим же или следующим x граничным. 
+                если да - это будет означать, что граница идёт вниз, значит сверху больше нет пикселей, принадлежащих фигуре
+                если нет - внизу границы нет, значит там фигура, выход из цикла
+
+                3) верхний пиксель не граничный, т.е.принадлежит фигуре
+                проверять, граничный ли пиксель, больше не надо.
+                Нужно выйти из цикла и искать следующий граничный пиксель. 
+                */
+
+                // координата x проверяемого пикселя
+                int i1 = xLeft;
 
 
-                // Проверка пикселей сверху и снизу
-                // Поиск крайних левых и правых незакрашенных пикселей. 
-
-
-                bool uFlag = false;
-                bool lFlag = false;
-                int ir = xLeft+1;
-                //while (lFlag == false && uFlag == false)
-                //{
-                    // за начало отсчёта берёт крайний левый пиксель. 
-                    //int ir = xLeft;
-
-                    // проверяет верхнюю строку
-
-                if ((myBitmap.GetPixel(ir + 1, yc + 1).ToArgb() != СurrentLineColor.ToArgb())
-                    && (myBitmap.GetPixel(ir, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
+                // Если верхняя граница не достигнута и можно идти вверх.
+                // ищет, где заканчивается верхняя граница
+                if (UpperBoundReached == false && CanGoUp == true)
                 {
-                    int[] a = { ir, yc + 1 };
-                    Pixels.Push(a);
-                    uFlag = true;
+                    while (true)
+                    {
+                        // Проверка условия 1
+                        // если пиксель граничный, пропускает его
+                        if (myBitmap.GetPixel(i1 + 1, yc + 1).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            i1++;
+                            continue;
+                        }
+
+                        // проверка 2
+                        // Проверяет пиксель на текущей строке и следующий,
+                        // если какой-либо из них цвета границы, значит наш пиксель уже за фигурой.
+                        // и переходить на него не надо. достигли верхней границы
+                        else if (myBitmap.GetPixel(i1, yc).ToArgb() == CurrentLineColor.ToArgb() ||
+                           myBitmap.GetPixel(i1 + 1, yc).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            // Дошёл до верхней границы, можно идти вниз.
+                            UpperBoundReached = true;
+                            CanGoDown = true;
+                            //int[] a = { i1 - 2, yc + 1 };
+
+                            // Добавляет верхний пиксель в стек
+                            //Pixels.Push(a);
+                            //upperpixelsaddedcount++;
+                            break;
+                        }
+                        else
+                        {
+
+                            break;
+                        }
+
+                    }
                 }
 
-                // то же самое для пикселя снизу
-                if ((myBitmap.GetPixel(ir, yc - 1).ToArgb() != СurrentLineColor.ToArgb())
-                    && (myBitmap.GetPixel(ir, yc - 1).ToArgb() != CurrentFillCllor.ToArgb()))
+
+
+                // если верхняя граница не достигнута и можно идти вверх, ищем пиксель. 
+
+                int it1 = i1;
+                if (UpperBoundReached == false && CanGoUp == true)
                 {
-                    int[] a = { ir, yc - 1 };
-                    Pixels.Push(a);
-                    lFlag = true;
+                    while (true)
+                    {
+                        // Если пиксель граничный заносит в стек и выходит из цикла
+                        if (myBitmap.GetPixel(it1 + 1, yc + 1).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            int[] b = { it1, yc + 1 }; ;
+                            // Добавляет верхний пиксель в стек
+                            Pixels.Push(b);
+                            //upperpixelsaddedcount++;
+
+                            break;
+                        }
+                        else
+                        {
+                            it1++;
+                        }
+                    }
                 }
-                //    ir++;
-                //}
-                //for (int i = xLeft; i < xRight; i++)
-                //{
-                //    // если пиксель сверху не закрашен, заносит его в стек
-                //    if ((myBitmap.GetPixel(i, yc + 1).ToArgb() != СurrentLineColor.ToArgb())
-                //        && (myBitmap.GetPixel(i, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
-                //    {
-                //        int[] a = { i, yc + 1 };
-                //        Pixels.Push(a);
-                //    }
 
-                //    // то же самое для пикселя снизу
-                //    if ((myBitmap.GetPixel(i, yc - 1).ToArgb() != СurrentLineColor.ToArgb())
-                //        && (myBitmap.GetPixel(i, yc - 1).ToArgb() != CurrentFillCllor.ToArgb()))
-                //    {
-                //        int[] a = { i, yc - 1 };
-                //        Pixels.Push(a);
 
-                //        // Выходит из цикла
-                //        break;
-                //    }
-                //}
-                textBox1.Text = count.ToString();
+                // то же самое для нижнего пикселя. 
+
+                // если нижняя граница не достигнута и можно идти вниз, ищем пиксель. 
+                int i2 = xLeft;
+
+                if (LowerBoundReached == false && CanGoDown == true)
+                {
+                    while (true)
+                    {
+                        // Проверка 1
+                        if (myBitmap.GetPixel(i2 + 1, yc - 1).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            i2++;
+                            continue;
+                        }
+
+                        // Проверка 2
+                        else if (myBitmap.GetPixel(i2, yc).ToArgb() == CurrentLineColor.ToArgb() ||
+                               myBitmap.GetPixel(i2 + 1, yc).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            // Нижняя граница достигнута. Дальше можно заносить верхние пиксели. Вниз больше идти нельзя. 
+                            LowerBoundReached = true;
+                            CanGoDown = false;
+                            CanGoUp = true;
+                            break;
+                        }
+                        else
+                        {
+                            // Если нижнняя граница не достигнута, запрещает заносить верхние пиксели.
+                            CanGoUp = false;
+                            break;
+                        }
+
+                    }
+                }
+
+
+                int it2 = i2;
+
+                if (LowerBoundReached == false && CanGoDown == true)
+                {
+                    while (true)
+                    {
+                        //Если пиксель граничный или закрашен заносит в стек и выходит из цикла
+                        if (myBitmap.GetPixel(it2 + 1, yc - 1).ToArgb() == CurrentLineColor.ToArgb())
+                        {
+                            //координаты нижнего левого пикселя
+                            int[] a = { it2, yc - 1 };
+
+                            //Добавляет нижний пиксель в стек
+                            Pixels.Push(a);
+
+                            break;
+                        }
+                        else
+                        {
+                            it2++;
+                        }
+                    }
+                }
             }
-
-            //for (int i = xLeft; i < xRight; i++)
-            //{
-            //    // если пиксель сверху не закрашен, заносит его в стек
-            //    if ((myBitmap.GetPixel(i, yc + 1).ToArgb() != СurrentLineColor.ToArgb())
-            //        && (myBitmap.GetPixel(i, yc + 1).ToArgb() != CurrentFillCllor.ToArgb()))
-            //    {
-            //        int[] a = { i, yc + 1 };
-            //        Pixels.Push(a);
-            //    }
-
-            //    // то же самое для пикселя снизу
-            //    if ((myBitmap.GetPixel(i, yc - 1).ToArgb() != СurrentLineColor.ToArgb())
-            //        && (myBitmap.GetPixel(i, yc - 1).ToArgb() != CurrentFillCllor.ToArgb()))
-            //    {
-            //        int[] a = { i, yc - 1 };
-            //        Pixels.Push(a);
-
-            //        // Выходит из цикла
-            //        break;
-            //    }
-            //}
-
-
 
         }
 
 
-
+        // Кнопка Выполнить
         private void ExecuteButton_Click(object sender, EventArgs e)
         {
 
@@ -1313,7 +1489,10 @@ namespace CG.View.Forms.Lab2
 
 
             // обновляем pictureBox и активируем кнопки
+            pictureBox1.Image = myBitmap;
+
             pictureBox1.Refresh();
+
             ClearButton.Enabled = true;
             LineColorButton.Enabled = true;
 
@@ -1321,17 +1500,40 @@ namespace CG.View.Forms.Lab2
         }
 
 
-        // Убирает множественный выбор
+        // Убирает множественный выбор в чек листбоксе
         private void AlgListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Текущий выбранный индекс
-            AlgIndex = AlgListBox.SelectedIndex;
+            int AlgIndex = AlgListBox.SelectedIndex;
 
             // Убирает выбор с других элементов
             for (int i = 0; i < AlgListBox.Items.Count; i++)
             {
                 if (i != AlgIndex)
                     AlgListBox.SetItemCheckState(i, CheckState.Unchecked);
+
+            }
+
+            if (AlgIndex == 7)
+            {
+
+                // Если кнопка нажата, добавляет пиксели. 
+                // Если кнопку отжать, потом нажать снова, пиксели сбрасываются
+                // Нужно будет добавлять их заново. 
+
+                PolygonPixels.Clear();
+                Color newPixelColor = Color.White;
+                for (int x = 0; x < myBitmap.Width; x++)
+                {
+                    for (int y = 0; y < myBitmap.Height; y++)
+                    {
+                        myBitmap.SetPixel(x, y, newPixelColor);
+                    }
+                }
+
+                pictureBox1.Image = myBitmap;
+
+                pictureBox1.Refresh();
             }
 
         }
@@ -1349,6 +1551,436 @@ namespace CG.View.Forms.Lab2
             {
                 Style = myBitmap.SetPixel;
             }
+        }
+
+
+        // Кнопка Создать многоугольник
+        private void CreatePolygon_Click(object sender, EventArgs e)
+        {
+
+
+            if (AlgListBox.SelectedIndex == 7)
+            {
+                for (int i = 0; i < PolygonPixels.Count() - 1; i++)
+                {
+                    BresLineAlg(PolygonPixels[i][0], PolygonPixels[i][1], PolygonPixels[i + 1][0], PolygonPixels[i + 1][1], Style);
+                }
+
+                // Линия из последнего пикселя в первый
+                BresLineAlg(PolygonPixels[PolygonPixels.Count() - 1][0], PolygonPixels[PolygonPixels.Count() - 1][1],
+                            PolygonPixels[0][0], PolygonPixels[0][1], Style);
+
+            }
+
+            if (AlgListBox.SelectedIndex == 8 && PolygonPixels.Count == 2)
+            {
+                int x1 = PolygonPixels[0][0];
+                int y1 = PolygonPixels[0][1];
+                int x2 = PolygonPixels[1][0];
+                int y2 = PolygonPixels[1][1];
+                BresLineAlg(x1, y1, x2, y1, Style);
+                BresLineAlg(x2, y1, x2, y2, Style);
+                BresLineAlg(x2, y2, x1, y2, Style);
+                BresLineAlg(x1, y2, x1, y1, Style);
+            }
+            // Рисует линии многоугольника
+
+            pictureBox1.Image = myBitmap;
+
+            pictureBox1.Refresh();
+        }
+
+        private void ClipLines1_Click(object sender, EventArgs e)
+        {
+
+            Color newPixelColor = Color.White;
+            for (int x = 0; x < myBitmap.Width; x++)
+            {
+                for (int y = 0; y < myBitmap.Height; y++)
+                {
+                    myBitmap.SetPixel(x, y, newPixelColor);
+                }
+            }
+            pictureBox1.Image = myBitmap;
+
+            // Точки прямоугольника
+            double x1 = PolygonPixels[0][0];
+            double y1 = PolygonPixels[0][1];
+            double x2 = PolygonPixels[1][0];
+            double y2 = PolygonPixels[1][1];
+
+            BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+            BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
+            BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
+            BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
+
+            double xl, xr, yn, yv;
+
+
+            xl = Math.Min(x1, x2);
+            xr = Math.Max(x1, x2);
+
+            yn = Math.Min(y1, y2);
+            yv = Math.Max(y1, y2);
+
+
+            //// поиск рёбер отсекающего окна.
+            //// 
+            //if (x1<x2)
+            //{
+            //    xl = x1;
+            //    xr = x2;
+            //}
+            //else
+            //{
+            //    xl = x2;
+            //    xr = x1;
+            //}
+
+            //if (y1 < y2)
+            //{
+            //    yn = y1;
+            //    yv = y2;
+            //}
+            //else
+            //{
+            //    yn = y2;
+            //    yv = y1;
+            //}
+
+
+            for (int i = 0; i < LinePixels.Count(); i++)
+            {   
+
+                // Точки отрезка
+                x1 = LinePixels[i][0][0];
+                y1 = LinePixels[i][0][1];
+                x2 = LinePixels[i][1][0];
+                y2 = LinePixels[i][1][1];
+
+                if((x1<xl || x1 >xr) || (x2<xl || x2 >xr) || (y1<yn || y1>yv) || (y2<yn || y2 > yv))
+                {
+                    if ((x1 < xl && x1 > xr) || (x2 < xl && x2 > xr) || (y1 < yn && y1 > yv) || (y2 < yn && y2 > yv))
+                    {
+                        break;
+                    }
+                    else
+                    {
+
+                        // Отрезок частично видим, надо найти точки пересечения отрезка с окном. 
+                        
+                        double xOutput1, yOutput1, xOutput2, yOutput2;
+                        double ylp, ypp, xnp, xvp;
+
+                        double dx = x2 - x1;
+                        double dy = y2 - y1;
+                        double tg = dy / dx;
+                        
+                        // точки пересечения прямой, на которой лежит отрезок
+                        // с продолжениями сторон прямоугольника
+                        ylp = tg * (xl - x1) + y1;
+                        ypp = tg * (xr - x1) + y1;
+                        xvp = x1 + (yv - y1) / tg;
+                        xnp = x1 + (yn - y1) / tg;
+
+                        bool Flag1 = xl <= x1;
+                        bool Flag2 = x1 >= xr;
+                        bool Flag3 = yn <= y1;
+                        bool Flag4 = y1 >= yv;
+
+                        // если первый конец отрезка лежит внутри окна
+                        if ((xl <= x1 && x1 <= xr) && (yn <= y1 && y1 <= yv))
+                        {
+                            xOutput1 = x1;
+                            yOutput1 = y1;
+
+                            if (dx > 0 && dy > 0)
+                            {
+                                
+                                if (ypp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp < yv)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                
+                            }
+
+                            else if (dx > 0 && dy < 0)
+                            {
+                                if (ypp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp > yn)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy < 0)
+                            {
+                                if (ylp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp > yn)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy > 0)
+                            {
+                                if (ylp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp < yv)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // если второй конец отрезка лежит внутри окна
+                        else if ((xl <= x2 && x2 <= xr) && (yn <= y2 && y2 <= yv))
+                        {
+
+                            // меняю начало и конец отрезка местами
+                            // чтобы не переписывать все условия. 
+                            double temp;
+
+                            xOutput1 = x2;
+                            yOutput1 = y2;
+
+                            temp = x1;
+                            x1 = x2;
+                            x2 = temp;
+
+                            temp = y1;
+                            y1 = y2;
+                            y2 = temp;
+
+                            xOutput1 = x1;
+                            yOutput1 = y1;
+
+                            dx = -dx;
+                            dy = -dy;
+                            
+
+
+                            if (dx > 0 && dy > 0)
+                            {
+
+                                if (ypp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp < yv)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+
+                            }
+
+                            else if (dx > 0 && dy < 0)
+                            {
+                                if (ypp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp > yn)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy < 0)
+                            {
+                                if (ylp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp > yn)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy > 0)
+                            {
+                                if (ylp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp < yv)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                        }
+
+                        // ни один из концов не лежит внутри окна
+                        // Не доделал
+                        /*else
+                        {
+                            if (ypp > yv)
+                            {
+                                yOutput1 = yv;
+
+                            }
+
+
+                                if (dx > 0 && dy > 0)
+                            {
+
+                                if (ypp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp < yv)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+
+                            }
+
+                            else if (dx > 0 && dy < 0)
+                            {
+                                if (ypp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+
+                                }
+                                else if (ypp > yn)
+                                {
+                                    yOutput2 = ypp;
+                                    xOutput2 = xr;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy < 0)
+                            {
+                                if (ylp < yn)
+                                {
+                                    yOutput2 = yn;
+                                    xOutput2 = xnp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp > yn)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                            else if (dx < 0 && dy > 0)
+                            {
+                                if (ylp > yv)
+                                {
+                                    yOutput2 = yv;
+                                    xOutput2 = xvp;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                                else if (ylp < yv)
+                                {
+                                    yOutput2 = ylp;
+                                    xOutput2 = xl;
+                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
+                                    continue;
+                                }
+                            }
+
+                        }
+                        */
+
+                        continue;
+                   
+                    }
+
+                    
+                }
+
+                BresLineAlg((int)x1, (int)y1, (int)x2, (int)y2, Style);
+
+            }
+
+            pictureBox1.Image = myBitmap;
+
+            pictureBox1.Refresh();
+
         }
     }
 }
