@@ -26,7 +26,6 @@ namespace CG.View.Forms.Lab2
             AlgListBox.Items.Add("Режим создания многоугольника");
             AlgListBox.Items.Add("Режим создания прямоугольника");
             AlgListBox.Items.Add("Создать отрезки");
-            AlgListBox.Items.Add("Алгоритм Коэна-Сазерленда для отсечения");
 
             // Задаёт стиль линии по умолчанию. 
             // Тонкая линия 
@@ -146,7 +145,6 @@ namespace CG.View.Forms.Lab2
             // 7 Режим создания многоугольника
             // 8 Создание прямоугльника
             // 9 Создание списка с отрезками
-            // 10 Алгоритм Коэна-Сазерленда для отсечения 
             switch (AlgListBox.SelectedIndex)
             {
                 case 0:
@@ -228,15 +226,6 @@ namespace CG.View.Forms.Lab2
 
                     break;
 
-                case 10:
-
-                    BresLineAlg(xn, yn, xk, yk, Style);
-                    //LinePixels.Add([[xn, yn],[xk, yk]]);
-
-                    break;
-
-
-
 
             }
 
@@ -264,6 +253,8 @@ namespace CG.View.Forms.Lab2
                 }
             }
             pictureBox1.Image = myBitmap;
+            LinePixels.Clear();
+            PolygonPixels.Clear();
 
 
             // Метод обновления компонента PictureBox
@@ -1590,15 +1581,16 @@ namespace CG.View.Forms.Lab2
             pictureBox1.Refresh();
         }
 
+
+        // Кнопка Простое отсечение отрезков 
         private void ClipLines1_Click(object sender, EventArgs e)
         {
 
-            Color newPixelColor = Color.White;
             for (int x = 0; x < myBitmap.Width; x++)
             {
                 for (int y = 0; y < myBitmap.Height; y++)
                 {
-                    myBitmap.SetPixel(x, y, newPixelColor);
+                    myBitmap.SetPixel(x, y, Color.White);
                 }
             }
             pictureBox1.Image = myBitmap;
@@ -1614,8 +1606,9 @@ namespace CG.View.Forms.Lab2
             BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
             BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
 
-            double xl, xr, yn, yv;
 
+            // Рёбра отсекающего окна
+            double xl, xr, yn, yv;
 
             xl = Math.Min(x1, x2);
             xr = Math.Max(x1, x2);
@@ -1624,33 +1617,9 @@ namespace CG.View.Forms.Lab2
             yv = Math.Max(y1, y2);
 
 
-            //// поиск рёбер отсекающего окна.
-            //// 
-            //if (x1<x2)
-            //{
-            //    xl = x1;
-            //    xr = x2;
-            //}
-            //else
-            //{
-            //    xl = x2;
-            //    xr = x1;
-            //}
-
-            //if (y1 < y2)
-            //{
-            //    yn = y1;
-            //    yv = y2;
-            //}
-            //else
-            //{
-            //    yn = y2;
-            //    yv = y1;
-            //}
-
-
+            // цикл по отрезкам 
             for (int i = 0; i < LinePixels.Count(); i++)
-            {   
+            {
 
                 // Точки отрезка
                 x1 = LinePixels[i][0][0];
@@ -1658,24 +1627,125 @@ namespace CG.View.Forms.Lab2
                 x2 = LinePixels[i][1][0];
                 y2 = LinePixels[i][1][1];
 
-                if((x1<xl || x1 >xr) || (x2<xl || x2 >xr) || (y1<yn || y1>yv) || (y2<yn || y2 > yv))
+
+                // Переделанный код Сергея. Работает. 
+                /*
+                double xStart = LinePixels[i][0][0];
+                double yStart = LinePixels[i][0][1];
+                double xEnd = LinePixels[i][1][0];
+                double yEnd = LinePixels[i][1][1];
+
+                bool Flag1 = xStart < xl;
+                bool Flag2 = xEnd < xl;
+                bool Flag3 = xStart > xr;
+                bool Flag4 = xEnd > xr;
+                bool Flag5 = yStart > yv;
+                bool Flag6 = yEnd > yv;
+
+
+                // если и начальная и конечная точка лежат с одной стороны окна - отрезок не виден
+                //if ((xStart < xl && xEnd < xl) || (xStart > xr && xEnd > xr) || (yStart < yv && yEnd < yv) || (yStart > yn && yEnd > yn))
+                if ((Flag1 && Flag2) || (Flag3 && Flag4) || (Flag5 && Flag6) || (yStart < yn && yEnd < yn))
                 {
-                    if ((x1 < xl && x1 > xr) || (x2 < xl && x2 > xr) || (y1 < yn && y1 > yv) || (y2 < yn && y2 > yv))
+                    continue; 
+                }
+                else
+                {
+                    bool flag = false;
+                    while (flag == false)
                     {
-                        break;
+                        // если обе точки внутри окна - отрезок полностью видим
+                        if (((xStart >= xl) && (xStart <= xr)) && ((xEnd >= xl) && (xEnd <= xr)) && ((yStart <= yv) && (yStart >= yn)) && ((yEnd <= yv) && (yEnd >= yn)))
+                        {
+                            BresLineAlg((int)xStart, (int)yStart, (int)xEnd, (int)yEnd, Style);
+                            pictureBox1.Image = myBitmap;
+
+                            pictureBox1.Refresh();
+                            flag = true;
+                        }
+
+                        else
+                        {
+                            double m;
+                            m = (double)(yEnd - yStart) / (xEnd - xStart);
+
+                            if (xStart < xl)
+                            {
+                                yStart = m * (xl - xStart) + yStart;
+                                xStart = xl;
+                            }
+
+                            if (xStart > xr)
+                            {
+                                yStart = m * (xr - xStart) + yStart;
+                                xStart = xr;
+                            }
+
+                            if (xEnd > xr)
+                            {
+                                yEnd = m * (xr - xStart) + yStart;
+                                xEnd = xr;
+                            }
+
+                            if (xEnd < xl)
+                            {
+                                yEnd =m * (xl - xStart) + yStart;
+                                xEnd = xl;
+                            }
+
+                            if (yStart > yv)
+                            {
+                                xStart = xStart + (1 / m) * (yv - yStart);
+                                yStart = yv;
+                            }
+
+                            if (yStart < yn)
+                            {
+                                xStart = xStart + (1 / m) * (yn - yStart);
+                                yStart = yn;
+                            }
+
+                            if (yEnd < yn)
+                            {
+                                xEnd = xStart + (1 / m) * (yn - yStart);
+                                yEnd = yn;
+                            }
+
+                            if (yEnd > yv)
+                            {
+                                xEnd = xStart + (1 / m) * (yv - yStart);
+                                yEnd = yv;
+                            }
+                        }
                     }
+
+                }
+                */
+
+
+                // Мой код
+
+                // лежит ли какая-либо точка снаружи окна
+                // если не лежит - отрезок полностью внутри окна. 
+                if ((x1 < xl || x1 > xr) || (x2 < xl || x2 > xr) || (y1 < yn || y1 > yv) || (y2 < yn || y2 > yv))
+                {
+
+                    // лежит ли вторая точка с этой же стороны окна.
+                    // если да - отрезок невидим. Переходим к следующему 
+                    if ((x1 < xl && x2 < xl) || (x1 > xr && x2 > xr) || (y1 > yv && y2 > yv) || (y1 < yn && y2 < yn))
+                    {
+                        continue;
+                    }
+
+                    // Если нет - отрезок частично виден. Определяем точки пересечения отрезка с окном. 
                     else
                     {
-
-                        // Отрезок частично видим, надо найти точки пересечения отрезка с окном. 
-                        
-                        double xOutput1, yOutput1, xOutput2, yOutput2;
                         double ylp, ypp, xnp, xvp;
 
                         double dx = x2 - x1;
                         double dy = y2 - y1;
                         double tg = dy / dx;
-                        
+
                         // точки пересечения прямой, на которой лежит отрезок
                         // с продолжениями сторон прямоугольника
                         ylp = tg * (xl - x1) + y1;
@@ -1683,105 +1753,186 @@ namespace CG.View.Forms.Lab2
                         xvp = x1 + (yv - y1) / tg;
                         xnp = x1 + (yn - y1) / tg;
 
-                        bool Flag1 = xl <= x1;
-                        bool Flag2 = x1 >= xr;
-                        bool Flag3 = yn <= y1;
-                        bool Flag4 = y1 >= yv;
-
-                        // если первый конец отрезка лежит внутри окна
-                        if ((xl <= x1 && x1 <= xr) && (yn <= y1 && y1 <= yv))
+                        // проверка x
+                        if (x1 < xl)
                         {
-                            xOutput1 = x1;
-                            yOutput1 = y1;
-
-                            if (dx > 0 && dy > 0)
-                            {
-                                
-                                if (ypp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp < yv)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                
-                            }
-
-                            else if (dx > 0 && dy < 0)
-                            {
-                                if (ypp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp > yn)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy < 0)
-                            {
-                                if (ylp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp > yn)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy > 0)
-                            {
-                                if (ylp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp < yv)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
+                            y1 = ylp;
+                            x1 = xl;
+                        }
+                        if (x1 > xr)
+                        {
+                            y1 = ypp;
+                            x1 = xr;
+                        }
+                        if (x2 > xr)
+                        {
+                            y2 = ypp;
+                            x2 = xr;
+                        }
+                        if (x2 < xl)
+                        {
+                            y2 = ylp;
+                            x2 = xl;
                         }
 
-                        // если второй конец отрезка лежит внутри окна
-                        else if ((xl <= x2 && x2 <= xr) && (yn <= y2 && y2 <= yv))
+                        // проверка y
+                        if (y1 > yv)
                         {
+                            x1 = xvp;
+                            y1 = yv;
+                        }
+                        if (y1 < yn)
+                        {
+                            x1 = xnp;
+                            y1 = yn;
+                        }
 
-                            // меняю начало и конец отрезка местами
-                            // чтобы не переписывать все условия. 
+                        if (y2 < yn)
+                        {
+                            x2 = xnp;
+                            y2 = yn;
+                        }
+                        if (y2 > yv)
+                        {
+                            x2 = xvp;
+                            y2 = yv;
+                        }
+
+                        BresLineAlg((int)x1, (int)y1, (int)x2, (int)y2, Style);
+                        continue;
+
+                    }
+
+                }
+
+                else
+                {
+                    BresLineAlg((int)x1, (int)y1, (int)x2, (int)y2, Style);
+                }
+
+
+            }
+            pictureBox1.Image = myBitmap;
+
+            pictureBox1.Refresh();
+            //LinePixels.Clear();
+        }
+
+        // Кнопка Отсечение Коэна-Сазерленда
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int x = 0; x < myBitmap.Width; x++)
+            {
+                for (int y = 0; y < myBitmap.Height; y++)
+                {
+                    myBitmap.SetPixel(x, y, Color.White);
+                }
+            }
+            pictureBox1.Image = myBitmap;
+
+            // Точки прямоугольника
+            double x1 = PolygonPixels[0][0];
+            double y1 = PolygonPixels[0][1];
+            double x2 = PolygonPixels[1][0];
+            double y2 = PolygonPixels[1][1];
+
+            BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+            BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
+            BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
+            BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
+
+
+            // Рёбра отсекающего окна
+            double xl, xr, yn, yv;
+
+            xl = Math.Min(x1, x2);
+            xr = Math.Max(x1, x2);
+
+            yn = Math.Min(y1, y2);
+            yv = Math.Max(y1, y2);
+
+
+            // цикл по отрезкам 
+            for (int i = 0; i < LinePixels.Count(); i++)
+            {
+
+                // Коды начальной и конечной точек отрезка
+                int FirstCode = 0000;
+                int SecondCode = 0000;
+
+                
+                // Точки отрезка
+                x1 = LinePixels[i][0][0];
+                y1 = LinePixels[i][0][1];
+                x2 = LinePixels[i][1][0];
+                y2 = LinePixels[i][1][1];
+
+                // Проверка первой точки 
+                if (y1 > yv)
+                {
+                    FirstCode += 1000;
+                }
+                else if (y1 < yn)
+                {
+                    FirstCode += 100;
+                }
+
+                if (x1 > xr)
+                {
+                    FirstCode += 10;
+                }
+                else if(x1<xl)
+                {
+                    FirstCode += 1;
+                }
+
+                // Проверка второй точки 
+                if (y2 > yv)
+                {
+                    SecondCode += 1000;
+                }
+                else if (y2 < yn)
+                {
+                    SecondCode += 100;
+                }
+
+                if (x2 > xr)
+                {
+                    SecondCode += 10;
+                }
+                else if (x2 < xl)
+                {
+                    SecondCode += 1;
+                }
+
+                while (true)
+                {
+
+                    // Проверка на видимость. 
+                    if (FirstCode == 0 && SecondCode == 0)
+                    {
+                        BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+                        break;
+                    }
+                    else if (FirstCode != SecondCode)
+                    {
+                        if (FirstCode == 0)
+                        {
+                            // Начальная точка меняется местами с конечной. 
                             double temp;
 
-                            xOutput1 = x2;
-                            yOutput1 = y2;
+                            temp = x2;
+                            x2 = x1;
+                            x1 = temp;
 
+                            temp = y2;
+                            y2 = y1;
+                            y1 = temp;
+                        }
+
+                        else if (SecondCode == 0)
+                        {
+                            double temp;
                             temp = x1;
                             x1 = x2;
                             x2 = temp;
@@ -1790,197 +1941,25 @@ namespace CG.View.Forms.Lab2
                             y1 = y2;
                             y2 = temp;
 
-                            xOutput1 = x1;
-                            yOutput1 = y1;
-
-                            dx = -dx;
-                            dy = -dy;
-                            
-
-
-                            if (dx > 0 && dy > 0)
-                            {
-
-                                if (ypp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp < yv)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-
-                            }
-
-                            else if (dx > 0 && dy < 0)
-                            {
-                                if (ypp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp > yn)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy < 0)
-                            {
-                                if (ylp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp > yn)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy > 0)
-                            {
-                                if (ylp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp < yv)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
                         }
 
-                        // ни один из концов не лежит внутри окна
-                        // Не доделал
-                        /*else
-                        {
-                            if (ypp > yv)
-                            {
-                                yOutput1 = yv;
-
-                            }
+                        //5.Анализируется код начальной точки для определения стороны окна,
+                        //с которой есть пересечение, и выполняется расчет пересечения.При этом
+                        //вычисленная точка пересечения заменяет начальную точку.
 
 
-                                if (dx > 0 && dy > 0)
-                            {
 
-                                if (ypp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp < yv)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-
-                            }
-
-                            else if (dx > 0 && dy < 0)
-                            {
-                                if (ypp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-
-                                }
-                                else if (ypp > yn)
-                                {
-                                    yOutput2 = ypp;
-                                    xOutput2 = xr;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy < 0)
-                            {
-                                if (ylp < yn)
-                                {
-                                    yOutput2 = yn;
-                                    xOutput2 = xnp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp > yn)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                            else if (dx < 0 && dy > 0)
-                            {
-                                if (ylp > yv)
-                                {
-                                    yOutput2 = yv;
-                                    xOutput2 = xvp;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                                else if (ylp < yv)
-                                {
-                                    yOutput2 = ylp;
-                                    xOutput2 = xl;
-                                    BresLineAlg((int)xOutput1, (int)yOutput1, (int)xOutput2, (int)yOutput2, Style);
-                                    continue;
-                                }
-                            }
-
-                        }
-                        */
-
-                        continue;
-                   
                     }
 
-                    
+                    // отрезок невидим.
+                    else
+                        continue;
+                    continue;
                 }
 
-                BresLineAlg((int)x1, (int)y1, (int)x2, (int)y2, Style);
+
 
             }
-
-            pictureBox1.Image = myBitmap;
-
-            pictureBox1.Refresh();
-
         }
     }
 }

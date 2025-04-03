@@ -33,6 +33,7 @@
             Lab2Button = new Button();
             Lab3Button = new Button();
             Lab4Button = new Button();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label2
@@ -83,10 +84,20 @@
             Lab4Button.Text = "Лабораторная работа №4";
             Lab4Button.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            button1.Location = new Point(215, 198);
+            button1.Name = "button1";
+            button1.Size = new Size(164, 75);
+            button1.TabIndex = 19;
+            button1.Text = "Гистограмма (пока не работает)";
+            button1.UseVisualStyleBackColor = true;
+            // 
             // MainTab
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(button1);
             Controls.Add(Lab4Button);
             Controls.Add(Lab3Button);
             Controls.Add(Lab2Button);
@@ -104,5 +115,6 @@
         private Button Lab2Button;
         private Button Lab3Button;
         private Button Lab4Button;
+        private Button button1;
     }
 }

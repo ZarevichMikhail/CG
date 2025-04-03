@@ -30,6 +30,8 @@
         {
             splitContainer1 = new SplitContainer();
             pictureBox1 = new PictureBox();
+            button1 = new Button();
+            ClipLines1 = new Button();
             CreatePolygon = new Button();
             label2 = new Label();
             RadiusTextBox = new TextBox();
@@ -42,7 +44,6 @@
             ClearButton = new Button();
             label1 = new Label();
             colorDialog1 = new ColorDialog();
-            ClipLines1 = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -62,6 +63,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(button1);
             splitContainer1.Panel2.Controls.Add(ClipLines1);
             splitContainer1.Panel2.Controls.Add(CreatePolygon);
             splitContainer1.Panel2.Controls.Add(label2);
@@ -88,6 +90,26 @@
             pictureBox1.TabStop = false;
             pictureBox1.MouseDown += pictureBox1_MouseDown;
             pictureBox1.MouseUp += pictureBox1_MouseUp;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(240, 408);
+            button1.Name = "button1";
+            button1.Size = new Size(170, 64);
+            button1.TabIndex = 18;
+            button1.Text = "Отсечение Коэна-Сазерленда";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // ClipLines1
+            // 
+            ClipLines1.Location = new Point(240, 331);
+            ClipLines1.Name = "ClipLines1";
+            ClipLines1.Size = new Size(170, 64);
+            ClipLines1.TabIndex = 17;
+            ClipLines1.Text = "Простое отсечение отрезков";
+            ClipLines1.UseVisualStyleBackColor = true;
+            ClipLines1.Click += ClipLines1_Click;
             // 
             // CreatePolygon
             // 
@@ -128,15 +150,15 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(12, 362);
+            textBox1.Location = new Point(12, 366);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(166, 40);
+            textBox1.Size = new Size(166, 28);
             textBox1.TabIndex = 10;
             // 
             // FillColorButton
             // 
-            FillColorButton.Location = new Point(124, 443);
+            FillColorButton.Location = new Point(122, 443);
             FillColorButton.Name = "FillColorButton";
             FillColorButton.Size = new Size(112, 29);
             FillColorButton.TabIndex = 8;
@@ -157,7 +179,7 @@
             // 
             // ExecuteButton
             // 
-            ExecuteButton.Location = new Point(14, 408);
+            ExecuteButton.Location = new Point(12, 408);
             ExecuteButton.Name = "ExecuteButton";
             ExecuteButton.Size = new Size(104, 29);
             ExecuteButton.TabIndex = 5;
@@ -167,9 +189,9 @@
             // 
             // LineColorButton
             // 
-            LineColorButton.Location = new Point(123, 408);
+            LineColorButton.Location = new Point(122, 408);
             LineColorButton.Name = "LineColorButton";
-            LineColorButton.Size = new Size(105, 29);
+            LineColorButton.Size = new Size(112, 29);
             LineColorButton.TabIndex = 4;
             LineColorButton.Text = "Цвет линии";
             LineColorButton.UseVisualStyleBackColor = true;
@@ -177,9 +199,9 @@
             // 
             // ClearButton
             // 
-            ClearButton.Location = new Point(14, 443);
+            ClearButton.Location = new Point(12, 443);
             ClearButton.Name = "ClearButton";
-            ClearButton.Size = new Size(94, 29);
+            ClearButton.Size = new Size(104, 29);
             ClearButton.TabIndex = 2;
             ClearButton.Text = "Очистить";
             ClearButton.UseVisualStyleBackColor = true;
@@ -193,16 +215,6 @@
             label1.Size = new Size(134, 20);
             label1.TabIndex = 0;
             label1.Text = "Выбор алгоритма";
-            // 
-            // ClipLines1
-            // 
-            ClipLines1.Location = new Point(208, 331);
-            ClipLines1.Name = "ClipLines1";
-            ClipLines1.Size = new Size(170, 29);
-            ClipLines1.TabIndex = 17;
-            ClipLines1.Text = "Отсечение отрезков";
-            ClipLines1.UseVisualStyleBackColor = true;
-            ClipLines1.Click += ClipLines1_Click;
             // 
             // Lab2Form
             // 
@@ -238,5 +250,6 @@
         private TextBox RadiusTextBox;
         internal Button CreatePolygon;
         internal Button ClipLines1;
+        internal Button button1;
     }
 }
