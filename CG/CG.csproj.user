@@ -4,6 +4,9 @@
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\Forms\Diagram\DiagramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\Forms\Lab1\CreateMatrixForm.cs">
       <SubType>Form</SubType>
     </Compile>

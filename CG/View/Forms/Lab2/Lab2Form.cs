@@ -195,12 +195,15 @@ namespace CG.View.Forms.Lab2
                     PolygonPixels.Add([e.X, e.Y]);
                     Style(e.X, e.Y, CurrentLineColor);
 
+                    DrawRectangle(xn, yn, CurrentLineColor);
+
                     break;
 
                 case 8:
 
                     PolygonPixels.Add([e.X, e.Y]);
                     Style(e.X, e.Y, CurrentLineColor);
+                    DrawRectangle(xn, yn, CurrentLineColor);
 
                     break;
 
@@ -1586,14 +1589,18 @@ namespace CG.View.Forms.Lab2
         private void ClipLines1_Click(object sender, EventArgs e)
         {
 
-            for (int x = 0; x < myBitmap.Width; x++)
-            {
-                for (int y = 0; y < myBitmap.Height; y++)
-                {
-                    myBitmap.SetPixel(x, y, Color.White);
-                }
-            }
-            pictureBox1.Image = myBitmap;
+            //for (int x = 0; x < myBitmap.Width; x++)
+            //{
+            //    for (int y = 0; y < myBitmap.Height; y++)
+            //    {
+            //        myBitmap.SetPixel(x, y, Color.White);
+            //    }
+            //}
+            //pictureBox1.Image = myBitmap;
+
+
+            Color TempColor = CurrentLineColor;
+            CurrentLineColor = Color.Black;
 
             // Точки прямоугольника
             double x1 = PolygonPixels[0][0];
@@ -1601,10 +1608,10 @@ namespace CG.View.Forms.Lab2
             double x2 = PolygonPixels[1][0];
             double y2 = PolygonPixels[1][1];
 
-            BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
-            BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
-            BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
-            BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
+            //BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+            //BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
+            //BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
+            //BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
 
 
             // Рёбра отсекающего окна
@@ -1626,101 +1633,6 @@ namespace CG.View.Forms.Lab2
                 y1 = LinePixels[i][0][1];
                 x2 = LinePixels[i][1][0];
                 y2 = LinePixels[i][1][1];
-
-
-                // Переделанный код Сергея. Работает. 
-                /*
-                double xStart = LinePixels[i][0][0];
-                double yStart = LinePixels[i][0][1];
-                double xEnd = LinePixels[i][1][0];
-                double yEnd = LinePixels[i][1][1];
-
-                bool Flag1 = xStart < xl;
-                bool Flag2 = xEnd < xl;
-                bool Flag3 = xStart > xr;
-                bool Flag4 = xEnd > xr;
-                bool Flag5 = yStart > yv;
-                bool Flag6 = yEnd > yv;
-
-
-                // если и начальная и конечная точка лежат с одной стороны окна - отрезок не виден
-                //if ((xStart < xl && xEnd < xl) || (xStart > xr && xEnd > xr) || (yStart < yv && yEnd < yv) || (yStart > yn && yEnd > yn))
-                if ((Flag1 && Flag2) || (Flag3 && Flag4) || (Flag5 && Flag6) || (yStart < yn && yEnd < yn))
-                {
-                    continue; 
-                }
-                else
-                {
-                    bool flag = false;
-                    while (flag == false)
-                    {
-                        // если обе точки внутри окна - отрезок полностью видим
-                        if (((xStart >= xl) && (xStart <= xr)) && ((xEnd >= xl) && (xEnd <= xr)) && ((yStart <= yv) && (yStart >= yn)) && ((yEnd <= yv) && (yEnd >= yn)))
-                        {
-                            BresLineAlg((int)xStart, (int)yStart, (int)xEnd, (int)yEnd, Style);
-                            pictureBox1.Image = myBitmap;
-
-                            pictureBox1.Refresh();
-                            flag = true;
-                        }
-
-                        else
-                        {
-                            double m;
-                            m = (double)(yEnd - yStart) / (xEnd - xStart);
-
-                            if (xStart < xl)
-                            {
-                                yStart = m * (xl - xStart) + yStart;
-                                xStart = xl;
-                            }
-
-                            if (xStart > xr)
-                            {
-                                yStart = m * (xr - xStart) + yStart;
-                                xStart = xr;
-                            }
-
-                            if (xEnd > xr)
-                            {
-                                yEnd = m * (xr - xStart) + yStart;
-                                xEnd = xr;
-                            }
-
-                            if (xEnd < xl)
-                            {
-                                yEnd =m * (xl - xStart) + yStart;
-                                xEnd = xl;
-                            }
-
-                            if (yStart > yv)
-                            {
-                                xStart = xStart + (1 / m) * (yv - yStart);
-                                yStart = yv;
-                            }
-
-                            if (yStart < yn)
-                            {
-                                xStart = xStart + (1 / m) * (yn - yStart);
-                                yStart = yn;
-                            }
-
-                            if (yEnd < yn)
-                            {
-                                xEnd = xStart + (1 / m) * (yn - yStart);
-                                yEnd = yn;
-                            }
-
-                            if (yEnd > yv)
-                            {
-                                xEnd = xStart + (1 / m) * (yv - yStart);
-                                yEnd = yv;
-                            }
-                        }
-                    }
-
-                }
-                */
 
 
                 // Мой код
@@ -1815,20 +1727,25 @@ namespace CG.View.Forms.Lab2
             pictureBox1.Image = myBitmap;
 
             pictureBox1.Refresh();
+
+            CurrentLineColor = TempColor;
             //LinePixels.Clear();
         }
 
         // Кнопка Отсечение Коэна-Сазерленда
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int x = 0; x < myBitmap.Width; x++)
-            {
-                for (int y = 0; y < myBitmap.Height; y++)
-                {
-                    myBitmap.SetPixel(x, y, Color.White);
-                }
-            }
-            pictureBox1.Image = myBitmap;
+            //for (int x = 0; x < myBitmap.Width; x++)
+            //{
+            //    for (int y = 0; y < myBitmap.Height; y++)
+            //    {
+            //        myBitmap.SetPixel(x, y, Color.White);
+            //    }
+            //}
+            //pictureBox1.Image = myBitmap;
+
+            Color TempColor = CurrentLineColor;
+            CurrentLineColor = Color.Black;
 
             // Точки прямоугольника
             double x1 = PolygonPixels[0][0];
@@ -1836,10 +1753,10 @@ namespace CG.View.Forms.Lab2
             double x2 = PolygonPixels[1][0];
             double y2 = PolygonPixels[1][1];
 
-            BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
-            BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
-            BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
-            BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
+            //BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+            //BresLineAlg((int)x2, (int)y1, (int)x2, (int)y2, Style);
+            //BresLineAlg((int)x2, (int)y2, (int)x1, (int)y2, Style);
+            //BresLineAlg((int)x1, (int)y2, (int)x1, (int)y1, Style);
 
 
             // Рёбра отсекающего окна
@@ -1857,8 +1774,8 @@ namespace CG.View.Forms.Lab2
             {
 
                 // Коды начальной и конечной точек отрезка
-                int FirstCode = 0000;
-                int SecondCode = 0000;
+                int FirstCode;
+                int SecondCode;
 
                 
                 // Точки отрезка
@@ -1867,58 +1784,88 @@ namespace CG.View.Forms.Lab2
                 x2 = LinePixels[i][1][0];
                 y2 = LinePixels[i][1][1];
 
-                // Проверка первой точки 
-                if (y1 > yv)
-                {
-                    FirstCode += 1000;
-                }
-                else if (y1 < yn)
-                {
-                    FirstCode += 100;
-                }
-
-                if (x1 > xr)
-                {
-                    FirstCode += 10;
-                }
-                else if(x1<xl)
-                {
-                    FirstCode += 1;
-                }
-
-                // Проверка второй точки 
-                if (y2 > yv)
-                {
-                    SecondCode += 1000;
-                }
-                else if (y2 < yn)
-                {
-                    SecondCode += 100;
-                }
-
-                if (x2 > xr)
-                {
-                    SecondCode += 10;
-                }
-                else if (x2 < xl)
-                {
-                    SecondCode += 1;
-                }
+                
 
                 while (true)
                 {
 
+                    // Этот код должен быть двоичным, а не десятичным. 
+                    FirstCode = 0000;
+                    SecondCode = 0000;
+
+
+                    // Код первой точки 
+                    if (y1 < yn)
+                    {
+                        //FirstCode += 1000;
+                        FirstCode += 8;
+                    }
+                    else if (y1 > yv)
+                    {
+                        //FirstCode += 100;
+                        FirstCode += 4;
+                    }
+
+                    if (x1 > xr)
+                    {
+                        //FirstCode += 10;
+                        FirstCode += 2;
+                    }
+                    else if (x1 < xl)
+                    {
+                        FirstCode += 1;
+                    }
+
+                    // Код второй точки 
+                    if (y2 < yn)
+                    {
+                        //SecondCode += 1000;
+                        SecondCode += 8;
+                    }
+                    else if (y2 > yv)
+                    {
+                        //SecondCode += 100;
+                        SecondCode += 4;
+                    }
+
+                    if (x2 > xr)
+                    {
+                        //SecondCode += 10;
+                        SecondCode += 2;
+                    }
+                    else if (x2 < xl)
+                    {
+                        SecondCode += 1;
+                    }
+
+
+
                     // Проверка на видимость. 
+                    // если коды обоих концов отрезка равны 0, то отрезок целиком внутри окна.
+                    // Нарисовать его, выйти из этого цикла и перейти к следующему отрезку. 
                     if (FirstCode == 0 && SecondCode == 0)
                     {
-                        BresLineAlg((int)x1, (int)y1, (int)x2, (int)y1, Style);
+                        BresLineAlg((int)x1, (int)y1, (int)x2, (int)y2, Style);
+                        pictureBox1.Image = myBitmap;
+
+                        pictureBox1.Refresh();
                         break;
                     }
-                    else if (FirstCode != SecondCode)
+                    // если логическое И(&) кодов обоих концов отрезка не равно нулю, то отрезок целиком вне окна.
+                    // выйти из этого цикла и перейти к следующему отрезку. 
+                    else if ((FirstCode & SecondCode) != 0)
                     {
+                        break;
+                    }
+
+                    // отрезок подозрительный. Либо частично видимый, либо полностью невидимый. 
+                    // Нужно его проверить. 
+                    else
+                    {
+                        // Если начальная точка внутри окна 
+                        // то она меняется местами с конечной точкой. 
                         if (FirstCode == 0)
-                        {
-                            // Начальная точка меняется местами с конечной. 
+                        {                 
                             double temp;
 
                             temp = x2;
@@ -1943,23 +1890,82 @@ namespace CG.View.Forms.Lab2
 
                         }
 
+                        // Начальная точка лежит вне окна
                         //5.Анализируется код начальной точки для определения стороны окна,
                         //с которой есть пересечение, и выполняется расчет пересечения.При этом
                         //вычисленная точка пересечения заменяет начальную точку.
 
+                        double ylp, ypp, xnp, xvp;
+
+                        double dx = x2 - x1;
+                        double dy = y2 - y1;
+                        double tg = dy / dx;
+
+                        // точки пересечения прямой, на которой лежит отрезок
+                        // с продолжениями сторон прямоугольника
+                        ylp = tg * (xl - x1) + y1;
+                        ypp = tg * (xr - x1) + y1;
+                        xvp = x1 + (yv - y1) / tg;
+                        xnp = x1 + (yn - y1) / tg;
+
+                        // проверка x
+                        if (x1 < xl)
+                        {
+                            y1 = ylp;
+                            x1 = xl;
+                        }
+                        if (x1 > xr)
+                        {
+                            y1 = ypp;
+                            x1 = xr;
+                        }
+                        if (x2 > xr)
+                        {
+                            y2 = ypp;
+                            x2 = xr;
+                        }
+                        if (x2 < xl)
+                        {
+                            y2 = ylp;
+                            x2 = xl;
+                        }
+
+                        // проверка y
+                        if (y1 > yv)
+                        {
+                            x1 = xvp;
+                            y1 = yv;
+                        }
+                        if (y1 < yn)
+                        {
+                            x1 = xnp;
+                            y1 = yn;
+                        }
+
+                        if (y2 < yn)
+                        {
+                            x2 = xnp;
+                            y2 = yn;
+                        }
+                        if (y2 > yv)
+                        {
+                            x2 = xvp;
+                            y2 = yv;
+                        }
+
+
+                        continue;
 
 
                     }
 
-                    // отрезок невидим.
-                    else
-                        continue;
                     continue;
                 }
 
 
 
             }
+            CurrentLineColor = TempColor;
         }
     }
 }
