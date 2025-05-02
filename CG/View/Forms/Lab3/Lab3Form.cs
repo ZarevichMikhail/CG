@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Reflection.Metadata;
 using System.ComponentModel.DataAnnotations;
+using static CG.View.Forms.Lab2.Lab2Form;
+using Microsoft.VisualBasic.ApplicationServices;
 
 
 namespace CG.View.Forms.Lab3
@@ -69,8 +71,11 @@ namespace CG.View.Forms.Lab3
 
 
         /// <summary>
-        /// Велосипед
-        /// Состоит из 4 фигур.
+        /// Велосипед. Коллекция массивов. 
+        /// Состоит из 4 фигур. 
+        /// 0, 1 - левое и правое колесо.
+        /// 2 - корпус.
+        /// 3 - педали. 
         /// </summary>
         //double[,,] Velo = new double[4, 4, 3];
 
@@ -152,6 +157,9 @@ namespace CG.View.Forms.Lab3
         }
 
 
+        /// <summary>
+        /// Инициализация велосипеда в начале координат. 
+        /// </summary>
         private void InitVelo()
         {
 
@@ -291,9 +299,10 @@ namespace CG.View.Forms.Lab3
 
             //int[,] kv1 = Array.ConvertAll(kv2, new Converter<double, int>(kv2));
             Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
-
+            
             //создаем новый объект Graphics (поверхность рисования) из pictureBox
             Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+            
             // рисуем 1 сторону квадрата
             g.DrawLine(myPen, (int)kv1[0, 0], (int)kv1[0, 1], (int)kv1[1, 0], (int)kv1[1, 1]);
             // рисуем 2 сторону квадрата
@@ -762,6 +771,45 @@ namespace CG.View.Forms.Lab3
             {
                 DrawFigure(Velo[i]);
             }
+
+            // центр левого колеса
+            //Velo[2][0, 0] = -70;
+
+            // центр правого колеса 
+            //Velo[2][3, 0] = 70;
+
+            // x - The x-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
+            // y - The y-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
+
+            // width
+            // Width of the bounding rectangle that defines the ellipse.
+
+            // height
+            // Height of the bounding rectangle that defines the ellipse.
+
+            float x = pictureBox1.Width / 2 + float.Parse(Velo[2][0, 0].ToString())-40;
+            float y = pictureBox1.Height / 2 + float.Parse(Velo[2][0, 1].ToString())-40;
+
+            // Высота колеса = 40. т.е. от центра надо отступать 20. 
+
+            //int Top = Velo[2].Max();
+
+            Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
+
+            //создаем новый объект Graphics (поверхность рисования) из pictureBox
+            Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+            
+            g.DrawEllipse(myPen, x, y, 80, 80);
+
+
+            x = pictureBox1.Width / 2 + float.Parse(Velo[2][3, 0].ToString()) - 40;
+            y = pictureBox1.Height / 2 + float.Parse(Velo[2][3, 1].ToString()) - 40;
+
+            g.DrawEllipse(myPen, x, y, 80, 80);
+
+
+            g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
         }
 
         double a = 0;
@@ -876,7 +924,36 @@ namespace CG.View.Forms.Lab3
                 DrawFigure(Velo[i]);
             }
 
+            float x = pictureBox1.Width / 2 + float.Parse(Velo[2][0, 0].ToString()) - 40;
+            float y = pictureBox1.Height / 2 + float.Parse(Velo[2][0, 1].ToString()) - 40;
+
+            // Высота колеса = 40. т.е. от центра надо отступать 20. 
+
+            //int Top = Velo[2].Max();
+
+            Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
+
+            //создаем новый объект Graphics (поверхность рисования) из pictureBox
+            Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            g.DrawEllipse(myPen, x, y, 80, 80);
+
+
+            x = pictureBox1.Width / 2 + float.Parse(Velo[2][3, 0].ToString()) - 40;
+            y = pictureBox1.Height / 2 + float.Parse(Velo[2][3, 1].ToString()) - 40;
+
+            g.DrawEllipse(myPen, x, y, 80, 80);
+
+
+            g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+
+
 
         }
+
+
+
+
     }
 }

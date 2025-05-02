@@ -1,21 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\",
+  "WorkspaceRootPath": "C:\\Users\\Mikhail\\source\\repos\\CG\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|c:\\users\\mikhail\\source\\repos\\\u043A\u0433\\cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|c:\\users\\mikhail\\source\\repos\\cg\\cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|solutionrelative:cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|C:\\Users\\Mikhail\\source\\repos\\CG\\cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|solutionrelative:cg\\view\\forms\\lab3\\lab3form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|c:\\users\\mikhail\\source\\repos\\cg\\cg\\view\\forms\\lab3\\lab3form.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|solutionrelative:cg\\view\\forms\\lab3\\lab3form.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|C:\\Users\\Mikhail\\source\\repos\\CG\\cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|solutionrelative:cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|c:\\users\\mikhail\\source\\repos\\\u043A\u0433\\cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|c:\\users\\mikhail\\source\\repos\\cg\\cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C0B0AF6F-BB23-40A4-AE18-72DCC1A12113}|CG\\CG.csproj|solutionrelative:cg\\view\\forms\\lab2\\lab2form.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -44,55 +48,70 @@
         },
         {
           "DockedWidth": 318,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Lab3Form.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.Designer.cs",
+              "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab3\\Lab3Form.Designer.cs",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.Designer.cs",
+              "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.Designer.cs",
+              "ViewState": "AgIAAGABAAAAAAAAAAAQwHEBAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-02T05:43:07.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Lab3Form.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
+              "Title": "Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
-              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab3\\Lab3Form.cs [Design]",
-              "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs [Design]",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T06:23:04.721Z",
-              "EditorCaption": " [Design]"
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Lab3Form.cs",
-              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
+              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
-              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPICAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAJgDAAAAAAAAAAAswKQDAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T06:28:03.584Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
-              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
+              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab2\\Lab2Form.cs",
-              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab2\\Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab2\\Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "RelativeToolTip": "CG\\View\\Forms\\Lab2\\Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-01T13:00:21.216Z"
+              "WhenOpened": "2025-04-01T13:00:21.216Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Lab2Form.cs",
-              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
+              "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab2\\Lab2Form.cs",
-              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\\u041A\u0413\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab2\\Lab2Form.cs",
               "RelativeToolTip": "CG\\View\\Forms\\Lab2\\Lab2Form.cs",
-              "ViewState": "AgIAAAoGAAAAAAAAAAAswBoGAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAALkDAAAAAAAAAAAtwLMDAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T09:56:58.08Z"
+              "WhenOpened": "2025-04-20T09:56:58.08Z",
+              "EditorCaption": ""
             }
           ]
         }
