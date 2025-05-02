@@ -778,8 +778,11 @@ namespace CG.View.Forms.Lab3
             // центр правого колеса 
             //Velo[2][3, 0] = 70;
 
-            // x - The x-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
-            // y - The y-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
+            // x 
+            // The x-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
+
+            // y
+            // The y-coordinate of the upper-left corner of the bounding rectangle that defines the ellipse.
 
             // width
             // Width of the bounding rectangle that defines the ellipse.
@@ -812,8 +815,6 @@ namespace CG.View.Forms.Lab3
             myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
         }
 
-        double a = 0;
-
         private void MoveVeloButton_Click(object sender, EventArgs e)
         {
             pictureBox1.Refresh();
@@ -826,41 +827,58 @@ namespace CG.View.Forms.Lab3
             double Angle = 30;
             Angle = Angle * Math.PI / 180;
 
+            // Центр левого колеса. 
+            //Velo[2][0, 0] = -70;
+
+            // центр правого колеса 
+            //Velo[2][3, 0] = 70;
 
 
-            // Правое колесо
+
+
+            // Корпус 
+            InitCoordTransformMatrix(1, 0, 0,
+                                    0, 1, 0,
+                                    5, 0, 1);
+            Velo[2] = MatrixMultiplication(Velo[2], CoordTransformMatrix);
+
+
 
             // Центр правого колеса
-            double[] RightWheelXCoord = { Velo[0][0, 0], Velo[0][1, 0], Velo[0][2, 0], Velo[0][3, 0] };
-            double center1 = RightWheelXCoord.Max() - RightWheelXCoord.Min();
-
-            // должно быть именно в таком порядке: перенос, поворот
-            InitCoordTransformMatrix(1, 0, 0,
-                                    0, 1, 0,
-                                    5, 0, 1);
-            a += 5;
-            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
-
-
-            InitCoordTransformMatrix(1, 0, 0,
-                                    0, 1, 0,
-                                    70-a, 30, 1);
-            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
-
-            InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0,
-                                     -Math.Sin(Angle), Math.Cos(Angle), 0,
-                                            0, 0, 1);
-            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
-
-            InitCoordTransformMatrix(1, 0, 0,
-                                    0, 1, 0,
-                                    -70+a, -30, 1);
-            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
-
-
-
+            double Center = Velo[2][0, 0];
             // Левое колесо
 
+            // должно быть именно в таком порядке: перенос, поворот
+
+            // Перенос на нужное расстояние
+            InitCoordTransformMatrix(1, 0, 0,
+                                    0, 1, 0,
+                                    5, 0, 1);
+            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
+
+            // Перенос в начало системы координат.  
+            InitCoordTransformMatrix(1, 0, 0,
+                                     0, 1, 0,
+                                     -Center, 30, 1);
+            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
+
+            // Поворот относительно начала системы координат. 
+            InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0,
+                                     -Math.Sin(Angle), Math.Cos(Angle), 0,
+                                            0, 0, 1);
+            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
+
+            // Перенос обратно 
+            InitCoordTransformMatrix(1, 0, 0,
+                                    0, 1, 0,
+                                    +Center, -30, 1);
+            Velo[0] = MatrixMultiplication(Velo[0], CoordTransformMatrix);
+
+
+
+            Center = Velo[2][3, 0];
+            // Правое колесо
+
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
                                     5, 0, 1);
@@ -869,7 +887,7 @@ namespace CG.View.Forms.Lab3
 
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
-                                    -70-a, 30, 1);
+                                    -Center, 30, 1);
             Velo[1] = MatrixMultiplication(Velo[1], CoordTransformMatrix);
 
             InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0,
@@ -879,7 +897,7 @@ namespace CG.View.Forms.Lab3
 
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
-                                    70+a, -30, 1);
+                                    Center, -30, 1);
             Velo[1] = MatrixMultiplication(Velo[1], CoordTransformMatrix);
 
 
@@ -895,9 +913,12 @@ namespace CG.View.Forms.Lab3
 
 
 
+            // 70 - расстояние от центра до начала по умолчанию 
+            // После сдвига это расстояние изменится. 
+            // на него и надо сдвигать педали т.к. они находятся в начале координат. 
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
-                                    0-a, 30, 1);
+                                     -Center+70, 30, 1);
             Velo[3] = MatrixMultiplication(Velo[3], CoordTransformMatrix);
 
             InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0,
@@ -907,14 +928,12 @@ namespace CG.View.Forms.Lab3
 
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
-                                    0+a, -30, 1);
+                                    Center-70, -30, 1);
             Velo[3] = MatrixMultiplication(Velo[3], CoordTransformMatrix);
 
 
-            InitCoordTransformMatrix(1, 0, 0,
-                                    0, 1, 0,
-                                    5, 0, 1);
-            Velo[2] = MatrixMultiplication(Velo[2], CoordTransformMatrix);
+
+            
 
 
 
@@ -923,7 +942,9 @@ namespace CG.View.Forms.Lab3
             {
                 DrawFigure(Velo[i]);
             }
+            
 
+            // Рисует круглые колёса 
             float x = pictureBox1.Width / 2 + float.Parse(Velo[2][0, 0].ToString()) - 40;
             float y = pictureBox1.Height / 2 + float.Parse(Velo[2][0, 1].ToString()) - 40;
 

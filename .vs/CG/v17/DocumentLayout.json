@@ -60,20 +60,19 @@
               "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.Designer.cs",
               "ViewState": "AgIAAGABAAAAAAAAAAAQwHEBAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-02T05:43:07.194Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-02T05:43:07.194Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "Title": "Lab3Form.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
-              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
-              "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs [Design]",
+              "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T06:23:04.721Z",
-              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+              "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
@@ -83,7 +82,7 @@
               "RelativeDocumentMoniker": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab3\\Lab3Form.cs",
               "RelativeToolTip": "CG\\View\\Forms\\Lab3\\Lab3Form.cs",
-              "ViewState": "AgIAAJMAAAAAAAAAAAAhwJwAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAIADAAAAAAAAAAApwIkDAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-18T06:28:03.584Z",
               "EditorCaption": ""
@@ -97,8 +96,7 @@
               "ToolTip": "C:\\Users\\Mikhail\\source\\repos\\CG\\CG\\View\\Forms\\Lab2\\Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "RelativeToolTip": "CG\\View\\Forms\\Lab2\\Lab2Form.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-01T13:00:21.216Z",
-              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+              "WhenOpened": "2025-04-01T13:00:21.216Z"
             },
             {
               "$type": "Document",
@@ -110,8 +108,7 @@
               "RelativeToolTip": "CG\\View\\Forms\\Lab2\\Lab2Form.cs",
               "ViewState": "AgIAALkDAAAAAAAAAAAtwLMDAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T09:56:58.08Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-20T09:56:58.08Z"
             }
           ]
         }
