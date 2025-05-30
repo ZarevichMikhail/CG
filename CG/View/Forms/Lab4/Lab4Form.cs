@@ -34,7 +34,10 @@ namespace CG.View.Forms.Lab4
         /// </summary>
         double[,] Axis = new double[6, 4];
 
-
+        /// <summary>
+        /// Матрица тела произвольной оси
+        /// </summary>
+        double[,] CustomAxis = new double[2, 4];
 
         //double[,] Tetraedr;
 
@@ -97,6 +100,10 @@ namespace CG.View.Forms.Lab4
 
         }
 
+        
+
+
+        double[] T = new double[4];
 
         /// <summary>
         /// Инициализация тэтраэдра
@@ -104,9 +111,10 @@ namespace CG.View.Forms.Lab4
         private void InitTet()
         {
             double[] x1 = { 0, 0, 0 };
-            double[] x2 = { 50, 0, 0 };
-            double[] x3 = { 0, 50, 0 };
-            double[] x4 = { 0, 0, 50 };
+            double[] x2 = { 100, 0, 0 };
+            double[] x3 = { 0, 100, 0 };
+            double[] x4 = { 0, 0, 100 };
+
 
 
             // Грань OAB
@@ -737,6 +745,87 @@ namespace CG.View.Forms.Lab4
             {
                 DrawFigure(Tetraedr[i]);
             }
+        }
+
+        private void DrawCustomAxisButton_Click(object sender, EventArgs e)
+        {
+            double X1 = double.Parse(X1TextBox.Text);
+            double X2 = double.Parse(X2TextBox.Text);
+
+            double Y1 = double.Parse(Y1TextBox.Text);
+            double Y2 = double.Parse(Y2TextBox.Text);
+
+            double Z1 = double.Parse(Z1TextBox.Text);
+            double Z2 = double.Parse(Z2TextBox.Text);
+
+            CustomAxis[0, 0] = X1; CustomAxis[0, 1] = Y1; CustomAxis[0, 2] = Z1; CustomAxis[0, 3] = 1;
+            CustomAxis[1, 0] = X2; CustomAxis[1, 1] = Y2; CustomAxis[1, 2] = Z2; CustomAxis[1, 3] = 1;
+
+            int m1 = pictureBox1.Width / 2;
+            int n1 = pictureBox1.Height / 2;
+
+            double alpha = 45;
+            double betha = 35.26;
+
+            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+                                            0, Math.Cos(betha), 0, 0,
+                                     Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
+                                            m1, n1, 0, 1);
+
+            double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
+
+            Pen myPen = new Pen(Color.Green, 1);// цвет линии и ширина
+            Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            // рисуем ось ОХ
+            g.DrawLine(myPen, (int)CustomAxis1[0, 0], (int)CustomAxis1[0, 1], (int)CustomAxis1[1, 0], (int)CustomAxis1[1, 1]);
+
+            g.Dispose();
+            myPen.Dispose();
+
+        }
+
+        private void RotateCustomAxisButton_Click(object sender, EventArgs e)
+        {
+
+            double X1 = double.Parse(X1TextBox.Text);
+            double X2 = double.Parse(X2TextBox.Text);
+
+            double Y1 = double.Parse(Y1TextBox.Text);
+            double Y2 = double.Parse(Y2TextBox.Text);
+
+            double Z1 = double.Parse(Z1TextBox.Text);
+            double Z2 = double.Parse(Z2TextBox.Text);
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     CustomAxis[0, 0], CustomAxis[0, 1], CustomAxis[0, 2], 1);
+
+            double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+            // Перевод угла из градусов в радианы
+            double Angle = double.Parse(AngleTextBox.Text);
+            Angle = Angle * Math.PI / 180;
+
+
+            InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0, 0,
+                                     -Math.Sin(Angle), Math.Cos(Angle), 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+
         }
     }
 }
