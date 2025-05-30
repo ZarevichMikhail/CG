@@ -706,7 +706,7 @@ namespace CG.View.Forms.Lab3
             // Убирает выбор с других элементов
             for (int i = 0; i < AlgCheckListBox.Items.Count; i++)
             {
-                if (i != AlgIndex)
+                if (i != AlgIndex) 
                     AlgCheckListBox.SetItemCheckState(i, CheckState.Unchecked);
 
             }
@@ -904,7 +904,7 @@ namespace CG.View.Forms.Lab3
 
 
             // Педали
-
+            
             InitCoordTransformMatrix(1, 0, 0,
                                     0, 1, 0,
                                     5, 0, 1);

@@ -83,6 +83,7 @@
             Lab4Button.TabIndex = 18;
             Lab4Button.Text = "Лабораторная работа №4";
             Lab4Button.UseVisualStyleBackColor = true;
+            Lab4Button.Click += Lab4Button_Click;
             // 
             // DiagramFormButton
             // 

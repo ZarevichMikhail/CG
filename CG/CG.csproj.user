@@ -22,6 +22,9 @@
     <Compile Update="View\Forms\Lab3\Lab3Form.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\Forms\Lab4\Lab4Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\Tabs\MainTab.cs">
       <SubType>UserControl</SubType>
     </Compile>

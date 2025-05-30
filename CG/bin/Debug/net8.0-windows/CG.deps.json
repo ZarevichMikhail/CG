@@ -7,8 +7,46 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "CG/1.0.0": {
+        "dependencies": {
+          "Tao.FreeGlut": "2.4.0.2",
+          "Tao.Glfw": "2.6.0.0",
+          "Tao.OpenGl": "2.1.0.12",
+          "Tao.Platform.Windows": "1.0.0.5"
+        },
         "runtime": {
           "CG.dll": {}
+        }
+      },
+      "Tao.FreeGlut/2.4.0.2": {
+        "runtime": {
+          "Tao.FreeGlut.dll": {
+            "assemblyVersion": "2.4.0.2",
+            "fileVersion": "2.4.0.2"
+          }
+        }
+      },
+      "Tao.Glfw/2.6.0.0": {
+        "runtime": {
+          "Tao.Glfw.dll": {
+            "assemblyVersion": "2.6.0.0",
+            "fileVersion": "2.6.0.0"
+          }
+        }
+      },
+      "Tao.OpenGl/2.1.0.12": {
+        "runtime": {
+          "Tao.OpenGl.dll": {
+            "assemblyVersion": "2.1.0.12",
+            "fileVersion": "2.1.0.12"
+          }
+        }
+      },
+      "Tao.Platform.Windows/1.0.0.5": {
+        "runtime": {
+          "Tao.Platform.Windows.dll": {
+            "assemblyVersion": "1.0.0.5",
+            "fileVersion": "1.0.0.5"
+          }
         }
       }
     }
@@ -16,6 +54,26 @@
   "libraries": {
     "CG/1.0.0": {
       "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tao.FreeGlut/2.4.0.2": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tao.Glfw/2.6.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tao.OpenGl/2.1.0.12": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tao.Platform.Windows/1.0.0.5": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

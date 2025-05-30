@@ -233,7 +233,7 @@ namespace CG.View.Forms.Diagram
                 LabelMatrix[0, i].Top = (Height - 40) + 10;
                 LabelMatrix[0, i].Left = VerticalCoordinates[i] - dx / 2;
                 LabelMatrix[0, i].Visible = true;
-                // Устанавливает элемент управления поверх других. 
+                //Устанавливает элемент управления поверх других.
                 LabelMatrix[0, i].BringToFront();
                 LabelMatrix[0, i].Size = new Size(30, 20);
 
@@ -242,10 +242,11 @@ namespace CG.View.Forms.Diagram
 
 
                 LabelMatrix[1, i].Top = h;
-                LabelMatrix[1, i].Left = 15;
+                LabelMatrix[1, i].Left = 10;
                 LabelMatrix[1, i].Visible = true;
                 LabelMatrix[1, i].BringToFront();
-                LabelMatrix[1, i].Size = new Size(30, 20);
+                LabelMatrix[1, i].Size = new Size(39, 30);
+                //LabelMatrix[1, i].TextAlign = ContentAlignment.TopRight;
 
                 //SpanFloodFill(VerticalCoordinates[i] - dx + 1, Height - 41);
                 IterativeFloodFill(VerticalCoordinates[i] - dx + 1, Height - 41);

@@ -12,6 +12,7 @@ using CG.View.Forms;
 using CG.View.Forms.Diagram;
 using CG.View.Forms.Lab2;
 using CG.View.Forms.Lab3;
+using CG.View.Forms.Lab4;
 using static System.Windows.Forms.DataFormats;
 
 
@@ -55,6 +56,7 @@ namespace CG.View
             }
         }
 
+
         private void Lab3Button_Click(object sender, EventArgs e)
         {
             var NewForm = new Lab3Form();
@@ -64,7 +66,20 @@ namespace CG.View
                 return;
             }
         }
-        
+
+
+        private void Lab4Button_Click(object sender, EventArgs e)
+        {
+
+            var NewForm = new Lab4Form();
+
+            if (NewForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+        }
+
 
         private void DiagramFormButton_Click(object sender, EventArgs e)
         {

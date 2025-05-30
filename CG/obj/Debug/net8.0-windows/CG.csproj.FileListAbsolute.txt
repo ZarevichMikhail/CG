@@ -88,3 +88,14 @@ C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\refint\CG.dll
 C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\CG.pdb
 C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\CG.genruntimeconfig.cache
 C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\ref\CG.dll
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.Glfw.dll
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.OpenGl.dll
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.Platform.Windows.dll
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.Glfw.xml
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.OpenGl.xml
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.Platform.Windows.xml
+C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\CG.csproj.AssemblyReference.cache
+C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\CG.csproj.Up2Date
+C:\Users\Mikhail\source\repos\CG\CG\obj\Debug\net8.0-windows\CG.View.Forms.Lab4.Lab4Form.resources
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.FreeGlut.dll
+C:\Users\Mikhail\source\repos\CG\CG\bin\Debug\net8.0-windows\Tao.FreeGlut.xml

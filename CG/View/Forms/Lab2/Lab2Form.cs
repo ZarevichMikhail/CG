@@ -1032,7 +1032,6 @@ namespace CG.View.Forms.Lab2
             Color oldPixelColor = myBitmap.GetPixel(x1, y1);
 
             // Тут он сравнивает цвет пикселя с текущим цветом линии
-            // Если линии разных цветов - ошибка System.ArgumentOutOfRangeException
 
             // сравнение цветов происходит в формате RGB
             // для этого используем метод ToArgb объекта Color
