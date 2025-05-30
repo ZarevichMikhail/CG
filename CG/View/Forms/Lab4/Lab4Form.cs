@@ -82,16 +82,16 @@ namespace CG.View.Forms.Lab4
         private void InitAxis()
         {
             // OX
-            Axis[0, 0] = -200; Axis[0, 1] = 0; Axis[0, 2] = 0; Axis[0, 3] = 1;
-            Axis[1, 0] = 200; Axis[1, 1] = 0; Axis[1, 2] = 0; Axis[1, 3] = 1;
+            Axis[0, 0] = 0; Axis[0, 1] = 0; Axis[0, 2] = 0; Axis[0, 3] = 1;
+            Axis[1, 0] = -200; Axis[1, 1] = 0; Axis[1, 2] = 0; Axis[1, 3] = 1;
 
             // OY
-            Axis[2, 0] = 0; Axis[2, 1] = -200; Axis[2, 2] = 0; Axis[2, 3] = 1;
+            Axis[2, 0] = 0; Axis[2, 1] = -0; Axis[2, 2] = 0; Axis[2, 3] = 1;
             Axis[3, 0] = 0; Axis[3, 1] = 200; Axis[3, 2] = 0; Axis[3, 3] = 1;
 
 
             // OZ
-            Axis[4, 0] = 0; Axis[4, 1] = 0; Axis[4, 2] = -200; Axis[4, 3] = 1;
+            Axis[4, 0] = 0; Axis[4, 1] = 0; Axis[4, 2] = -0; Axis[4, 3] = 1;
             Axis[5, 0] = 0; Axis[5, 1] = 0; Axis[5, 2] = 200; Axis[5, 3] = 1;
 
 
@@ -109,29 +109,29 @@ namespace CG.View.Forms.Lab4
             double[] x4 = { 0, 0, 50 };
 
 
-            // Грань XOY
+            // Грань OAB
             Tetraedr.Add(new double[3, 4]);
             Tetraedr[0][0, 0] = 0; Tetraedr[0][0, 1] = 0; Tetraedr[0][0, 2] = 0; Tetraedr[0][0, 3] = 1;
-            Tetraedr[0][1, 0] = 100; Tetraedr[0][1, 1] = 0; Tetraedr[0][1, 2] = 0; Tetraedr[0][1, 3] = 1;
+            Tetraedr[0][1, 0] = -100; Tetraedr[0][1, 1] = 0; Tetraedr[0][1, 2] = 0; Tetraedr[0][1, 3] = 1;
             Tetraedr[0][2, 0] = 0; Tetraedr[0][2, 1] = 100; Tetraedr[0][2, 2] = 0; Tetraedr[0][2, 3] = 1;
 
-            // Грань XYZ
+            // Грань ABC
             Tetraedr.Add(new double[3, 4]);
-            Tetraedr[1][0, 0] = 100; Tetraedr[1][0, 1] = 0; Tetraedr[1][0, 2] = 0; Tetraedr[1][0, 3] = 1;
+            Tetraedr[1][0, 0] = -100; Tetraedr[1][0, 1] = 0; Tetraedr[1][0, 2] = 0; Tetraedr[1][0, 3] = 1;
             Tetraedr[1][1, 0] = 0; Tetraedr[1][1, 1] = 100; Tetraedr[1][1, 2] = 0; Tetraedr[1][1, 3] = 1;
-            Tetraedr[1][2, 0] = 0; Tetraedr[1][2, 1] = 0; Tetraedr[1][2, 2] = 0.25; Tetraedr[1][2, 3] = 1;
+            Tetraedr[1][2, 0] = 0; Tetraedr[1][2, 1] = 0; Tetraedr[1][2, 2] = 100; Tetraedr[1][2, 3] = 1;
 
-            // Грань YOZ
+            // Грань OBD
             Tetraedr.Add(new double[3, 4]);
             Tetraedr[2][0, 0] = 0; Tetraedr[2][0, 1] = 0; Tetraedr[2][0, 2] = 0; Tetraedr[2][0, 3] = 1;
             Tetraedr[2][1, 0] = 0; Tetraedr[2][1, 1] = 100; Tetraedr[2][1, 2] = 0; Tetraedr[2][1, 3] = 1;
-            Tetraedr[2][2, 0] = 0; Tetraedr[2][2, 1] = 0; Tetraedr[2][2, 2] = 0.25; Tetraedr[2][2, 3] = 1;
+            Tetraedr[2][2, 0] = 0; Tetraedr[2][2, 1] = 0; Tetraedr[2][2, 2] = 100; Tetraedr[2][2, 3] = 1;
 
-            // Грань XOZ
+            // Грань OAC
             Tetraedr.Add(new double[3, 4]);
             Tetraedr[3][0, 0] = 0; Tetraedr[3][0, 1] = 0; Tetraedr[3][0, 2] = 0; Tetraedr[3][0, 3] = 1;
-            Tetraedr[3][1, 0] = 100; Tetraedr[3][1, 1] = 0; Tetraedr[3][1, 2] = 0; Tetraedr[3][1, 3] = 1;
-            Tetraedr[3][2, 0] = 0; Tetraedr[3][2, 1] = 0; Tetraedr[3][2, 2] = 0.25; Tetraedr[3][2, 3] = 1;
+            Tetraedr[3][1, 0] = -100; Tetraedr[3][1, 1] = 0; Tetraedr[3][1, 2] = 0; Tetraedr[3][1, 3] = 1;
+            Tetraedr[3][2, 0] = 0; Tetraedr[3][2, 1] = 0; Tetraedr[3][2, 2] = 100; Tetraedr[3][2, 3] = 1;
 
 
 
@@ -146,7 +146,7 @@ namespace CG.View.Forms.Lab4
         {
             CoordTransformMatrix[0, 0] = a; CoordTransformMatrix[0, 1] = b; CoordTransformMatrix[0, 2] = c; CoordTransformMatrix[0, 3] = p;
             CoordTransformMatrix[1, 0] = d; CoordTransformMatrix[1, 1] = e; CoordTransformMatrix[1, 2] = f; CoordTransformMatrix[1, 3] = q;
-            CoordTransformMatrix[2, 0] = m; CoordTransformMatrix[2, 1] = i; CoordTransformMatrix[2, 2] = j; CoordTransformMatrix[2, 3] = r;
+            CoordTransformMatrix[2, 0] = h; CoordTransformMatrix[2, 1] = i; CoordTransformMatrix[2, 2] = j; CoordTransformMatrix[2, 3] = r;
             CoordTransformMatrix[3, 0] = l; CoordTransformMatrix[3, 1] = m; CoordTransformMatrix[3, 2] = n; CoordTransformMatrix[3, 3] = s;
         }
 
@@ -158,19 +158,22 @@ namespace CG.View.Forms.Lab4
             //Инициализация матрицы сдвига с заданными параметрами
             int m1 = pictureBox1.Width / 2;
             int n1 = pictureBox1.Height / 2;
-            //InitCoordTransformMatrix(1,  0,  0,  0,
-            //                         0,  1,  0,  0,
-            //                         0,  0,  1,  0,
-            //                         0, 0, 0, 1);
+            //InitCoordTransformMatrix(1, 0, 0, 0,
+            //                         0, 1, 0, 0,
+            //                         0, 0, 1, 0,
+            //                         m1, n1, 0, 1);
 
             //Перенос осей в центр picture box
             //double[,] osi1 = MatrixMultiplication(Axis, CoordTransformMatrix);
             //double alpha = 21.208;
             //double betha = 19.705;
 
+
+            // Изометрическая проекция 
             double alpha = 45;
             double betha = 35.26;
 
+            // Диметрическая проекция
             //double alpha = 22.208;
             //double betha = 20.705;
 
@@ -180,13 +183,14 @@ namespace CG.View.Forms.Lab4
             //                         Math.Sin(alpha), 0, Math.Cos(alpha) * Math.Sin(betha), 0,
             //                                m1,               n1,                         0, 1);
 
-            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha),  0, 0,
-                                            0,            Math.Cos(betha),                0, 0,
+            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+                                            0, Math.Cos(betha), 0, 0,
                                      Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
-                                            m1,               n1,                         0, 1);
+                                            m1, n1, 0, 1);
 
             double[,] osi1 = MatrixMultiplication(Axis, CoordTransformMatrix);
 
+            //double[,] osi1 =Axis;
 
             //Перенос осей в центр picture box
             //osi1 = MatrixMultiplication(Axis, CoordTransformMatrix);
@@ -221,11 +225,7 @@ namespace CG.View.Forms.Lab4
             int n1 = pictureBox1.Height / 2;
 
 
-            //InitCoordTransformMatrix(1, 0, 0, 0,
-            //                         0, 1, 0, 0,
-            //                         0, 0, 1, 0,
-            //                         m1, n1, 0, 1);
-            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
+
             //double alpha = 21.208;
             //double betha = 19.705;
 
@@ -234,32 +234,10 @@ namespace CG.View.Forms.Lab4
 
             //double alpha = 22.208;
             //double betha = 20.705;
-            //InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha),  0, 0,
-            //                                0,            Math.Cos(betha),                0, 0,
-            //                         Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
-            //                                m1,               n1,                         0, 1);
-            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
-
-            // Поворот относительно оси Y
-            InitCoordTransformMatrix(Math.Cos(alpha), -Math.Sin(alpha), 0, 0,
-                                            0, 1, 0, 0,
-                                     Math.Sin(alpha), Math.Cos(alpha), 0, 0,
+            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+                                            0, Math.Cos(betha), 0, 0,
+                                     Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
                                             0, 0, 0, 1);
-
-            Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
-
-            // Поворот относительно оси Z
-            InitCoordTransformMatrix(Math.Cos(betha), Math.Sin(betha), 0, 0,
-                                    -Math.Sin(betha), Math.Cos(betha), 0, 0,
-                                     0, 0, 1, 0,
-                                     0, 0, 0, 1);
-            Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
-
-            // Параллельное проецирование на ось X
-            InitCoordTransformMatrix(0, 0, 0, 0,
-                                     0, 1, 0, 0,
-                                     0, 0, 1, 0,
-                                     0, 0, 0, 1);
             Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
 
             InitCoordTransformMatrix(1, 0, 0, 0,
@@ -267,6 +245,34 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      m1, n1, 0, 1);
             Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
+
+            //// Поворот относительно оси Y
+            //InitCoordTransformMatrix(Math.Cos(alpha), -Math.Sin(alpha), 0, 0,
+            //                                0, 1, 0, 0,
+            //                         Math.Sin(alpha), Math.Cos(alpha), 0, 0,
+            //                                0, 0, 0, 1);
+
+            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
+
+            //// Поворот относительно оси Z
+            //InitCoordTransformMatrix(Math.Cos(betha), Math.Sin(betha), 0, 0,
+            //                        -Math.Sin(betha), Math.Cos(betha), 0, 0,
+            //                         0, 0, 1, 0,
+            //                         0, 0, 0, 1);
+            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
+
+            //// Параллельное проецирование на ось X
+            //InitCoordTransformMatrix(0, 0, 0, 0,
+            //                         0, 1, 0, 0,
+            //                         0, 0, 1, 0,
+            //                         0, 0, 0, 1);
+            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
+
+            //InitCoordTransformMatrix(1, 0, 0, 0,
+            //                         0, 1, 0, 0,
+            //                         0, 0, 1, 0,
+            //                         m1, n1, 0, 1);
+            //Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
 
             // Рисует фигуру относительно центра picture box
             Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
@@ -291,7 +297,7 @@ namespace CG.View.Forms.Lab4
             // Третья линия
             g.DrawLine(myPen, (int)Figure[2, 0], (int)Figure[2, 1], (int)Figure[0, 0], (int)Figure[0, 1]);
 
-            
+
 
 
 
@@ -304,10 +310,10 @@ namespace CG.View.Forms.Lab4
 
             // Перенос обратно в начало координат
 
-            InitCoordTransformMatrix(1,  0,   0,  0,
-                                     0,  1,   0,  0,
-                                     0,  0,   1,  0,
-                                     -m1, -n1,  0, 1);
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     -m1, -n1, 0, 1);
 
             Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
         }
@@ -326,5 +332,412 @@ namespace CG.View.Forms.Lab4
                 DrawFigure(Tetraedr[i]);
             }
         }
+
+
+        /// <summary>
+        /// Поворот относительно оси OY
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RotateYButton_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Refresh();
+            DrawAxis();
+            // Перевод угла из градусов в радианы
+            double Angle = double.Parse(AngleTextBox.Text);
+            Angle = Angle * Math.PI / 180;
+
+
+            InitCoordTransformMatrix(Math.Cos(Angle), 0, -Math.Sin(Angle), 0,
+                                            0, 1, 0, 0,
+                                     Math.Sin(Angle), 0, Math.Cos(Angle), 0,
+                                            0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+
+
+
+        }
+
+        // Поворот относительно оси OX
+        private void RotateXButton_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Refresh();
+            DrawAxis();
+            // Перевод угла из градусов в радианы
+            double Angle = double.Parse(AngleTextBox.Text);
+            Angle = Angle * Math.PI / 180;
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, Math.Cos(Angle), Math.Sin(Angle), 0,
+                                     0, -Math.Sin(Angle), Math.Cos(Angle), 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void RotateZButton_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Refresh();
+            DrawAxis();
+            // Перевод угла из градусов в радианы
+            double Angle = double.Parse(AngleTextBox.Text);
+            Angle = Angle * Math.PI / 180;
+
+
+            InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0, 0,
+                                     -Math.Sin(Angle), Math.Cos(Angle), 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveXRight_Click(object sender, EventArgs e)
+        {
+
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     Distance, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveXLeft_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     -Distance, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveYUp_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, Distance, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveYDown_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, -Distance, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveZForwards_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, Distance, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void MoveZBackwards_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(DistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, -Distance, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ScaleOXButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(Distance, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ScaleOYButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, Distance, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ScaleOZButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, Distance, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ScalingXYButton_Click(object sender, EventArgs e)
+        {
+            double s = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1 / s, 0, 0, 0,
+                                     0, 1 / s, 0, 0,
+                                     0, 0, 1 / s, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+
+                //for (int j = 0; j < 3; j++)
+                //{
+                //    Tetraedr[i][j, 0] = Tetraedr[i][j, 0] / s;
+                //    Tetraedr[i][j, 1] = Tetraedr[i][j, 1] / s;
+                //    Tetraedr[i][j, 2] = Tetraedr[i][j, 1] / s;
+                //    Tetraedr[i][j, 3] = 1;
+                //}
+
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+
+                DrawFigure(Tetraedr[i]);
+        }
+
+        private void ReflectionXButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(-1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ReflectionYButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, -1, 0, 0,
+                                     0, 0, 1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
+
+        private void ReflextionOZButton_Click(object sender, EventArgs e)
+        {
+            double Distance = double.Parse(ScaleDistanceTextBox.Text);
+
+            pictureBox1.Refresh();
+            DrawAxis();
+
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, -1, 0,
+                                     0, 0, 0, 1);
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+            }
+
+            for (int i = 0; i < Tetraedr.Count; i++)
+            {
+                DrawFigure(Tetraedr[i]);
+            }
+        }
     }
 }
+
