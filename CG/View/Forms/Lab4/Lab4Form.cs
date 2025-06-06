@@ -240,6 +240,7 @@ namespace CG.View.Forms.Lab4
             double alpha = 45;
             double betha = 35.26;
 
+            // Проекция
             //double alpha = 22.208;
             //double betha = 20.705;
             InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
@@ -248,6 +249,7 @@ namespace CG.View.Forms.Lab4
                                             0, 0, 0, 1);
             Figure = MatrixMultiplication(Figure, CoordTransformMatrix);
 
+            // Перенос в центр
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, 1, 0, 0,
                                      0, 0, 1, 0,
@@ -317,7 +319,6 @@ namespace CG.View.Forms.Lab4
 
 
             // Перенос обратно в начало координат
-
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, 1, 0, 0,
                                      0, 0, 1, 0,
@@ -785,9 +786,11 @@ namespace CG.View.Forms.Lab4
 
         }
 
+        // Это пока не сделал. 
         private void RotateCustomAxisButton_Click(object sender, EventArgs e)
         {
 
+            // Координаты двух точек, через которые проходит ось
             double X1 = double.Parse(X1TextBox.Text);
             double X2 = double.Parse(X2TextBox.Text);
 
@@ -796,6 +799,14 @@ namespace CG.View.Forms.Lab4
 
             double Z1 = double.Parse(Z1TextBox.Text);
             double Z2 = double.Parse(Z2TextBox.Text);
+
+            // Модуль направляющего вектора оси
+            double module = Math.Sqrt(Math.Pow(X2 - X1, 2) + Math.Pow(Y2 - Y1, 2) + Math.Pow(Z2 - Z1, 2));
+
+            // Направляющие косинусы для осей x y z 
+            double n1 = (X2- X1) / module;
+            double n2 = (Y2- Y1) / module;
+            double n3 = (Z2- Z1) / module;
 
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, 1, 0, 0,
@@ -811,19 +822,33 @@ namespace CG.View.Forms.Lab4
             Angle = Angle * Math.PI / 180;
 
 
-            InitCoordTransformMatrix(Math.Cos(Angle), Math.Sin(Angle), 0, 0,
-                                     -Math.Sin(Angle), Math.Cos(Angle), 0, 0,
-                                     0, 0, 1, 0,
+            double a = Math.Pow(n1, 2) + (1 - Math.Pow(n1, 2)) * Math.Cos(Angle);
+            double b = n1 * n2 * (1 - Math.Cos(Angle))+n3* Math.Sin(Angle);
+            double c = n1 * n3 * (1 - Math.Cos(Angle)) - n2 * Math.Sin(Angle);
+
+            double d = n1 * n2 * (1 - Math.Cos(Angle)) - n3 * Math.Sin(Angle);
+            double e1 = Math.Pow(n2, 2) + (1 - Math.Pow(n2, 2)) * Math.Cos(Angle); // не дал присвоить имя e из за ошибки CS0136 Локальная переменная или параметр с именем "e" нельзя объявить в данной области, так как это имя используется во включающей локальной области для определения локальной переменной или параметра
+            double f = n2 * n3 * (1 - Math.Cos(Angle)) + n1 * Math.Sin(Angle);    // не знаю, из-за чего она возникла, такой переменной у меня больше нигде нет. 
+
+            double h = n1 * n3 * (1 - Math.Cos(Angle)) + n2 * Math.Sin(Angle);
+            double i = n2 * n3 * (1 - Math.Cos(Angle)) - n1 * Math.Sin(Angle);
+            double j = Math.Pow(n3, 2) + (1 - Math.Pow(n3, 2)) * Math.Cos(Angle);
+
+
+            InitCoordTransformMatrix(a, b, c, 0,
+                                     d, e1, f, 0,
+                                     h, i, j, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Tetraedr.Count; i++)
+            for (int i1 = 0; i1 < Tetraedr.Count; i1++)
             {
-                Tetraedr[i] = MatrixMultiplication(Tetraedr[i], CoordTransformMatrix);
+                Tetraedr[i1] = MatrixMultiplication(Tetraedr[i1], CoordTransformMatrix);
             }
 
-            for (int i = 0; i < Tetraedr.Count; i++)
+            for (int i2 = 0; i2 < Tetraedr.Count; i2++)
             {
-                DrawFigure(Tetraedr[i]);
+                DrawFigure(Tetraedr[i2]);
+                continue;
             }
 
         }
