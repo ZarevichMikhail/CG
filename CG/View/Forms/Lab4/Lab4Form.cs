@@ -37,7 +37,6 @@ namespace CG.View.Forms.Lab4
         /// </summary>
         double[,] CustomAxis = new double[2, 4];
 
-        //double[,] Cube;
 
         /// <summary>
         /// Матрица тела тэтраэдра
@@ -48,7 +47,15 @@ namespace CG.View.Forms.Lab4
         /// <summary>
         /// Точки куба
         /// </summary>
-        double[,] Dots = new double[8, 4];
+        double[,] CubeDots = new double[8, 4];
+
+
+        /// <summary>
+        /// Грани куба.
+        /// Каждая грань записывается в виде списка с индексами вершин. 
+        /// </summary>
+        int[,] CubeFaces = new int[6, 4];
+
 
 
         double[,] Center = new double[3,4];
@@ -94,7 +101,7 @@ namespace CG.View.Forms.Lab4
         /// </summary>
         /// <param name="face"></param>
         /// <returns></returns>
-        private bool RobertsAlg(double[,] face, double[] Center)
+        private bool RobertsAlg(int[] face, double[] Center)
         {
             
             
@@ -104,13 +111,14 @@ namespace CG.View.Forms.Lab4
             double[] VecOne = new double[3];
             double[] VecTwo = new double[3];
 
-            VecOne[0] = face[0, 0] - face[1, 0];
-            VecOne[1] = face[0, 1] - face[1, 1];
-            VecOne[2] = face[0, 2] - face[1, 2];
 
-            VecTwo[0] = face[2, 0] - face[1, 0];
-            VecTwo[1] = face[2, 1] - face[1, 1];
-            VecTwo[2] = face[2, 2] - face[1, 2];
+            VecOne[0] = CubeDots[face[0], 0] - CubeDots[face[1], 0];
+            VecOne[1] = CubeDots[face[0], 1] - CubeDots[face[1], 1];
+            VecOne[2] = CubeDots[face[0], 2] - CubeDots[face[1], 2];
+
+            VecTwo[0] = CubeDots[face[2], 0] - CubeDots[face[1], 0];
+            VecTwo[1] = CubeDots[face[2], 1] - CubeDots[face[1], 1];
+            VecTwo[2] = CubeDots[face[2], 2] - CubeDots[face[1], 2];
 
             // Коэффициенты уравнения плоскости
             double A;
@@ -121,16 +129,16 @@ namespace CG.View.Forms.Lab4
             A = VecOne[1] * VecTwo[2] - VecTwo[1] * VecOne[2];
             B = VecOne[2] * VecTwo[0] - VecTwo[2] * VecOne[0];
             C = VecOne[0] * VecTwo[1] - VecTwo[0] * VecOne[1];
-            D = -(A * face[0,0] + B * face[0, 1] + C * face[0, 2]);
+            D = -(A * CubeDots[face[0], 0] + B * CubeDots[face[0], 1] + C * CubeDots[face[0], 2]);
 
             //коэффициент, изменяющий знак плоскости True, если Sign = +, False иначе
             double sign;
             double[] E = new double[3];
-            E = [1, 0, 0];
+            E = [1, -1, -1];
 
             sign = -(A * Center[0] + B * Center[1] + C * Center[2]);
 
-            if (sign >= 0)
+            if (sign > 0)
             {
                 if ((A * E[0] + B * E[1] + C * E[2]+D)>0)
                 {
@@ -184,74 +192,78 @@ namespace CG.View.Forms.Lab4
 
         }
 
-        
+
 
         /// <summary>
         /// Инициализация тэтраэдра
         /// </summary>
         private void InitCube()
         {
-            double[] x1 = { 0, 0, 0 };
-            double[] x2 = { 100, 0, 0 };
-            double[] x3 = { 0, 100, 0 };
-            double[] x4 = { 0, 0, 100 };
 
-            double[] A = { 0, 0, 0, 1 };
+            // Координаты точек нижней грани
+            CubeDots[0, 0] = 0;   CubeDots[0, 1] = 0;   CubeDots[0, 2] = 0;   CubeDots[0, 3] = 1;  // A
+            CubeDots[1, 0] = -100; CubeDots[1, 1] = 0;   CubeDots[1, 2] = 0;   CubeDots[1, 3] = 1;  // B
+            CubeDots[2, 0] = -100; CubeDots[2, 1] = 100; CubeDots[2, 2] = 0;   CubeDots[2, 3] = 1;  // C
+            CubeDots[3, 0] = 0;   CubeDots[3, 1] = 100; CubeDots[3, 2] = 0;   CubeDots[3, 3] = 1;  // D
 
-            // Нижняя грань
-            Dots[0, 0] = 0; Dots[0, 1] = 0; Dots[0, 2] = 0; Dots[0,3] = 1;       // A
-            Dots[1, 0] = 100; Dots[1, 1] = 0; Dots[1, 2] = 0; Dots[1, 3] = 1;    // B
-            Dots[2, 0] = 100; Dots[2, 1] = 100; Dots[2, 2] = 0; Dots[2, 3] = 1;  // C
-            Dots[3, 0] = 0; Dots[3, 1] = 100; Dots[3, 2] = 0; Dots[3, 3] = 1;    // D
+            // Координаты точек верхней грани
+            CubeDots[4, 0] = 0;   CubeDots[4, 1] = 0;   CubeDots[4, 2] = 100; CubeDots[4, 3] = 1;  // E
+            CubeDots[5, 0] = -100; CubeDots[5, 1] = 0;   CubeDots[5, 2] = 100; CubeDots[5, 3] = 1;  // F
+            CubeDots[6, 0] = -100; CubeDots[6, 1] = 100; CubeDots[6, 2] = 100; CubeDots[6, 3] = 1;  // G
+            CubeDots[7, 0] = 0;   CubeDots[7, 1] = 100; CubeDots[7, 2] = 100; CubeDots[7, 3] = 1;  // H
 
-            // Верхняя грань
-            Dots[4, 0] = 0; Dots[4, 1] = 0; Dots[4, 2] = 100; Dots[4, 3] = 1;    // E
-            Dots[5, 0] = 100; Dots[5, 1] = 0; Dots[5, 2] = 100; Dots[5, 3] = 1;  // F
-            Dots[6, 0] = 0; Dots[6, 1] = 100; Dots[6, 2] = 100; Dots[6, 3] = 1;  // G
-            Dots[7, 0] = 100; Dots[7, 1] = 100; Dots[7, 2] = 100; Dots[3, 3] = 1;// H
+            // Индексы вершин из которых состоит грань
+            CubeFaces[0, 0] = 0; CubeFaces[0, 1] = 1; CubeFaces[0, 2] = 2; CubeFaces[0, 3] = 3; // ABCD
+            CubeFaces[1, 0] = 0; CubeFaces[1, 1] = 1; CubeFaces[1, 3] = 5; CubeFaces[1, 3] = 4; // ABFE
+            CubeFaces[2, 0] = 1; CubeFaces[2, 1] = 2; CubeFaces[2, 2] = 6; CubeFaces[2, 3] = 5; // BCGF
+            CubeFaces[3, 0] = 2; CubeFaces[3, 1] = 3; CubeFaces[3, 2] = 7; CubeFaces[3, 3] = 6; // CDHG
+            CubeFaces[4, 0] = 0; CubeFaces[4, 1] = 3; CubeFaces[4, 2] = 7; CubeFaces[4, 3] = 4; // ADHE
+            CubeFaces[5, 0] = 4; CubeFaces[5, 1] = 5; CubeFaces[5, 2] = 6; CubeFaces[5, 3] = 7; // EFGH
 
 
-            // Грань ABCD
-            Cube.Add(new double[4, 4]);
-            Cube[0][0, 0] = Dots[0, 0]; Cube[0][0, 1] = Dots[0, 1]; Cube[0][0, 2] = Dots[0, 2]; Cube[0][0, 3] = Dots[0, 3];
-            Cube[0][1, 0] = Dots[1, 0]; Cube[0][1, 1] = Dots[1, 1]; Cube[0][1, 2] = Dots[1, 2]; Cube[0][1, 3] = Dots[1, 3];
-            Cube[0][2, 0] = Dots[2, 0]; Cube[0][2, 1] = Dots[2, 1]; Cube[0][2, 2] = Dots[2, 2]; Cube[0][2, 3] = Dots[2, 3];
-            Cube[0][3, 0] = Dots[3, 0]; Cube[0][3, 1] = Dots[3, 1]; Cube[0][3, 2] = Dots[3, 2]; Cube[0][2, 3] = Dots[3, 3];
 
-            // Грань ABFE
-            Cube.Add(new double[4, 4]);
-            Cube[1][0, 0] = Dots[0, 0]; Cube[1][0, 1] = Dots[0, 1]; Cube[1][0, 2] = Dots[0, 2]; Cube[1][0, 3] = Dots[0, 3];
-            Cube[1][1, 0] = Dots[1, 0]; Cube[1][1, 1] = Dots[1, 1]; Cube[1][1, 2] = Dots[1, 2]; Cube[1][1, 3] = Dots[1, 3];
-            Cube[1][2, 0] = Dots[5, 0]; Cube[1][2, 1] = Dots[5, 1]; Cube[1][2, 2] = Dots[5, 2]; Cube[1][2, 3] = Dots[5, 3];
-            Cube[1][3, 0] = Dots[4, 0]; Cube[1][3, 1] = Dots[4, 1]; Cube[1][3, 2] = Dots[4, 2]; Cube[1][3, 3] = Dots[4, 3];
 
-            // Грань BCGF
-            Cube.Add(new double[4, 4]);
-            Cube[2][0, 0] = Dots[1, 0]; Cube[2][0, 1] = Dots[1, 1]; Cube[2][0, 2] = Dots[1, 2]; Cube[2][0, 3] = Dots[1, 3];
-            Cube[2][1, 0] = Dots[2, 0]; Cube[2][1, 1] = Dots[2, 1]; Cube[2][1, 2] = Dots[2, 2]; Cube[2][1, 3] = Dots[2, 3];
-            Cube[2][2, 0] = Dots[6, 0]; Cube[2][2, 1] = Dots[6, 1]; Cube[2][2, 2] = Dots[6, 2]; Cube[2][2, 3] = Dots[6, 3];
-            Cube[2][3, 0] = Dots[5, 0]; Cube[2][3, 1] = Dots[5, 1]; Cube[2][3, 2] = Dots[5, 2]; Cube[2][3, 3] = Dots[5, 3];
+            //// Грань ABCD
+            //Cube.Add(new double[4, 4]);
+            //Cube[0][0, 0] = CubeDots[0, 0]; Cube[0][0, 1] = CubeDots[0, 1]; Cube[0][0, 2] = CubeDots[0, 2]; Cube[0][0, 3] = CubeDots[0, 3];
+            //Cube[0][1, 0] = CubeDots[1, 0]; Cube[0][1, 1] = CubeDots[1, 1]; Cube[0][1, 2] = CubeDots[1, 2]; Cube[0][1, 3] = CubeDots[1, 3];
+            //Cube[0][2, 0] = CubeDots[2, 0]; Cube[0][2, 1] = CubeDots[2, 1]; Cube[0][2, 2] = CubeDots[2, 2]; Cube[0][2, 3] = CubeDots[2, 3];
+            //Cube[0][3, 0] = CubeDots[3, 0]; Cube[0][3, 1] = CubeDots[3, 1]; Cube[0][3, 2] = CubeDots[3, 2]; Cube[0][3, 3] = CubeDots[3, 3];
 
-            // Грань CDHG
-            Cube.Add(new double[4, 4]);
-            Cube[3][0, 0] = Dots[2, 0]; Cube[3][0, 1] = Dots[2, 1]; Cube[3][0, 2] = Dots[2, 2]; Cube[3][0, 3] = Dots[2, 3];
-            Cube[3][1, 0] = Dots[3, 0]; Cube[3][1, 1] = Dots[3, 1]; Cube[3][1, 2] = Dots[3, 2]; Cube[3][1, 3] = Dots[3, 3];
-            Cube[3][2, 0] = Dots[7, 0]; Cube[3][2, 1] = Dots[7, 1]; Cube[3][2, 2] = Dots[7, 2]; Cube[3][2, 3] = Dots[7, 3];
-            Cube[3][3, 0] = Dots[6, 0]; Cube[3][3, 1] = Dots[6, 1]; Cube[3][3, 2] = Dots[6, 2]; Cube[3][3, 3] = Dots[6, 3];
+            //// Грань ABFE
+            //Cube.Add(new double[4, 4]);
+            //Cube[1][0, 0] = CubeDots[0, 0]; Cube[1][0, 1] = CubeDots[0, 1]; Cube[1][0, 2] = CubeDots[0, 2]; Cube[1][0, 3] = CubeDots[0, 3];
+            //Cube[1][1, 0] = CubeDots[1, 0]; Cube[1][1, 1] = CubeDots[1, 1]; Cube[1][1, 2] = CubeDots[1, 2]; Cube[1][1, 3] = CubeDots[1, 3];
+            //Cube[1][2, 0] = CubeDots[5, 0]; Cube[1][2, 1] = CubeDots[5, 1]; Cube[1][2, 2] = CubeDots[5, 2]; Cube[1][2, 3] = CubeDots[5, 3];
+            //Cube[1][3, 0] = CubeDots[4, 0]; Cube[1][3, 1] = CubeDots[4, 1]; Cube[1][3, 2] = CubeDots[4, 2]; Cube[1][3, 3] = CubeDots[4, 3];
 
-            // Грань ADHE
-            Cube.Add(new double[4, 4]);
-            Cube[4][0, 0] = Dots[0, 0]; Cube[4][0, 1] = Dots[0, 1]; Cube[4][0, 2] = Dots[0, 2]; Cube[4][0, 3] = Dots[0, 3];
-            Cube[4][1, 0] = Dots[3, 0]; Cube[4][1, 1] = Dots[3, 1]; Cube[4][1, 2] = Dots[3, 2]; Cube[4][1, 3] = Dots[3, 3];
-            Cube[4][2, 0] = Dots[7, 0]; Cube[4][2, 1] = Dots[7, 1]; Cube[4][2, 2] = Dots[7, 2]; Cube[4][2, 3] = Dots[7, 3];
-            Cube[4][3, 0] = Dots[4, 0]; Cube[4][3, 1] = Dots[4, 1]; Cube[4][3, 2] = Dots[4, 2]; Cube[4][3, 3] = Dots[4, 3];
+            //// Грань BCGF
+            //Cube.Add(new double[4, 4]);
+            //Cube[2][0, 0] = CubeDots[1, 0]; Cube[2][0, 1] = CubeDots[1, 1]; Cube[2][0, 2] = CubeDots[1, 2]; Cube[2][0, 3] = CubeDots[1, 3];
+            //Cube[2][1, 0] = CubeDots[2, 0]; Cube[2][1, 1] = CubeDots[2, 1]; Cube[2][1, 2] = CubeDots[2, 2]; Cube[2][1, 3] = CubeDots[2, 3];
+            //Cube[2][2, 0] = CubeDots[6, 0]; Cube[2][2, 1] = CubeDots[6, 1]; Cube[2][2, 2] = CubeDots[6, 2]; Cube[2][2, 3] = CubeDots[6, 3];
+            //Cube[2][3, 0] = CubeDots[5, 0]; Cube[2][3, 1] = CubeDots[5, 1]; Cube[2][3, 2] = CubeDots[5, 2]; Cube[2][3, 3] = CubeDots[5, 3];
 
-            // Грань EFGH
-            Cube.Add(new double[4, 4]);
-            Cube[5][0, 0] = Dots[4, 0]; Cube[5][0, 1] = Dots[4, 1]; Cube[5][0, 2] = Dots[4, 2]; Cube[5][0, 3] = Dots[4, 3];
-            Cube[5][1, 0] = Dots[5, 0]; Cube[5][1, 1] = Dots[5, 1]; Cube[5][1, 2] = Dots[5, 2]; Cube[5][1, 3] = Dots[5, 3];
-            Cube[5][2, 0] = Dots[6, 0]; Cube[5][2, 1] = Dots[6, 1]; Cube[5][2, 2] = Dots[6, 2]; Cube[5][2, 3] = Dots[6, 3];
-            Cube[5][3, 0] = Dots[7, 0]; Cube[5][3, 1] = Dots[7, 1]; Cube[5][3, 2] = Dots[7, 2]; Cube[5][3, 3] = Dots[7, 3];
+            //// Грань CDHG
+            //Cube.Add(new double[4, 4]);
+            //Cube[3][0, 0] = CubeDots[2, 0]; Cube[3][0, 1] = CubeDots[2, 1]; Cube[3][0, 2] = CubeDots[2, 2]; Cube[3][0, 3] = CubeDots[2, 3];
+            //Cube[3][1, 0] = CubeDots[3, 0]; Cube[3][1, 1] = CubeDots[3, 1]; Cube[3][1, 2] = CubeDots[3, 2]; Cube[3][1, 3] = CubeDots[3, 3];
+            //Cube[3][2, 0] = CubeDots[7, 0]; Cube[3][2, 1] = CubeDots[7, 1]; Cube[3][2, 2] = CubeDots[7, 2]; Cube[3][2, 3] = CubeDots[7, 3];
+            //Cube[3][3, 0] = CubeDots[6, 0]; Cube[3][3, 1] = CubeDots[6, 1]; Cube[3][3, 2] = CubeDots[6, 2]; Cube[3][3, 3] = CubeDots[6, 3];
+
+            //// Грань ADHE
+            //Cube.Add(new double[4, 4]);
+            //Cube[4][0, 0] = CubeDots[0, 0]; Cube[4][0, 1] = CubeDots[0, 1]; Cube[4][0, 2] = CubeDots[0, 2]; Cube[4][0, 3] = CubeDots[0, 3];
+            //Cube[4][1, 0] = CubeDots[3, 0]; Cube[4][1, 1] = CubeDots[3, 1]; Cube[4][1, 2] = CubeDots[3, 2]; Cube[4][1, 3] = CubeDots[3, 3];
+            //Cube[4][2, 0] = CubeDots[7, 0]; Cube[4][2, 1] = CubeDots[7, 1]; Cube[4][2, 2] = CubeDots[7, 2]; Cube[4][2, 3] = CubeDots[7, 3];
+            //Cube[4][3, 0] = CubeDots[4, 0]; Cube[4][3, 1] = CubeDots[4, 1]; Cube[4][3, 2] = CubeDots[4, 2]; Cube[4][3, 3] = CubeDots[4, 3];
+
+            //// Грань EFGH
+            //Cube.Add(new double[4, 4]);
+            //Cube[5][0, 0] = CubeDots[4, 0]; Cube[5][0, 1] = CubeDots[4, 1]; Cube[5][0, 2] = CubeDots[4, 2]; Cube[5][0, 3] = CubeDots[4, 3];
+            //Cube[5][1, 0] = CubeDots[5, 0]; Cube[5][1, 1] = CubeDots[5, 1]; Cube[5][1, 2] = CubeDots[5, 2]; Cube[5][1, 3] = CubeDots[5, 3];
+            //Cube[5][2, 0] = CubeDots[6, 0]; Cube[5][2, 1] = CubeDots[6, 1]; Cube[5][2, 2] = CubeDots[6, 2]; Cube[5][2, 3] = CubeDots[6, 3];
+            //Cube[5][3, 0] = CubeDots[7, 0]; Cube[5][3, 1] = CubeDots[7, 1]; Cube[5][3, 2] = CubeDots[7, 2]; Cube[5][3, 3] = CubeDots[7, 3];
 
             //// Ещё одна точка
             //Cube.Add(new double[3, 4]);
@@ -333,162 +345,230 @@ namespace CG.View.Forms.Lab4
         }
 
 
+
+        private double[] FindCenter(double[,] cubedots)
+        {
+            // Координаты центра куба
+            double[] Center = new double[3];
+
+            for (int i = 0; i < 8; i++)
+            {
+                Center[0] += cubedots[i, 0];
+                Center[1] += cubedots[i, 1];
+                Center[2] += cubedots[i, 2];
+            }
+
+            Center[0] = Center[0] / 8;
+            Center[1] = Center[1] / 8;
+            Center[2] = Center[2] / 8;
+
+            return Center;
+        }
+
         /// <summary>
         /// Рисует фигуру
         /// </summary>
-        private void DrawFigure(List<double[,]> Figure)
+        private void DrawFigure(double[,] cubedots)
         {
 
             // Перенос фигуры  в центр picture box 
             int m1 = pictureBox1.Width / 2;
             int n1 = pictureBox1.Height / 2;
 
-
-
             //double alpha = 21.208;
             //double betha = 19.705;
 
+            // Аксонометрическая проекция
             double alpha = 45;
             double betha = 35.26;
 
+            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+                                        0, Math.Cos(betha), 0, 0,
+                                 Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
+                                        0, 0, 0, 1);
+            cubedots = MatrixMultiplication(cubedots, CoordTransformMatrix);
 
+            //Перенос в центр
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                    0, 1, 0, 0,
+                                    0, 0, 1, 0,
+                                    m1, n1, 0, 1);
+            cubedots = MatrixMultiplication(cubedots, CoordTransformMatrix);
 
-            double x = (Cube[0][1, 0] + Cube[0][2, 0] + Cube[1][2, 0] + Cube[2][2, 0]) / 4;
-            double y = (Cube[0][1, 1] + Cube[0][2, 1] + Cube[1][2, 1] + Cube[2][2, 1]) / 4;
-            double z = (Cube[0][1, 2] + Cube[0][2, 2] + Cube[1][2, 2] + Cube[2][2, 2]) / 4;
+            // Координаты центра куба
+            double[] Center = FindCenter(cubedots);
 
-            Center[0, 0] = x; Center[0, 1] = 0; Center[0, 2] = 0; Center[0, 3] = 1;
-            Center[1, 0] = 0; Center[1, 1] = y; Center[1, 2] = 0; Center[1, 3] = 1;
-            Center[2, 0] = 0; Center[2, 1] = 0; Center[2, 2] = z; Center[2, 3] = 1;
+            Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
 
-
-
-            for (int i = 0; i < Figure.Count; i++)
+            //создаем новый объект Graphics (поверхность рисования) из pictureBox
+            Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+            for (int i = 0; i < CubeFaces.GetLength(0); i++)
             {
-
-                //Грань
-                double[,] Face = Figure[i];
-
-
-                //InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
-                //                            0, Math.Cos(betha), 0, 0,
-                //                     Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
-                //                            0, 0, 0, 1);
-                //Face = MatrixMultiplication(Face, CoordTransformMatrix);
-
-
-                Center = MatrixMultiplication(Center, CoordTransformMatrix);
-
-
-
-                double[] Center1 = new double[3];
-                Center1[0] = 50;
-                Center1[1] = 50;
-                Center1[2] = 50;
-
-                
-                if (RobertsAlg(Face, Center1) == true)
+                // Координаты точек текущей грани
+                int[] face = new int[4];
+                for (int j = 0; j < 4; j++)
                 {
-                    // Рисует фигуру относительно центра picture box
-                    Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
+                    face[j] = CubeFaces[i, j];
+                }
 
-                    //создаем новый объект Graphics (поверхность рисования) из pictureBox
-                    Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
-                    // Перенос в центр
-                    InitCoordTransformMatrix(1, 0, 0, 0,
-                                             0, 1, 0, 0,
-                                             0, 0, 1, 0,
-                                             m1, n1, 0, 1);
-                    Face = MatrixMultiplication(Face, CoordTransformMatrix);
-
-
-                    for (int j = 1; j < Face.GetLength(0); j++)
+                if (RobertsAlg(face, Center) == true)
+                {   
+                    // Рисует линии от первой точки до последней
+                    for (int k = 1; k < face.GetLength(0); k++)
                     {
-                        g.DrawLine(myPen, (int)Face[j - 1, 0], (int)Face[j - 1, 1], (int)Face[j, 0], (int)Face[j, 1]);
+                        g.DrawLine(myPen, (int)cubedots[face[k - 1], 0], (int)cubedots[face[k - 1], 1], (int)cubedots[face[k], 0], (int)cubedots[face[k], 1]);
 
                     }
 
-
-                    g.DrawLine(myPen, (int)Face[Face.GetLength(0) - 1, 0], (int)Face[Face.GetLength(0) - 1, 1], (int)Face[0, 0], (int)Face[0, 1]);
-                    //// Первая линия
-                    //g.DrawLine(myPen, (int)Face[0, 0], (int)Face[0, 1], (int)Face[1, 0], (int)Face[1, 1]);
-
-                    //// Вторая линия
-                    //g.DrawLine(myPen, (int)Face[1, 0], (int)Face[1, 1], (int)Face[2, 0], (int)Face[2, 1]);
-
-                    //// Третья линия
-                    //g.DrawLine(myPen, (int)Face[2, 0], (int)Face[2, 1], (int)Face[0, 0], (int)Face[0, 1]);
-
-                    g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
-                    myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
-
-                    // Перенос обратно в начало координат
-                    InitCoordTransformMatrix(1, 0, 0, 0,
-                                             0, 1, 0, 0,
-                                             0, 0, 1, 0,
-                                             -m1, -n1, 0, 1);
-
-                    Face = MatrixMultiplication(Face, CoordTransformMatrix);
-                    g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
-                    myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+                    // Линия из последней точки в первую
+                    g.DrawLine(myPen, (int)cubedots[face[3], 0], (int)cubedots[face[3], 1], (int)cubedots[face[0], 0], (int)cubedots[face[0], 1]);
                 }
                 else
                 {
-                    // Рисует фигуру относительно центра picture box
-                    Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
 
-                    //создаем новый объект Graphics (поверхность рисования) из pictureBox
-                    Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+                    //for (int k = 1; k < face.GetLength(0); k++)
+                    //{
+                    //    g.DrawLine(myPen, (int)cubedots[face[k - 1], 0], (int)cubedots[face[k - 1], 1], (int)cubedots[face[k], 0], (int)cubedots[face[k], 1]);
 
-                    // Перенос в центр
-                    InitCoordTransformMatrix(1,  0,  0, 0,
-                                             0,  1,  0, 0,
-                                             0,  0,  1, 0,
-                                             m1, n1, 0, 1);
-                    Face = MatrixMultiplication(Face, CoordTransformMatrix);
-
-                    for (int j = 1; j < Face.GetLength(0); j++)
-                    {
-                        g.DrawLine(myPen, (int)Face[j - 1, 0], (int)Face[j - 1, 1], (int)Face[j, 0], (int)Face[j, 1]);
-
-                    }
-
-
-                    g.DrawLine(myPen, (int)Face[Face.GetLength(0) - 1, 0], (int)Face[Face.GetLength(0) - 1, 1], (int)Face[0, 0], (int)Face[0, 1]);
-
-                    g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
-                    myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
-
-                    // Перенос обратно в начало координат
-                    InitCoordTransformMatrix(1, 0, 0, 0,
-                                             0, 1, 0, 0,
-                                             0, 0, 1, 0,
-                                             -m1, -n1, 0, 1);
-
-                    Face = MatrixMultiplication(Face, CoordTransformMatrix);
-                    g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
-                    myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+                    //}
+                    //g.DrawLine(myPen, (int)cubedots[face[3], 0], (int)cubedots[face[3], 1], (int)cubedots[face[0], 0], (int)cubedots[face[0], 1]);
                 }
-
-                //for (int i = 1; i < Face.GetLength(0); i++)
-                //{
-                //    g.DrawLine(myPen, (int)Face[i - 1, 0], (int)Face[i - 1, 1], (int)Face[i, 0], (int)Face[i, 1]);
-
-                //}
-
-
-
-                // Первая линия
-                //g.DrawLine(myPen, (int)Face[0, 0], (int)Face[0, 1], (int)Face[1, 0], (int)Face[1, 1]);
-
-                // Вторая линия
-                //g.DrawLine(myPen, (int)Face[1, 0], (int)Face[1, 1], (int)Face[2, 0], (int)Face[2, 1]);
-
-                // Третья линия
-                //g.DrawLine(myPen, (int)Face[2, 0], (int)Face[2, 1], (int)Face[0, 0], (int)Face[0, 1]);
-
-
             }
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                    0, 1, 0, 0,
+                                    0, 0, 1, 0,
+                                    -m1, -n1, 0, 1);
+
+            cubedots = MatrixMultiplication(cubedots, CoordTransformMatrix);
+
+
+
+            //    for (int i = 0; i < Figure.Count; i++)
+            //{
+
+            //    //Грань
+            //    double[,] Face = Figure[i];
+
+
+            //    //InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+            //    //                            0, Math.Cos(betha), 0, 0,
+            //    //                     Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
+            //    //                            0, 0, 0, 1);
+            //    //Face = MatrixMultiplication(Face, CoordTransformMatrix);
+
+
+            //    //Center = MatrixMultiplication(Center, CoordTransformMatrix);
+
+
+
+            //    double[] Center1 = new double[3];
+            //    Center1[0] = 50;
+            //    Center1[1] = 50;
+            //    Center1[2] = 50;
+
+
+            //    if (RobertsAlg(face, Center1) == true)
+            //    {
+            //        // Рисует фигуру относительно центра picture box
+            //        Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
+
+            //        //создаем новый объект Graphics (поверхность рисования) из pictureBox
+            //        Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+            //        // Перенос в центр
+            //        InitCoordTransformMatrix(1, 0, 0, 0,
+            //                                 0, 1, 0, 0,
+            //                                 0, 0, 1, 0,
+            //                                 m1, n1, 0, 1);
+            //        Face = MatrixMultiplication(Face, CoordTransformMatrix);
+
+
+            //        for (int j = 1; j < Face.GetLength(0); j++)
+            //        {
+            //            g.DrawLine(myPen, (int)Face[j - 1, 0], (int)Face[j - 1, 1], (int)Face[j, 0], (int)Face[j, 1]);
+
+            //        }
+
+
+            //        g.DrawLine(myPen, (int)Face[Face.GetLength(0) - 1, 0], (int)Face[Face.GetLength(0) - 1, 1], (int)Face[0, 0], (int)Face[0, 1]);
+            //        //// Первая линия
+            //        //g.DrawLine(myPen, (int)Face[0, 0], (int)Face[0, 1], (int)Face[1, 0], (int)Face[1, 1]);
+
+            //        //// Вторая линия
+            //        //g.DrawLine(myPen, (int)Face[1, 0], (int)Face[1, 1], (int)Face[2, 0], (int)Face[2, 1]);
+
+            //        //// Третья линия
+            //        //g.DrawLine(myPen, (int)Face[2, 0], (int)Face[2, 1], (int)Face[0, 0], (int)Face[0, 1]);
+
+            //        g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            //        myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+
+            //        // Перенос обратно в начало координат
+            //        InitCoordTransformMatrix(1, 0, 0, 0,
+            //                                 0, 1, 0, 0,
+            //                                 0, 0, 1, 0,
+            //                                 -m1, -n1, 0, 1);
+
+            //        Face = MatrixMultiplication(Face, CoordTransformMatrix);
+            //        g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            //        myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+            //    }
+            //    else
+            //    {
+            //        // Рисует фигуру относительно центра picture box
+            //        Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
+
+            //        //создаем новый объект Graphics (поверхность рисования) из pictureBox
+            //        Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            //        // Перенос в центр
+            //        InitCoordTransformMatrix(1,  0,  0, 0,
+            //                                 0,  1,  0, 0,
+            //                                 0,  0,  1, 0,
+            //                                 m1, n1, 0, 1);
+            //        Face = MatrixMultiplication(Face, CoordTransformMatrix);
+
+            //        for (int j = 1; j < Face.GetLength(0); j++)
+            //        {
+            //            g.DrawLine(myPen, (int)Face[j - 1, 0], (int)Face[j - 1, 1], (int)Face[j, 0], (int)Face[j, 1]);
+
+            //        }
+
+
+            //        g.DrawLine(myPen, (int)Face[Face.GetLength(0) - 1, 0], (int)Face[Face.GetLength(0) - 1, 1], (int)Face[0, 0], (int)Face[0, 1]);
+
+            //        g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            //        myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+
+            //        // Перенос обратно в начало координат
+            //        InitCoordTransformMatrix(1, 0, 0, 0,
+            //                                 0, 1, 0, 0,
+            //                                 0, 0, 1, 0,
+            //                                 -m1, -n1, 0, 1);
+
+            //        Face = MatrixMultiplication(Face, CoordTransformMatrix);
+            //        g.Dispose();// освобождаем все ресурсы, связанные с отрисовкой
+            //        myPen.Dispose(); //освобождвем ресурсы, связанные с Pen
+            //    }
+
+            //    //for (int i = 1; i < Face.GetLength(0); i++)
+            //    //{
+            //    //    g.DrawLine(myPen, (int)Face[i - 1, 0], (int)Face[i - 1, 1], (int)Face[i, 0], (int)Face[i, 1]);
+
+            //    //}
+
+
+
+            //    // Первая линия
+            //    //g.DrawLine(myPen, (int)Face[0, 0], (int)Face[0, 1], (int)Face[1, 0], (int)Face[1, 1]);
+
+            //    // Вторая линия
+            //    //g.DrawLine(myPen, (int)Face[1, 0], (int)Face[1, 1], (int)Face[2, 0], (int)Face[2, 1]);
+
+            //    // Третья линия
+            //    //g.DrawLine(myPen, (int)Face[2, 0], (int)Face[2, 1], (int)Face[0, 0], (int)Face[0, 1]);
+
+
+            //}
 
 
             //InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
@@ -550,30 +630,8 @@ namespace CG.View.Forms.Lab4
             InitCube();
 
 
-            double x = (Cube[0][1, 0] + Cube[0][2, 0] + Cube[1][2, 0] + Cube[2][2, 0])/4;
-            double y = (Cube[0][1, 1] + Cube[0][2, 1] + Cube[1][2, 1] + Cube[2][2, 1]) / 4;
-            double z = (Cube[0][1, 2] + Cube[0][2, 2] + Cube[1][2, 2] + Cube[2][2, 2]) / 4;
-            
-            Center[0, 0] = x; Center[0, 1] = 0; Center[0, 2] = 0; Center[0, 3] = 1;
-            Center[1, 0] = 0; Center[1, 1] = y; Center[1, 2] = 0; Center[1, 3] = 1;
-            Center[2, 0] = 0; Center[2, 1] = 0; Center[2, 2] = z; Center[2, 3] = 1;
+            DrawFigure(CubeDots);
 
-            //Center[0] = -1; 
-            //Center[1] = -1;
-            //Center[2] = -1;
-
-
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    Center[0] = Center[0] + Cube[i][0,0];
-            //}
-
-
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
         }
 
 
@@ -596,17 +654,9 @@ namespace CG.View.Forms.Lab4
                                      Math.Sin(Angle), 0, Math.Cos(Angle), 0,
                                             0, 0, 0, 1);
 
-
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
             
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            DrawFigure(CubeDots);
 
 
 
@@ -626,13 +676,13 @@ namespace CG.View.Forms.Lab4
                                      0, Math.Cos(Angle), Math.Sin(Angle), 0,
                                      0, -Math.Sin(Angle), Math.Cos(Angle), 0,
                                      0, 0, 0, 1);
-
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
             for (int i = 0; i < Cube.Count; i++)
             {
                 Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
             }
 
-            DrawFigure(Cube);
+            DrawFigure(CubeDots);
             //for (int i = 0; i < Cube.Count; i++)
             //{
             //    DrawFigure(Cube[i]);
@@ -652,13 +702,13 @@ namespace CG.View.Forms.Lab4
                                      -Math.Sin(Angle), Math.Cos(Angle), 0, 0,
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
-
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
             for (int i = 0; i < Cube.Count; i++)
             {
                 Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
             }
 
-            DrawFigure(Cube);
+            DrawFigure(CubeDots);
             //for (int i = 0; i < Cube.Count; i++)
             //{
             //    DrawFigure(Cube[i]);
@@ -679,16 +729,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      Distance, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            DrawFigure(CubeDots);
         }
 
         private void MoveXLeft_Click(object sender, EventArgs e)
@@ -703,16 +746,9 @@ namespace CG.View.Forms.Lab4
                                      0, 1, 0, 0,
                                      0, 0, 1, 0,
                                      -Distance, 0, 0, 1);
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            DrawFigure(CubeDots);
         }
 
         private void MoveYUp_Click(object sender, EventArgs e)
@@ -728,15 +764,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, Distance, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void MoveYDown_Click(object sender, EventArgs e)
@@ -752,15 +782,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, -Distance, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void MoveZForwards_Click(object sender, EventArgs e)
@@ -776,15 +800,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, Distance, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void MoveZBackwards_Click(object sender, EventArgs e)
@@ -800,15 +818,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, -Distance, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ScaleOXButton_Click(object sender, EventArgs e)
@@ -824,15 +836,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ScaleOYButton_Click(object sender, EventArgs e)
@@ -848,15 +854,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ScaleOZButton_Click(object sender, EventArgs e)
@@ -872,15 +872,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, Distance, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ScalingXYButton_Click(object sender, EventArgs e)
@@ -896,23 +890,10 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1 / s, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-                //for (int j = 0; j < 3; j++)
-                //{
-                //    Cube[i][j, 0] = Cube[i][j, 0] / s;
-                //    Cube[i][j, 1] = Cube[i][j, 1] / s;
-                //    Cube[i][j, 2] = Cube[i][j, 1] / s;
-                //    Cube[i][j, 3] = 1;
-                //}
+            DrawFigure(CubeDots);
 
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-
-            //    DrawFigure(Cube[i]);
         }
 
         private void ReflectionXButton_Click(object sender, EventArgs e)
@@ -928,15 +909,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ReflectionYButton_Click(object sender, EventArgs e)
@@ -952,15 +927,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void ReflextionOZButton_Click(object sender, EventArgs e)
@@ -976,15 +945,9 @@ namespace CG.View.Forms.Lab4
                                      0, 0, -1, 0,
                                      0, 0, 0, 1);
 
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i = 0; i < Cube.Count; i++)
-            //{
-            //    DrawFigure(Cube[i]);
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
         }
 
         private void DrawCustomAxisButton_Click(object sender, EventArgs e)
@@ -1079,16 +1042,9 @@ namespace CG.View.Forms.Lab4
                                      h, i, j, 0,
                                      0, 0, 0, 1);
 
-            for (int i1 = 0; i1 < Cube.Count; i1++)
-            {
-                Cube[i1] = MatrixMultiplication(Cube[i1], CoordTransformMatrix);
-            }
-            DrawFigure(Cube);
-            //for (int i2 = 0; i2 < Cube.Count; i2++)
-            //{
-            //    DrawFigure(Cube[i2]);
-            //    continue;
-            //}
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+            DrawFigure(CubeDots);
 
         }
     }
