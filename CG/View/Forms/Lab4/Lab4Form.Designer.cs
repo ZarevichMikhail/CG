@@ -30,6 +30,7 @@
         {
             splitContainer1 = new SplitContainer();
             pictureBox1 = new PictureBox();
+            RotateCustomAxisButton = new Button();
             DrawCustomAxisButton = new Button();
             Z2TextBox = new TextBox();
             Z1TextBox = new TextBox();
@@ -68,7 +69,6 @@
             DrawFigureButton = new Button();
             DrawAxisButton = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            RotateCustomAxisButton = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -139,6 +139,16 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
+            // RotateCustomAxisButton
+            // 
+            RotateCustomAxisButton.Location = new Point(519, 171);
+            RotateCustomAxisButton.Name = "RotateCustomAxisButton";
+            RotateCustomAxisButton.Size = new Size(267, 29);
+            RotateCustomAxisButton.TabIndex = 43;
+            RotateCustomAxisButton.Text = "Поворот относительно новой оси";
+            RotateCustomAxisButton.UseVisualStyleBackColor = true;
+            RotateCustomAxisButton.Click += RotateCustomAxisButton_Click;
+            // 
             // DrawCustomAxisButton
             // 
             DrawCustomAxisButton.Location = new Point(578, 136);
@@ -155,7 +165,7 @@
             Z2TextBox.Name = "Z2TextBox";
             Z2TextBox.Size = new Size(49, 27);
             Z2TextBox.TabIndex = 41;
-            Z2TextBox.Text = "-20";
+            Z2TextBox.Text = "500";
             // 
             // Z1TextBox
             // 
@@ -163,7 +173,7 @@
             Z1TextBox.Name = "Z1TextBox";
             Z1TextBox.Size = new Size(49, 27);
             Z1TextBox.TabIndex = 40;
-            Z1TextBox.Text = "20";
+            Z1TextBox.Text = "0";
             // 
             // Y2TextBox
             // 
@@ -171,7 +181,7 @@
             Y2TextBox.Name = "Y2TextBox";
             Y2TextBox.Size = new Size(49, 27);
             Y2TextBox.TabIndex = 39;
-            Y2TextBox.Text = "100";
+            Y2TextBox.Text = "0";
             // 
             // Y1TextBox
             // 
@@ -179,7 +189,7 @@
             Y1TextBox.Name = "Y1TextBox";
             Y1TextBox.Size = new Size(49, 27);
             Y1TextBox.TabIndex = 38;
-            Y1TextBox.Text = "400";
+            Y1TextBox.Text = "0";
             // 
             // X2TextBox
             // 
@@ -195,7 +205,7 @@
             X1TextBox.Name = "X1TextBox";
             X1TextBox.Size = new Size(49, 27);
             X1TextBox.TabIndex = 36;
-            X1TextBox.Text = "200";
+            X1TextBox.Text = "0";
             // 
             // label8
             // 
@@ -481,16 +491,6 @@
             DrawAxisButton.Text = "Нарисовать оси";
             DrawAxisButton.UseVisualStyleBackColor = true;
             DrawAxisButton.Click += DrawAxisButton_Click;
-            // 
-            // RotateCustomAxisButton
-            // 
-            RotateCustomAxisButton.Location = new Point(519, 171);
-            RotateCustomAxisButton.Name = "RotateCustomAxisButton";
-            RotateCustomAxisButton.Size = new Size(267, 29);
-            RotateCustomAxisButton.TabIndex = 43;
-            RotateCustomAxisButton.Text = "Поворот относительно новой оси";
-            RotateCustomAxisButton.UseVisualStyleBackColor = true;
-            RotateCustomAxisButton.Click += RotateCustomAxisButton_Click;
             // 
             // Lab4Form
             // 
