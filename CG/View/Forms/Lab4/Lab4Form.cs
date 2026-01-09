@@ -7,12 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-// для работы с библиотекой OpenGL
-using Tao.OpenGl;
-// для работы с библиотекой FreeGLUT
-using Tao.FreeGlut;
-// для работы с элементом управления SimpleOpenGLControl
-using Tao.Platform.Windows;
 
 
 
@@ -39,13 +33,16 @@ namespace CG.View.Forms.Lab4
 
 
         /// <summary>
-        /// Матрица тела тэтраэдра
+        /// Матрица тела тэтраэдра.
+        /// Эта переменная у меня нигде не используется.
+        /// Нужен рефракторинг.
         /// </summary>
         List<double[,]> Cube = new List<double[,]>();
 
 
         /// <summary>
-        /// Точки куба
+        /// Координаты точек куба.
+        /// По сути это матрица тела, а Cube можно убрать. 
         /// </summary>
         double[,] CubeDots = new double[8, 4];
 
@@ -97,105 +94,6 @@ namespace CG.View.Forms.Lab4
 
 
         /// <summary>
-        /// Алгоритм Робертса для определения видимости грани
-        /// </summary>
-        /// <param name="face"></param>
-        /// <returns></returns>
-        private bool RobertsAlg(int[] face, double[] Center)
-        {
-                        
-            bool IsVisible;
-
-            // Уравнение плоскости по двум направляющим векторам и точке. 
-            double[] VecOne = new double[3];
-            double[] VecTwo = new double[3];
-
-
-            VecOne[0] = CubeDots[face[0], 0] - CubeDots[face[1], 0];
-            VecOne[1] = CubeDots[face[0], 1] - CubeDots[face[1], 1];
-            VecOne[2] = CubeDots[face[0], 2] - CubeDots[face[1], 2];
-
-            VecTwo[0] = CubeDots[face[2], 0] - CubeDots[face[1], 0];
-            VecTwo[1] = CubeDots[face[2], 1] - CubeDots[face[1], 1];
-            VecTwo[2] = CubeDots[face[2], 2] - CubeDots[face[1], 2];
-
-
-            //VecOne[0] = CubeDots[face[1], 0] - CubeDots[face[0], 0];
-            //VecOne[1] = CubeDots[face[1], 1] - CubeDots[face[0], 1];
-            //VecOne[2] = CubeDots[face[1], 2] - CubeDots[face[0], 2];
-
-            //VecTwo[0] = CubeDots[face[2], 0] - CubeDots[face[0], 0];
-            //VecTwo[1] = CubeDots[face[2], 1] - CubeDots[face[0], 1];
-            //VecTwo[2] = CubeDots[face[2], 2] - CubeDots[face[0], 2];
-
-            // Коэффициенты уравнения плоскости, т.е. координаты вектора нормали. 
-            double A;
-            double B;
-            double C;
-            double D;
-
-            A = VecOne[1] * VecTwo[2] - VecTwo[1] * VecOne[2];
-            B = VecOne[2] * VecTwo[0] - VecTwo[2] * VecOne[0];
-            C = VecOne[0] * VecTwo[1] - VecTwo[0] * VecOne[1];
-
-            D = -(A * CubeDots[face[0], 0] + B * CubeDots[face[0], 1] + C * CubeDots[face[0], 2]);
-
-            // коэффициент, изменяющий знак плоскости 
-            // Скалярное произведение нормального вектора плоскости и радиус-вектора центра фигуры
-            // Оно должно быть отрицательным, чтобы нормальный вектор был направлен в центр фигуры. 
-            // Если положительное, надо поменять знак,
-            double sign;
-            // Не понимаю, зачем тут + D
-            sign = -(A * Center[0] + B * Center[1] + C * Center[2]+D);
-
-            //sign = A * Center[0] + B * Center[1] + C * Center[2];
-
-            // вектор направления взгляда
-            // взгляд направлен из точки [-1,1,1] в противоположную сторону. 
-            double[] E = new double[3];
-            //E = [1, -1, -1];
-            E = [0, 0, -1];
-
-            // Если грань ориентирована правильно. 
-            if (sign > 0)
-            {
-                // Скалярное произведение вектора нормали и ветора взгляда 
-                if ((A * E[0] + B * E[1] + C * E[2]+D) > 0) 
-                {
-                    IsVisible = true;
-                }
-                else
-                {
-                    IsVisible = false;
-                }
-            }
-            // Если плоскость ориентирована неправильно,
-            // меняем направление вектора нормали
-            else
-            {
-                A = -A;
-                B = -B;
-                C = -C;
-                D = -D;
-
-                // Теперь он ориентировал правильно, выполняем проверку. 
-                if ((A * E[0] + B * E[1] + C * E[2]+D) > 0)
-                {
-                    IsVisible = true;
-                }
-                else
-                {
-                    IsVisible = false;
-                }
-            }
-
-
-            return IsVisible;
-        }
-
-
-
-        /// <summary>
         /// Инициализация матрицы осей
         /// </summary>
         private void InitAxis()
@@ -225,28 +123,60 @@ namespace CG.View.Forms.Lab4
         {
 
             // Координаты точек нижней грани
-            CubeDots[0, 0] = 0;   CubeDots[0, 1] = 0;   CubeDots[0, 2] = 0;   CubeDots[0, 3] = 1;  // A
+            CubeDots[0, 0] = 0;    CubeDots[0, 1] = 0;   CubeDots[0, 2] = 0;   CubeDots[0, 3] = 1;  // A
             CubeDots[1, 0] = -100; CubeDots[1, 1] = 0;   CubeDots[1, 2] = 0;   CubeDots[1, 3] = 1;  // B
             CubeDots[2, 0] = -100; CubeDots[2, 1] = 100; CubeDots[2, 2] = 0;   CubeDots[2, 3] = 1;  // C
-            CubeDots[3, 0] = 0;   CubeDots[3, 1] = 100; CubeDots[3, 2] = 0;   CubeDots[3, 3] = 1;  // D
+            CubeDots[3, 0] = 0;    CubeDots[3, 1] = 100; CubeDots[3, 2] = 0;   CubeDots[3, 3] = 1;  // D
 
             // Координаты точек верхней грани
-            CubeDots[4, 0] = 0;   CubeDots[4, 1] = 0;   CubeDots[4, 2] = 100; CubeDots[4, 3] = 1;  // E
+            CubeDots[4, 0] = 0;    CubeDots[4, 1] = 0;   CubeDots[4, 2] = 100; CubeDots[4, 3] = 1;  // E
             CubeDots[5, 0] = -100; CubeDots[5, 1] = 0;   CubeDots[5, 2] = 100; CubeDots[5, 3] = 1;  // F
             CubeDots[6, 0] = -100; CubeDots[6, 1] = 100; CubeDots[6, 2] = 100; CubeDots[6, 3] = 1;  // G
-            CubeDots[7, 0] = 0;   CubeDots[7, 1] = 100; CubeDots[7, 2] = 100; CubeDots[7, 3] = 1;  // H
+            CubeDots[7, 0] = 0;    CubeDots[7, 1] = 100; CubeDots[7, 2] = 100; CubeDots[7, 3] = 1;  // H
 
-            // Индексы вершин из которых состоит грань
+            //// Индексы вершин из которых состоит грань
             CubeFaces[0, 0] = 0; CubeFaces[0, 1] = 1; CubeFaces[0, 2] = 2; CubeFaces[0, 3] = 3; // ABCD
-            CubeFaces[1, 0] = 0; CubeFaces[1, 1] = 1; CubeFaces[1, 3] = 5; CubeFaces[1, 3] = 4; // ABFE
+            CubeFaces[1, 0] = 0; CubeFaces[1, 1] = 1; CubeFaces[1, 2] = 5; CubeFaces[1, 3] = 4; // ABFE
             CubeFaces[2, 0] = 1; CubeFaces[2, 1] = 2; CubeFaces[2, 2] = 6; CubeFaces[2, 3] = 5; // BCGF
             CubeFaces[3, 0] = 2; CubeFaces[3, 1] = 3; CubeFaces[3, 2] = 7; CubeFaces[3, 3] = 6; // CDHG
             CubeFaces[4, 0] = 0; CubeFaces[4, 1] = 3; CubeFaces[4, 2] = 7; CubeFaces[4, 3] = 4; // ADHE
             CubeFaces[5, 0] = 4; CubeFaces[5, 1] = 5; CubeFaces[5, 2] = 6; CubeFaces[5, 3] = 7; // EFGH
 
+            //// 0: ABCD (Нижняя) - смотрим снизу, обход против часовой
+            //CubeFaces[0, 0] = 0; CubeFaces[0, 1] = 3; CubeFaces[0, 2] = 2; CubeFaces[0, 3] = 1;
+            //// 1: ABFE (Передняя)
+            //CubeFaces[1, 0] = 0; CubeFaces[1, 1] = 1; CubeFaces[1, 2] = 5; CubeFaces[1, 3] = 4;
+            //// 2: BCGF (Правая)
+            //CubeFaces[2, 0] = 1; CubeFaces[2, 1] = 2; CubeFaces[2, 2] = 6; CubeFaces[2, 3] = 5;
+            //// 3: CDHG (Задняя)
+            //CubeFaces[3, 0] = 2; CubeFaces[3, 1] = 3; CubeFaces[3, 2] = 7; CubeFaces[3, 3] = 6;
+            //// 4: ADHE (Левая)
+            //CubeFaces[4, 0] = 3; CubeFaces[4, 1] = 0; CubeFaces[4, 2] = 4; CubeFaces[4, 3] = 7;
+            //// 5: EFGH (Верхняя)
+            //CubeFaces[5, 0] = 4; CubeFaces[5, 1] = 5; CubeFaces[5, 2] = 6; CubeFaces[5, 3] = 7;
 
         }
 
+
+        /// <summary>
+        /// Инициализация матрицы преобразования
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="p"></param>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        /// <param name="f"></param>
+        /// <param name="q"></param>
+        /// <param name="h"></param>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="r"></param>
+        /// <param name="l"></param>
+        /// <param name="m"></param>
+        /// <param name="n"></param>
+        /// <param name="s"></param>
         private void InitCoordTransformMatrix(double a, double b, double c, double p,
                                               double d, double e, double f, double q,
                                               double h, double i, double j, double r,
@@ -277,7 +207,7 @@ namespace CG.View.Forms.Lab4
             //double betha = 19.705;
 
 
-            // Аксонометрическая проекция 
+            // Изометрическая проекция 
             double alpha = 45;
             double betha = 35.26;
 
@@ -322,18 +252,18 @@ namespace CG.View.Forms.Lab4
         /// <summary>
         /// Поиск центра фигуры.
         /// </summary>
-        /// <param name="cubedots"></param>
-        /// <returns></returns>
-        private double[] FindCenter(double[,] cubedots)
+        /// <param name="cube_dots">Фигура</param>
+        /// <returns>Массив с x y z координатами центра фигуры</returns>
+        private double[] FindCenter(double[,] cube_dots)
         {
             // Координаты центра куба
             double[] Center = new double[3];
 
             for (int i = 0; i < 8; i++)
             {
-                Center[0] += cubedots[i, 0];
-                Center[1] += cubedots[i, 1];
-                Center[2] += cubedots[i, 2];
+                Center[0] += cube_dots[i, 0];
+                Center[1] += cube_dots[i, 1];
+                Center[2] += cube_dots[i, 2];
             }
 
             Center[0] = Center[0] / 8;
@@ -343,12 +273,107 @@ namespace CG.View.Forms.Lab4
             return Center;
         }
 
+
+
+
+
+        // Моя фукнция
         /// <summary>
-        /// Рисует фигуру
+        /// Алгоритм Робертса для определения видимости грани
         /// </summary>
-        private void DrawFigure(double[,] cubedots)
+        /// <param name="face">Грань, которую нужно проверить на видимость</param>
+        /// <returns> IsVisible</returns>
+        private bool RobertsAlg(int[] face, double[] FigureCenter, double[,] FigureDots )
         {
 
+            bool IsVisible;
+
+            // Уравнение плоскости по двум направляющим векторам и точке. 
+            double[] VecOne = new double[3];
+            double[] VecTwo = new double[3];
+
+            // Вектор от 0-й вершины к 1-й
+            VecOne[0] = FigureDots[face[1], 0] - FigureDots[face[0], 0];
+            VecOne[1] = FigureDots[face[1], 1] - FigureDots[face[0], 1];
+            VecOne[2] = FigureDots[face[1], 2] - FigureDots[face[0], 2];
+
+            // Вектор от 0-й вершины к 3-й 
+            VecTwo[0] = FigureDots[face[3], 0] - FigureDots[face[0], 0];
+            VecTwo[1] = FigureDots[face[3], 1] - FigureDots[face[0], 1];
+            VecTwo[2] = FigureDots[face[3], 2] - FigureDots[face[0], 2];
+
+            // Коэффициенты уравнения плоскости, т.е. координаты вектора нормали. 
+            double A;
+            double B;
+            double C;
+            double D;
+
+            A = VecOne[1] * VecTwo[2] - VecTwo[1] * VecOne[2];
+            B = VecOne[2] * VecTwo[0] - VecTwo[2] * VecOne[0];
+            C = VecOne[0] * VecTwo[1] - VecTwo[0] * VecOne[1];
+
+            D = -(A * FigureDots[face[0], 0] + B * FigureDots[face[0], 1] + C * FigureDots[face[0], 2]);
+
+            // Коэффициент, изменяющий знак плоскости 
+            // Нужно определить, с какой стороны от плоскости грани находится центр фигуры. 
+            // sign - это уравнение плоскости. Подставив в него координаты центра узнаем
+            // с какой стороны он находится. 0 - на плоскости, + выше, - ниже. 
+            // В алгоритме нужно, чтобы положительное направление было внутрь фигуры
+            double sign;
+            sign = -(A * FigureCenter[0] + B * FigureCenter[1] + C * FigureCenter[2] + D);
+
+
+            // вектор направления взгляда
+            // взгляд направлен из точки [-1,1,1] в противоположную сторону. 
+            double[] E = new double[3];
+            E = [ -1, 1, 1 ];
+
+            // Если грань ориентирована правильно. 
+            if (sign > 0)
+            {
+                
+            }
+            // Если плоскость ориентирована неправильно,
+            // меняем направление вектора нормали
+            else
+            {
+                A = -A;
+                B = -B;
+                C = -C;
+                D = -D;
+              
+            }
+
+            // Скалярное произведение вектора нормали и ветора взгляда 
+            // Если оно положительно, значит взгляд и нормаль направлены в одну сторону
+            // Если отрицательно, то взгляд и нормаль направлены в противоположные стороны
+            // И это значит, что между этой гранью и взглядом есть другая грань, которая её закрывает. 
+            // То есть рисовать её не надо. 
+            if ((A * E[0] + B * E[1] + C * E[2]) > 0)
+            {
+                IsVisible = true;
+            }
+            else
+            {
+                IsVisible = false;
+            }
+
+
+            return IsVisible;
+        }
+
+
+        /// <summary>
+        /// Делает проекцию фигуры и переносит её в центр экрана
+        /// </summary>
+        /// <param name="Figure">Матрица тела фигуры</param>
+        /// <returns>Массив с экранными координатами фигуры</returns>
+        private double[,] FigureProjection(double[,] Figure)
+        {
+
+            // Явное копирование массива figure_dots
+            // Чтобы тут работать с копией, а не с оригиналом
+            double[,] WorkingDots = (double[,])Figure.Clone();
             // Перенос фигуры  в центр picture box 
             int m1 = pictureBox1.Width / 2;
             int n1 = pictureBox1.Height / 2;
@@ -356,99 +381,102 @@ namespace CG.View.Forms.Lab4
             //double alpha = 21.208;
             //double betha = 19.705;
 
-            // Аксонометрическая проекция
+            // Изометрическая проекция
             double alpha = 45;
             double betha = 35.26;
 
-            
 
+            // Проекция куба
             InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
-                                          0,                 Math.Cos(betha),            0, 0,
-                                 Math.Sin(alpha),    -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
-                                          0,                        0,                   0, 1);
-            cubedots = MatrixMultiplication(cubedots, CoordTransformMatrix);
+                                          0, Math.Cos(betha), 0, 0,
+                                     Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
+                                          0, 0, 0, 1);
+            WorkingDots = MatrixMultiplication(WorkingDots, CoordTransformMatrix);
 
-            
+
 
             //Перенос в центр
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, 1, 0, 0,
                                      0, 0, 1, 0,
                                      m1, n1, 0, 1);
-            cubedots = MatrixMultiplication(cubedots, CoordTransformMatrix);
+            WorkingDots = MatrixMultiplication(WorkingDots, CoordTransformMatrix);
+
+            return WorkingDots;
+
+        }
+
+
+        /// <summary>
+        // Рисует фигуру
+        // </summary>
+        private void DrawFigure(double[,] initial_figure_dots, int[,] initial_figure_faces)
+        {
+            // Явное копирование массива figure_dots
+            // Чтобы тут работать с копией, а не с оригиналом
+            double[,] WorkingDots = (double[,]) initial_figure_dots.Clone();
+
+            // Количество граней в фигуре
+            int FacesNumber = initial_figure_faces.GetLength(0);
+
+            double[] FigureCenter = FindCenter(initial_figure_dots);
+
+            WorkingDots = FigureProjection(WorkingDots);
 
             // Координаты центра куба
-            double[] CubeCenter = FindCenter(cubedots);
+            // double[] CubeCenter = FindCenter(WorkingDots);
 
 
-            Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
 
             //создаем новый объект Graphics (поверхность рисования) из pictureBox
             Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
+            Pen myPen = new Pen(Color.Blue, 2);// цвет линии и ширина
 
-
-            for (int i = 0; i < CubeFaces.GetLength(0); i++)
+            for (int i = 0; i < FacesNumber; i++)
             {
                 // Координаты точек текущей грани
                 int[] face = new int[4];
                 for (int j = 0; j < 4; j++)
                 {
-                    face[j] = CubeFaces[i, j];
+                    face[j] = initial_figure_faces[i, j];
                 }
 
-                if (RobertsAlg(face, CubeCenter) == true)
+                
+                if (RobertsAlg(face, FigureCenter, initial_figure_dots) == true)
                 {   
                     // Рисует линии от первой точки до последней
-                    for (int k = 1; k < face.GetLength(0); k++)
+                    //for (int k = 1; k < face.GetLength(0); k++)
+                    for (int k = 0; k < face.GetLength(0); k++)
                     {
+                        int next = (k + 1) % 4; // Линии 0-1, 1-2, 2-3, 3-0
+                        g.DrawLine(myPen, 
+                            (int)WorkingDots[face[k], 0],    (int)WorkingDots[face[k], 1], 
+                            (int)WorkingDots[face[next], 0], (int)WorkingDots[face[next], 1]);
 
+                        //g.DrawLine(myPen, (int)WorkingDots[face[k - 1], 0], (int)WorkingDots[face[k - 1], 1], (int)WorkingDots[face[k], 0], (int)WorkingDots[face[k], 1]);
 
-                        //cubedots[face[k - 1], 0] = cubedots[face[k - 1], 0] + m1;
-                        //cubedots[face[k - 1], 1] = cubedots[face[k - 1], 1] + n1;
+                    } 
 
-                        //cubedots[face[k], 0] = cubedots[face[k], 0] + m1;
-                        //cubedots[face[k], 1] = cubedots[face[k], 1] + n1;
-                        g.DrawLine(myPen, (int)cubedots[face[k - 1], 0], (int)cubedots[face[k - 1], 1], (int)cubedots[face[k], 0], (int)cubedots[face[k], 1]);
+                    //Линия из последней точки в первую
+                    //g.DrawLine(myPen, (int)WorkingDots[face[3], 0], (int)WorkingDots[face[3], 1], (int)WorkingDots[face[0], 0], (int)WorkingDots[face[0], 1]);
 
-                        //cubedots[face[k - 1], 0] = cubedots[face[k - 1], 0] - m1;
-                        //cubedots[face[k - 1], 1] = cubedots[face[k - 1], 1] - n1;
-
-                        //cubedots[face[k], 0] = cubedots[face[k], 0] - m1;
-                        //cubedots[face[k], 1] = cubedots[face[k], 1] - n1;
-
-                    }
-
-
-
-                    //cubedots[face[0], 0] = cubedots[face[0], 0] + m1;
-                    //cubedots[face[0], 1] = cubedots[face[0], 1] + n1;
-
-                    //cubedots[face[3], 0] = cubedots[face[3], 0] + m1;
-                    //cubedots[face[3], 1] = cubedots[face[3], 1] + n1;
-
-                    // Линия из последней точки в первую
-                    g.DrawLine(myPen, (int)cubedots[face[3], 0], (int)cubedots[face[3], 1], (int)cubedots[face[0], 0], (int)cubedots[face[0], 1]);
-
-
-                    //cubedots[face[0], 0] = cubedots[face[0], 0] - m1;
-                    //cubedots[face[0], 1] = cubedots[face[0], 1] - n1;
-
-                    //cubedots[face[3], 0] = cubedots[face[3], 0] - m1;
-                    //cubedots[face[3], 1] = cubedots[face[3], 1] - n1;
                 }
                 else
                 {
 
-                    //for (int k = 1; k < face.GetLength(0); k++)
+                    // //for (int k = 1; k < face.GetLength(0); k++)
+                    //for (int k = 0; k < face.GetLength(0); k++)
                     //{
-                    //    g.DrawLine(myPen, (int)cubedots[face[k - 1], 0], (int)cubedots[face[k - 1], 1], (int)cubedots[face[k], 0], (int)cubedots[face[k], 1]);
-
+                    //    g.DrawLine(myPen, (int)WorkingDots[face[k - 1], 0], (int)WorkingDots[face[k - 1], 1], (int)WorkingDots[face[k], 0], (int)WorkingDots[face[k], 1]);
+                    //int next = (k + 1) % 4; // Соединяем 0-1, 1-2, 2-3, 3-0
+                    //g.DrawLine(myPen, (int)WorkingDots[face[k], 0], (int)WorkingDots[face[k], 1], (int)WorkingDots[face[next], 0], (int)WorkingDots[face[next], 1]);
                     //}
-                    //g.DrawLine(myPen, (int)cubedots[face[3], 0], (int)cubedots[face[3], 1], (int)cubedots[face[0], 0], (int)cubedots[face[0], 1]);
+                    //g.DrawLine(myPen, (int)WorkingDots[face[3], 0], (int)WorkingDots[face[3], 1], (int)WorkingDots[face[0], 0], (int)WorkingDots[face[0], 1]);
                 }
             }
 
-
+            g.Dispose();
+            myPen.Dispose();
         }
 
 
@@ -463,8 +491,7 @@ namespace CG.View.Forms.Lab4
         {
             InitCube();
 
-
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
 
         }
 
@@ -490,7 +517,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
             
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
 
 
 
@@ -505,18 +532,18 @@ namespace CG.View.Forms.Lab4
             double Angle = double.Parse(AngleTextBox.Text);
             Angle = Angle * Math.PI / 180;
 
-
+            
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, Math.Cos(Angle), Math.Sin(Angle), 0,
                                      0, -Math.Sin(Angle), Math.Cos(Angle), 0,
                                      0, 0, 0, 1);
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
+            //for (int i = 0; i < Cube.Count; i++)
+            //{
+            //    Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
+            //}
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
             //for (int i = 0; i < Cube.Count; i++)
             //{
             //    DrawFigure(Cube[i]);
@@ -537,12 +564,12 @@ namespace CG.View.Forms.Lab4
                                      0, 0, 1, 0,
                                      0, 0, 0, 1);
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
-            for (int i = 0; i < Cube.Count; i++)
-            {
-                Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
-            }
+            //for (int i = 0; i < Cube.Count; i++)
+            //{
+            //    Cube[i] = MatrixMultiplication(Cube[i], CoordTransformMatrix);
+            //}
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
             //for (int i = 0; i < Cube.Count; i++)
             //{
             //    DrawFigure(Cube[i]);
@@ -565,7 +592,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void MoveXLeft_Click(object sender, EventArgs e)
@@ -582,7 +609,7 @@ namespace CG.View.Forms.Lab4
                                      -Distance, 0, 0, 1);
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void MoveYUp_Click(object sender, EventArgs e)
@@ -600,7 +627,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void MoveYDown_Click(object sender, EventArgs e)
@@ -618,7 +645,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void MoveZForwards_Click(object sender, EventArgs e)
@@ -636,7 +663,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void MoveZBackwards_Click(object sender, EventArgs e)
@@ -654,7 +681,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ScaleOXButton_Click(object sender, EventArgs e)
@@ -672,7 +699,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ScaleOYButton_Click(object sender, EventArgs e)
@@ -690,7 +717,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ScaleOZButton_Click(object sender, EventArgs e)
@@ -708,7 +735,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ScalingXYButton_Click(object sender, EventArgs e)
@@ -726,7 +753,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
 
         }
 
@@ -745,7 +772,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ReflectionYButton_Click(object sender, EventArgs e)
@@ -763,7 +790,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void ReflextionOZButton_Click(object sender, EventArgs e)
@@ -781,7 +808,7 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+            DrawFigure(CubeDots, CubeFaces);
         }
 
         private void DrawCustomAxisButton_Click(object sender, EventArgs e)
@@ -804,10 +831,10 @@ namespace CG.View.Forms.Lab4
             double alpha = 45;
             double betha = 35.26;
 
-            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha),  0, 0,
+            InitCoordTransformMatrix(Math.Cos(alpha),  Math.Sin(alpha) * Math.Sin(betha), 0, 0,
                                             0,         Math.Cos(betha),                   0, 0,
                                      Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
-                                            m1, n1,                                       0, 1);
+                                            m1,                 n1,                       0, 1);
 
             double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
 
@@ -820,7 +847,12 @@ namespace CG.View.Forms.Lab4
 
         }
 
-        // Это пока не сделал. 
+        
+        /// <summary>
+        /// Поворот вокруг произвольной оси.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RotateCustomAxisButton_Click(object sender, EventArgs e)
         {
 
@@ -842,12 +874,14 @@ namespace CG.View.Forms.Lab4
             double n2 = (Y2- Y1) / module;
             double n3 = (Z2- Z1) / module;
 
+            // Перенос то
             InitCoordTransformMatrix(1, 0, 0, 0,
                                      0, 1, 0, 0,
                                      0, 0, 1, 0,
-                                     CustomAxis[0, 0], CustomAxis[0, 1], CustomAxis[0, 2], 1);
+                                     -CustomAxis[0, 0], -CustomAxis[0, 1], -CustomAxis[0, 2], 1);
 
-            double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
+            //double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
             pictureBox1.Refresh();
             DrawAxis();
@@ -861,8 +895,8 @@ namespace CG.View.Forms.Lab4
             double c = n1 * n3 * (1 - Math.Cos(Angle)) - n2 * Math.Sin(Angle);
 
             double d = n1 * n2 * (1 - Math.Cos(Angle)) - n3 * Math.Sin(Angle);
-            double e1 = Math.Pow(n2, 2) + (1 - Math.Pow(n2, 2)) * Math.Cos(Angle); // не дал присвоить имя e из за ошибки CS0136 Локальная переменная или параметр с именем "e" нельзя объявить в данной области, так как это имя используется во включающей локальной области для определения локальной переменной или параметра
-            double f = n2 * n3 * (1 - Math.Cos(Angle)) + n1 * Math.Sin(Angle);    // не знаю, из-за чего она возникла, такой переменной у меня больше нигде нет. 
+            double e1 = Math.Pow(n2, 2) + (1 - Math.Pow(n2, 2)) * Math.Cos(Angle); 
+            double f = n2 * n3 * (1 - Math.Cos(Angle)) + n1 * Math.Sin(Angle);    
 
             double h = n1 * n3 * (1 - Math.Cos(Angle)) + n2 * Math.Sin(Angle);
             double i = n2 * n3 * (1 - Math.Cos(Angle)) - n1 * Math.Sin(Angle);
@@ -876,14 +910,34 @@ namespace CG.View.Forms.Lab4
 
             CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
 
-            DrawFigure(CubeDots);
+
+            InitCoordTransformMatrix(1, 0, 0, 0,
+                                     0, 1, 0, 0,
+                                     0, 0, 1, 0,
+                                     CustomAxis[0, 0], CustomAxis[0, 1], CustomAxis[0, 2], 1);
+
+
+            CubeDots = MatrixMultiplication(CubeDots, CoordTransformMatrix);
+
+
+            DrawFigure(CubeDots, CubeFaces);
 
             Pen myPen = new Pen(Color.Green, 1);// цвет линии и ширина
             Graphics g = Graphics.FromHwnd(pictureBox1.Handle);
 
-            // рисуем ось ОХ
-            g.DrawLine(myPen, (int)CustomAxis1[0, 0], (int)CustomAxis1[0, 1], (int)CustomAxis1[1, 0], (int)CustomAxis1[1, 1]);
+            double alpha = 45;
+            double betha = 35.26;
 
+            InitCoordTransformMatrix(Math.Cos(alpha), Math.Sin(alpha) * Math.Sin(betha), 0, 0,
+                                           0, Math.Cos(betha), 0, 0,
+                                    Math.Sin(alpha), -Math.Cos(alpha) * Math.Sin(betha), 0, 0,
+                                           pictureBox1.Width / 2, pictureBox1.Height / 2, 0, 1);
+
+            double[,] CustomAxis1 = MatrixMultiplication(CustomAxis, CoordTransformMatrix);
+
+            // Рисуем ось
+            g.DrawLine(myPen, (int)CustomAxis1[0, 0], (int)CustomAxis1[0, 1], (int)CustomAxis1[1, 0], (int)CustomAxis1[1, 1]);
+            DrawAxis();
             g.Dispose();
             myPen.Dispose();
 

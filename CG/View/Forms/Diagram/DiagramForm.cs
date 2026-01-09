@@ -88,7 +88,7 @@ namespace CG.View.Forms.Diagram
                 }
         }
 
-
+        
         // Кнопка Ввести значения
         private void EnterValuesButton_Click(object sender, EventArgs e)
         {
